@@ -16,7 +16,9 @@ import SwiftUI
 ///
 @available(iOS, introduced: 13, obsoleted: 14.0,
            message: "Backport not necessary as of iOS 14", renamed: "SwiftUI.ProgressView")
-struct ProgressView: View {
+public struct ProgressView<Label>: View where Label: View {
+
+    private var label: Label?
 
     private struct ActivityIndicatorView: UIViewRepresentable {
         let style: UIActivityIndicatorView.Style
@@ -36,8 +38,32 @@ struct ProgressView: View {
 
     }
 
-    var body: some View {
-        ActivityIndicatorView()
+    public init() where Label == EmptyView {
+
+    }
+
+    public init(@ViewBuilder label: () -> Label) {
+        self.label = label()
+    }
+
+    public init(_ titleKey: LocalizedStringKey) where Label == Text {
+        self.init(label: {Text(titleKey)})
+    }
+
+    public init<S>(_ title: S) where Label == Text, S: StringProtocol {
+        self.init(label: {Text(title)})
+    }
+
+    public var body: some View {
+        if let label = label {
+            VStack {
+                ActivityIndicatorView()
+                label
+                    .foregroundColor(.secondary)
+            }
+        } else {
+            ActivityIndicatorView()
+        }
     }
 }
 
