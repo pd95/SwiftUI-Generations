@@ -8,7 +8,10 @@
 import SwiftUI
 
 struct ProgressViewDemo: View {
-    @State private var progress = 0.5
+    @State private var progress = 0.0
+
+    let startTime = Date()
+    let timer = Timer.publish(every: 0.1, on: .main, in: .common).autoconnect()
 
     var body: some View {
         VStack(spacing: 8) {
@@ -47,13 +50,25 @@ struct ProgressViewDemo: View {
 //                Divider()
 //                    .frame(maxWidth: 200)
 
-                ProgressView(value: progress)
-                Button("More", action: {
-                    progress = (progress + 0.05).truncatingRemainder(dividingBy: 1)
-                })
+                ProgressView(value: progress/100)
             }
             .padding()
             .border(.blue, width: 1)
+
+            VStack {
+                ProgressView("Downloading…", value: progress, total: 100)
+            }
+            .padding()
+            .border(.blue, width: 1)
+            .onReceive(timer) { time in
+                if progress < 100 {
+                    progress += 2
+                }
+                if floor(startTime.distance(to: time)
+                            .truncatingRemainder(dividingBy: 10)) == 0 {
+                    progress = 0
+                }
+            }
         }
     }
 }

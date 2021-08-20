@@ -12,8 +12,11 @@ So far I have the following working (and compatible with iOS 15 SwiftUI API):
 
 - `AsyncImage`
 - `Label`
-- iOS 15 `Color`s like `mint`, `teal`, `cyan`, `brown`
-- initial parts of `ProgressView`
+- iOS 15 `Color`s like `mint`, `teal`, `cyan`, `indigo` and `brown`
+- iOS 14 `Font`s like `title2`, `title3` and `caption2`
+- basic parts of `ProgressView`: 
+    - Indeterminate progress with or without `Text` label
+    - Determinate progress linear progress with or without `Text` label
 
 The sources can be found in the [Backports](Backports) directory. All `struct`s and `protocol`s have been amended with
 with `@available` to make clear, as of which iOS target the source should be removed because SwiftUI contains the

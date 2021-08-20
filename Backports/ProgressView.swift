@@ -25,22 +25,43 @@ public struct ProgressView<Label>: View where Label: View {
         self.label = label()
     }
 
+    fileprivate var percentView: LinearProgressView? {
+        guard let percent = percent else {
+            return nil
+        }
+
+        return LinearProgressView(percentage: percent)
+    }
+
     public var body: some View {
-        if let label = label {
-            VStack {
-                ActivityIndicatorView()
-                label
-                    .foregroundColor(.secondary)
+        if let percentView = percentView {
+            // Determinate process
+            if let label = label {
+                VStack(alignment: .leading, spacing: 4) {
+                    label
+                    percentView
+                }
+            } else {
+                percentView
             }
         } else {
-            ActivityIndicatorView()
+            // Indeterminate process
+            if let label = label {
+                VStack {
+                    ActivityIndicatorView()
+                    label
+                        .foregroundColor(.secondary)
+                }
+            } else {
+                ActivityIndicatorView()
+            }
         }
     }
 }
 
 // MARK: - Indeterminate progress initializers
 extension ProgressView {
-    
+
     /// Creates a progress view for showing indeterminate progress
     public init() where Label == EmptyView {
     }
@@ -58,10 +79,42 @@ extension ProgressView {
 extension ProgressView {
 
     /// Creates a progress view for showing a determinate progress
-    public init<V>(value: V?, total: V = 1.0) where Label == Text, V: BinaryFloatingPoint {
-        let percent: V = round((value ?? 0)/total*1000.0)/10
-        self.label = Text("\(String(describing: percent))%")
-        self.percent = Double(percent)
+    public init<V>(value: V?, total: V = 1.0) where Label == EmptyView, V: BinaryFloatingPoint {
+        self.percent = Double((value ?? 0)/total)
+    }
+
+    /// Creates a progress view for showing a determinate progress and a label
+    public init<V>(_ titleKey: LocalizedStringKey,
+                   value: V?, total: V = 1.0
+    ) where Label == Text, V: BinaryFloatingPoint {
+        self.label = Text(titleKey)
+        self.percent = Double((value ?? 0)/total)
+    }
+
+    /// Creates a progress view for showing a determinate progress and a label
+    public init<S, V>(_ title: S,
+                      value: V?, total: V = 1.0
+    ) where Label == Text, S: StringProtocol, V: BinaryFloatingPoint {
+        self.label = Text(title)
+        self.percent = Double((value ?? 0)/total)
+    }
+}
+
+private struct LinearProgressView: View {
+    let percentage: Double
+
+    var body: some View {
+        GeometryReader { proxy in
+            RoundedRectangle(cornerRadius: 2)
+                .foregroundColor(Color(.systemFill))
+                .overlay(
+                    RoundedRectangle(cornerRadius: 2)
+                        .foregroundColor(.accentColor)
+                        .frame(width: proxy.size.width * percentage),
+                    alignment: .leading
+                )
+        }
+        .frame(height: 4)
     }
 }
 
