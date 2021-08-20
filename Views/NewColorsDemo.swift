@@ -10,7 +10,7 @@ import SwiftUI
 struct NewColorsDemo: View {
     var body: some View {
         VStack {
-            Text("New SwiftUI colors...")
+            Text("New SwiftUI colors:")
                 .font(.headline)
 
             // Showing new Colors in light mode

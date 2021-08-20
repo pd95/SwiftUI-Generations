@@ -12,7 +12,7 @@ struct AsyncImageDemo: View {
 
     var body: some View {
         VStack {
-            Text("Loading images asynchronously...")
+            Text("Loading images asynchronously:")
                 .font(.headline)
             AsyncImage(url: url)
                 .frame(width: 100, height: 100)

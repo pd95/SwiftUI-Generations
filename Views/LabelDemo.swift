@@ -10,7 +10,7 @@ import SwiftUI
 struct LabelDemo: View {
     var body: some View {
         VStack(spacing: 8) {
-            Text("Labels in various styles...")
+            Text("Labels in various styles:")
                 .font(.headline)
 
             Label("Profile", systemImage: "person.circle")

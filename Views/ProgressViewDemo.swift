@@ -12,7 +12,7 @@ struct ProgressViewDemo: View {
 
     var body: some View {
         VStack(spacing: 8) {
-            Text("ProgressViews...")
+            Text("ProgressViews:")
                 .font(.headline)
 
             ProgressView()
