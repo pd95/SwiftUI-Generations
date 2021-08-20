@@ -232,7 +232,7 @@ public struct TitleOnlyLabelStyle: LabelStyle {
 // MARK: - Type Erased LabelStyle
 @available(iOS, introduced: 13, obsoleted: 14.0,
            message: "Backport not necessary as of iOS 14", renamed: "SwiftUI.AnyLabelStyle")
-fileprivate struct AnyLabelStyle: LabelStyle {
+private struct AnyLabelStyle: LabelStyle {
     private let _makeBody: (LabelStyle.Configuration) -> AnyView
 
     init<S: LabelStyle>(_ style: S) {
@@ -247,7 +247,7 @@ fileprivate struct AnyLabelStyle: LabelStyle {
 // MARK: - Custom environment for LabelStyle
 @available(iOS, introduced: 13, obsoleted: 14.0,
            message: "Backport not necessary as of iOS 14", renamed: "SwiftUI.DefaultLabelstyle")
-fileprivate struct LabelStyleEnvironmentKey: EnvironmentKey {
+private struct LabelStyleEnvironmentKey: EnvironmentKey {
     static var defaultValue: AnyLabelStyle = AnyLabelStyle(DefaultLabelstyle())
 }
 
