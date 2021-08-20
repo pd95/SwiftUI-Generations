@@ -15,6 +15,9 @@ struct ContentView: View {
                 NewColorsDemo()
                 Divider()
 
+                NewFontsDemo()
+                Divider()
+
                 LabelDemo()
                 Divider()
 

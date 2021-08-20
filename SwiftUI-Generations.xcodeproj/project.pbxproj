@@ -36,6 +36,10 @@
 		175D32AC26D0381B002322AB /* ProgressViewDemo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 175D32A926D0381B002322AB /* ProgressViewDemo.swift */; };
 		1785AACF26CE9DAC0009572F /* AsyncImage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1785AACE26CE9DAC0009572F /* AsyncImage.swift */; };
 		17B25DD926CEFCC20004DC50 /* Label.swift in Sources */ = {isa = PBXBuildFile; fileRef = 17B25DD826CEFCC20004DC50 /* Label.swift */; };
+		17EFA68926D049420094D483 /* Font-extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 17EFA68826D049420094D483 /* Font-extension.swift */; };
+		17EFA68B26D049540094D483 /* NewFontsDemo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 17EFA68A26D049540094D483 /* NewFontsDemo.swift */; };
+		17EFA68C26D049D80094D483 /* NewFontsDemo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 17EFA68A26D049540094D483 /* NewFontsDemo.swift */; };
+		17EFA68D26D049D90094D483 /* NewFontsDemo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 17EFA68A26D049540094D483 /* NewFontsDemo.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -60,6 +64,8 @@
 		175D32A926D0381B002322AB /* ProgressViewDemo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProgressViewDemo.swift; sourceTree = "<group>"; };
 		1785AACE26CE9DAC0009572F /* AsyncImage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AsyncImage.swift; sourceTree = "<group>"; };
 		17B25DD826CEFCC20004DC50 /* Label.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Label.swift; sourceTree = "<group>"; };
+		17EFA68826D049420094D483 /* Font-extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Font-extension.swift"; sourceTree = "<group>"; };
+		17EFA68A26D049540094D483 /* NewFontsDemo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewFontsDemo.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -116,6 +122,7 @@
 			children = (
 				173D286726CE9C7F00039D17 /* ContentView.swift */,
 				175D32A126D036BF002322AB /* NewColorsDemo.swift */,
+				17EFA68A26D049540094D483 /* NewFontsDemo.swift */,
 				175D329D26D03603002322AB /* AsyncImageDemo.swift */,
 				175D32A526D03731002322AB /* LabelDemo.swift */,
 				175D32A926D0381B002322AB /* ProgressViewDemo.swift */,
@@ -156,6 +163,7 @@
 			children = (
 				1785AACE26CE9DAC0009572F /* AsyncImage.swift */,
 				174C438F26CEC88A009D6D94 /* Color-extension.swift */,
+				17EFA68826D049420094D483 /* Font-extension.swift */,
 				17B25DD826CEFCC20004DC50 /* Label.swift */,
 				174C439126CECF3D009D6D94 /* ProgressView.swift */,
 			);
@@ -292,6 +300,7 @@
 				174C439026CEC88A009D6D94 /* Color-extension.swift in Sources */,
 				175D32A726D03731002322AB /* LabelDemo.swift in Sources */,
 				175D32A326D036BF002322AB /* NewColorsDemo.swift in Sources */,
+				17EFA68C26D049D80094D483 /* NewFontsDemo.swift in Sources */,
 				173D286826CE9C7F00039D17 /* ContentView.swift in Sources */,
 				175D329F26D03603002322AB /* AsyncImageDemo.swift in Sources */,
 				1785AACF26CE9DAC0009572F /* AsyncImage.swift in Sources */,
@@ -304,6 +313,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				17EFA68B26D049540094D483 /* NewFontsDemo.swift in Sources */,
 				174C43BE26CEF897009D6D94 /* AppDelegate.swift in Sources */,
 				175D32A626D03731002322AB /* LabelDemo.swift in Sources */,
 				174C43BF26CEF897009D6D94 /* SceneDelegate.swift in Sources */,
@@ -312,6 +322,7 @@
 				175D32A226D036BF002322AB /* NewColorsDemo.swift in Sources */,
 				174C43A626CEF7C9009D6D94 /* ProgressView.swift in Sources */,
 				175D329E26D03603002322AB /* AsyncImageDemo.swift in Sources */,
+				17EFA68926D049420094D483 /* Font-extension.swift in Sources */,
 				17B25DD926CEFCC20004DC50 /* Label.swift in Sources */,
 				174C43A826CEF7D0009D6D94 /* Color-extension.swift in Sources */,
 				175D32AA26D0381B002322AB /* ProgressViewDemo.swift in Sources */,
@@ -326,6 +337,7 @@
 				175D32A826D03731002322AB /* LabelDemo.swift in Sources */,
 				175D32AC26D0381B002322AB /* ProgressViewDemo.swift in Sources */,
 				174C43C426CEF9F9009D6D94 /* ContentView.swift in Sources */,
+				17EFA68D26D049D90094D483 /* NewFontsDemo.swift in Sources */,
 				174C43B126CEF843009D6D94 /* iOS15App.swift in Sources */,
 				175D32A426D036BF002322AB /* NewColorsDemo.swift in Sources */,
 			);
