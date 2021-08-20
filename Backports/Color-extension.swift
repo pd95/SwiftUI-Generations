@@ -79,34 +79,10 @@ extension Color {
 #endif
 
 #if DEBUG
-
 // MARK: - Preview for testing
 struct Color_Previews: PreviewProvider {
     static var previews: some View {
-        VStack(spacing: 2) {
-            HStack(spacing: 2) {
-                Group {
-                    Color.mint
-                    Color.teal
-                    Color.cyan
-                    Color.indigo
-                    Color.brown
-                }
-                .frame(width: 50, height: 50)
-            }
-            HStack(spacing: 2) {
-                Group {
-                    Color.mint
-                    Color.teal
-                    Color.cyan
-                    Color.indigo
-                    Color.brown
-                }
-                .frame(width: 50, height: 50)
-            }
-            .environment(\.colorScheme, .dark)
-        }
+        NewColorsDemo()
     }
 }
-
 #endif

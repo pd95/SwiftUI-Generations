@@ -70,7 +70,7 @@ public struct ProgressView<Label>: View where Label: View {
 #if DEBUG
 struct ProgressView_Previews: PreviewProvider {
     static var previews: some View {
-        ProgressView()
+        ProgressViewDemo()
     }
 }
 #endif

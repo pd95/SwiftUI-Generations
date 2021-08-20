@@ -94,35 +94,10 @@ struct AsyncImage<Content>: View where Content: View {
     }
 }
 
+#if DEBUG
 struct AsyncImage_Previews: PreviewProvider {
-    static let url = URL(string: "https://developer.apple.com/assets/elements/icons/xcode/xcode-128x128_2x.png")!
-
     static var previews: some View {
-        VStack {
-            Group {
-                AsyncImage(url: url)
-                    .frame(width: 100, height: 100)
-
-                AsyncImage(url: url) { image in
-                    image.resizable()
-                } placeholder: {
-                    ProgressView()
-                }
-                .frame(width: 50, height: 50)
-
-                AsyncImage(url: url) { phase in
-                    if let image = phase.image {
-                        image // Displays the loaded image.
-                    } else if phase.error != nil {
-                        Color.red // Indicates an error.
-                    } else {
-                        Color.blue // Acts as a placeholder.
-                    }
-                }
-
-            }
-            .overlay(RoundedRectangle(cornerRadius: 8)
-                    .strokeBorder(Color.red, lineWidth: 4))
-        }
+        AsyncImageDemo()
     }
 }
+#endif
