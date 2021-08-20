@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct ProgressViewDemo: View {
-    @State static private var progress = 0.5
+    @State private var progress = 0.5
 
     var body: some View {
         VStack(spacing: 8) {
@@ -16,21 +16,44 @@ struct ProgressViewDemo: View {
                 .font(.headline)
 
             ProgressView()
+//            ProgressView()
+//                .progressViewStyle(.linear)
+
+            Divider()
+                .frame(maxWidth: 200)
 
             ProgressView("Loading...")
+//            ProgressView("Loading...")
+//                .progressViewStyle(.linear)
 
-            ProgressView {
-                Text("Loading...")
-                    .font(.title)
-                    .bold()
-            }
+            Divider()
+                .frame(maxWidth: 200)
 
-            /*
+
             VStack {
-                ProgressView(value: progress)
-                Button("More", action: { progress += 0.05 })
+                ProgressView {
+                    Text("Loading...")
+                        .font(.title)
+                        .bold()
+                }
             }
-             */
+            .padding()
+            .border(.blue, width: 1)
+
+            VStack {
+//                ProgressView(value: progress)
+//                    .progressViewStyle(.circular)
+//
+//                Divider()
+//                    .frame(maxWidth: 200)
+
+                ProgressView(value: progress)
+                Button("More", action: {
+                    progress = (progress + 0.05).truncatingRemainder(dividingBy: 1)
+                })
+            }
+            .padding()
+            .border(.blue, width: 1)
         }
     }
 }
