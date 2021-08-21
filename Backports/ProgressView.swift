@@ -21,24 +21,16 @@ where Label: View, CurrentValueLabel: View {
 
     private var label: Label?
     private var currentValueLabel: CurrentValueLabel?
-    private var percent: Double?
-
-    fileprivate var percentView: LinearProgressView? {
-        guard let percent = percent else {
-            return nil
-        }
-
-        return LinearProgressView(percentage: percent)
-    }
+    private var fractionCompleted: Double?
 
     public var body: some View {
-        if let percentView = percentView {
+        if let fractionCompleted = fractionCompleted {
             // Determinate process
             VStack(alignment: .leading, spacing: 4) {
                 if let label = label {
                     label
                 }
-                percentView
+                LinearProgressView(fractionCompleted: fractionCompleted)
                 if let currentValueLabel = currentValueLabel {
                     currentValueLabel
                         .foregroundColor(.secondary)
@@ -49,12 +41,12 @@ where Label: View, CurrentValueLabel: View {
             // Indeterminate process
             if let label = label {
                 VStack {
-                    ActivityIndicatorView()
+                    CircularProgressView()
                     label
                         .foregroundColor(.secondary)
                 }
             } else {
-                ActivityIndicatorView()
+                CircularProgressView()
             }
         }
     }
@@ -93,7 +85,7 @@ extension ProgressView {
     /// Creates a progress view for showing determinate progress.
     public init<V>(value: V?, total: V = 1.0)
     where Label == EmptyView, CurrentValueLabel == EmptyView, V: BinaryFloatingPoint {
-        self.percent = Double((value ?? 0)/total)
+        self.fractionCompleted = Double((value ?? 0)/total)
     }
 
     /// Creates a progress view for showing determinate progress, with a
@@ -101,7 +93,7 @@ extension ProgressView {
     public init<V>(value: V?, total: V = 1.0, @ViewBuilder label: () -> Label)
     where CurrentValueLabel == EmptyView, V: BinaryFloatingPoint {
         self.label = label()
-        self.percent = Double((value ?? 0)/total)
+        self.fractionCompleted = Double((value ?? 0)/total)
     }
 
     /// Creates a progress view for showing determinate progress, with a
@@ -112,7 +104,7 @@ extension ProgressView {
     where V: BinaryFloatingPoint {
         self.label = label()
         self.currentValueLabel = currentValueLabel()
-        self.percent = Double((value ?? 0)/total)
+        self.fractionCompleted = Double((value ?? 0)/total)
     }
 
     /// Creates a progress view for showing determinate progress that generates
@@ -121,7 +113,7 @@ extension ProgressView {
                    value: V?, total: V = 1.0)
     where Label == Text, CurrentValueLabel == EmptyView, V: BinaryFloatingPoint {
         self.label = Text(titleKey)
-        self.percent = Double((value ?? 0)/total)
+        self.fractionCompleted = Double((value ?? 0)/total)
     }
 
     /// Creates a progress view for showing determinate progress that generates
@@ -130,12 +122,12 @@ extension ProgressView {
                       value: V?, total: V = 1.0)
     where Label == Text, CurrentValueLabel == EmptyView, S: StringProtocol, V: BinaryFloatingPoint {
         self.label = Text(title)
-        self.percent = Double((value ?? 0)/total)
+        self.fractionCompleted = Double((value ?? 0)/total)
     }
 }
 
 private struct LinearProgressView: View {
-    let percentage: Double
+    let fractionCompleted: Double
 
     var body: some View {
         GeometryReader { proxy in
@@ -144,7 +136,7 @@ private struct LinearProgressView: View {
                 .overlay(
                     RoundedRectangle(cornerRadius: 2)
                         .foregroundColor(.accentColor)
-                        .frame(width: proxy.size.width * percentage),
+                        .frame(width: proxy.size.width * fractionCompleted),
                     alignment: .leading
                 )
         }
@@ -152,7 +144,7 @@ private struct LinearProgressView: View {
     }
 }
 
-private struct ActivityIndicatorView: UIViewRepresentable {
+private struct CircularProgressView: UIViewRepresentable {
     let style: UIActivityIndicatorView.Style
 
     init(style: UIActivityIndicatorView.Style = .medium) {
