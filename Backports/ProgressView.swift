@@ -16,14 +16,12 @@ import SwiftUI
 ///
 @available(iOS, introduced: 13, obsoleted: 14.0,
            message: "Backport not necessary as of iOS 14", renamed: "SwiftUI.ProgressView")
-public struct ProgressView<Label>: View where Label: View {
+public struct ProgressView<Label, CurrentValueLabel>: View
+where Label: View, CurrentValueLabel: View {
 
     private var label: Label?
+    private var currentValueLabel: CurrentValueLabel?
     private var percent: Double?
-
-    public init(@ViewBuilder label: () -> Label) {
-        self.label = label()
-    }
 
     fileprivate var percentView: LinearProgressView? {
         guard let percent = percent else {
@@ -60,16 +58,27 @@ public struct ProgressView<Label>: View where Label: View {
 }
 
 // MARK: - Indeterminate progress initializers
-extension ProgressView {
+extension ProgressView where CurrentValueLabel == EmptyView {
 
-    /// Creates a progress view for showing indeterminate progress
+    /// Creates a progress view for showing indeterminate progress, without a
+    /// label.
     public init() where Label == EmptyView {
     }
 
+    /// Creates a progress view for showing indeterminate progress that displays
+    /// a custom label.
+    public init(@ViewBuilder label: () -> Label) {
+        self.label = label()
+    }
+
+    /// Creates a progress view for showing indeterminate progress that
+    /// generates its label from a localized string.
     public init(_ titleKey: LocalizedStringKey) where Label == Text {
         self.init(label: {Text(titleKey)})
     }
 
+    /// Creates a progress view for showing indeterminate progress that
+    /// generates its label from a string.
     public init<S>(_ title: S) where Label == Text, S: StringProtocol {
         self.init(label: {Text(title)})
     }
@@ -78,23 +87,45 @@ extension ProgressView {
 // MARK: - Determinate progress initializers
 extension ProgressView {
 
-    /// Creates a progress view for showing a determinate progress
-    public init<V>(value: V?, total: V = 1.0) where Label == EmptyView, V: BinaryFloatingPoint {
+    /// Creates a progress view for showing determinate progress.
+    public init<V>(value: V?, total: V = 1.0)
+    where Label == EmptyView, CurrentValueLabel == EmptyView, V: BinaryFloatingPoint {
         self.percent = Double((value ?? 0)/total)
     }
 
-    /// Creates a progress view for showing a determinate progress and a label
+    /// Creates a progress view for showing determinate progress, with a
+    /// custom label.
+    public init<V>(value: V?, total: V = 1.0, @ViewBuilder label: () -> Label)
+    where CurrentValueLabel == EmptyView, V: BinaryFloatingPoint {
+        self.label = label()
+        self.percent = Double((value ?? 0)/total)
+    }
+
+    /// Creates a progress view for showing determinate progress, with a
+    /// custom label.
+    public init<V>(value: V?, total: V = 1.0,
+                   @ViewBuilder label: () -> Label,
+                   @ViewBuilder currentValueLabel: () -> CurrentValueLabel)
+    where V: BinaryFloatingPoint {
+        self.label = label()
+        self.currentValueLabel = currentValueLabel()
+        self.percent = Double((value ?? 0)/total)
+    }
+
+    /// Creates a progress view for showing determinate progress that generates
+    /// its label from a localized string.
     public init<V>(_ titleKey: LocalizedStringKey,
-                   value: V?, total: V = 1.0
-    ) where Label == Text, V: BinaryFloatingPoint {
+                   value: V?, total: V = 1.0)
+    where Label == Text, CurrentValueLabel == EmptyView, V: BinaryFloatingPoint {
         self.label = Text(titleKey)
         self.percent = Double((value ?? 0)/total)
     }
 
-    /// Creates a progress view for showing a determinate progress and a label
+    /// Creates a progress view for showing determinate progress that generates
+    /// its label from a string.
     public init<S, V>(_ title: S,
-                      value: V?, total: V = 1.0
-    ) where Label == Text, S: StringProtocol, V: BinaryFloatingPoint {
+                      value: V?, total: V = 1.0)
+    where Label == Text, CurrentValueLabel == EmptyView, S: StringProtocol, V: BinaryFloatingPoint {
         self.label = Text(title)
         self.percent = Double((value ?? 0)/total)
     }
