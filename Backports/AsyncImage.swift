@@ -19,7 +19,7 @@ public enum AsyncImagePhase {
     case success(Image)
 
     /// An image failed to load with an error.
-    case failure(URLError)
+    case failure(Error)
 
     /// The loaded image, if any.
     public var image: Image? {
@@ -30,7 +30,7 @@ public enum AsyncImagePhase {
     }
 
     /// The error that occurred when attempting to load an image, if any.
-    public var error: URLError? {
+    public var error: Error? {
         if case .failure(let error) = self {
             return error
         }
@@ -43,6 +43,10 @@ public enum AsyncImagePhase {
 public struct AsyncImage<Content>: View where Content: View {
     private var url: URL?
     private var contentBuilder: ((AsyncImagePhase) -> Content)?
+
+    public enum Errors: Error {
+        case imageDecodingError
+    }
 
     @State private var phase = AsyncImagePhase.empty
     @State private var cancellable: AnyCancellable?
@@ -78,15 +82,20 @@ public struct AsyncImage<Content>: View where Content: View {
     }
 
     private func fetchImage() {
-        guard let url = url else {
+        guard let url = url, case .empty = self.phase else {
             return
         }
         cancellable = Just(1)
             .receive(on: DispatchQueue.global(qos: .default), options: nil)
-            .setFailureType(to: URLError.self) // this is required for iOS 13!
-            .flatMap({ _ -> AnyPublisher<UIImage, URLError> in
+            .setFailureType(to: Error.self) // this is required for iOS 13!
+            .flatMap({ _ -> AnyPublisher<UIImage, Error> in
                 URLSession.shared.dataTaskPublisher(for: url)
-                    .compactMap({ UIImage(data: $0.data) })
+                    .tryMap({
+                        guard let image = UIImage(data: $0.data) else {
+                            throw Errors.imageDecodingError
+                        }
+                        return image
+                    })
                     .eraseToAnyPublisher()
             })
             .sink(receiveCompletion: { result in
@@ -94,6 +103,11 @@ public struct AsyncImage<Content>: View where Content: View {
                 case .failure(let error):
                     self.phase = .failure(error)
                 case .finished:
+                    // FIXME: This should not happen!
+                    if case .empty = self.phase {
+                        print("🔴🔴🔴 Error: no image was load! Restarting fetchImage again!")
+                        fetchImage()
+                    }
                     break
                 }
             }, receiveValue: { image in
