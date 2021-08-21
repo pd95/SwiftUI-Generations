@@ -10,19 +10,27 @@ import Combine
 
 @available(iOS, introduced: 13, obsoleted: 15.0,
            message: "Backport not necessary as of iOS 15", renamed: "SwiftUI.AsyncImagePhase")
-enum AsyncImagePhase {
+public enum AsyncImagePhase {
+
+    /// No image is loaded.
     case empty
+
+    /// An image succesfully loaded.
     case success(Image)
+
+    /// An image failed to load with an error.
     case failure(URLError)
 
-    var image: Image? {
+    /// The loaded image, if any.
+    public var image: Image? {
         if case .success(let image) = self {
             return image
         }
         return nil
     }
 
-    var error: URLError? {
+    /// The error that occurred when attempting to load an image, if any.
+    public var error: URLError? {
         if case .failure(let error) = self {
             return error
         }
@@ -32,25 +40,25 @@ enum AsyncImagePhase {
 
 @available(iOS, introduced: 13, obsoleted: 15.0,
            message: "Backport not necessary as of iOS 15", renamed: "SwiftUI.AsyncImage")
-struct AsyncImage<Content>: View where Content: View {
+public struct AsyncImage<Content>: View where Content: View {
     private var url: URL?
     private var contentBuilder: ((AsyncImagePhase) -> Content)?
 
     @State private var phase = AsyncImagePhase.empty
     @State private var cancellable: AnyCancellable?
 
-    init(url: URL?, @ViewBuilder content: @escaping (AsyncImagePhase) -> Content) {
+    public init(url: URL?, @ViewBuilder content: @escaping (AsyncImagePhase) -> Content) {
         self.url = url
         self.contentBuilder = content
     }
 
-    init(url: URL?) where Content == Image {
+    public init(url: URL?) where Content == Image {
         self.init(url: url) { phase in
             phase.image ?? Image(uiImage: UIImage())
         }
     }
 
-    init<I, P>(url: URL?,
+    public init<I, P>(url: URL?,
                @ViewBuilder content: @escaping (Image) -> I,
                @ViewBuilder placeholder: @escaping () -> P)
     where Content == _ConditionalContent<I, P>, I: View, P: View {
@@ -64,12 +72,12 @@ struct AsyncImage<Content>: View where Content: View {
         })
     }
 
-    var body: some View {
+    public var body: some View {
         contentBuilder?(phase)
             .onAppear(perform: fetchImage)
     }
 
-    func fetchImage() {
+    private func fetchImage() {
         guard let url = url else {
             return
         }
