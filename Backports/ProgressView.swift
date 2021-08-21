@@ -34,13 +34,16 @@ where Label: View, CurrentValueLabel: View {
     public var body: some View {
         if let percentView = percentView {
             // Determinate process
-            if let label = label {
-                VStack(alignment: .leading, spacing: 4) {
+            VStack(alignment: .leading, spacing: 4) {
+                if let label = label {
                     label
-                    percentView
                 }
-            } else {
                 percentView
+                if let currentValueLabel = currentValueLabel {
+                    currentValueLabel
+                        .foregroundColor(.secondary)
+                        .font(.caption)
+                }
             }
         } else {
             // Indeterminate process

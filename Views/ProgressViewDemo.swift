@@ -18,48 +18,63 @@ struct ProgressViewDemo: View {
             Text("ProgressViews:")
                 .font(.headline)
 
-            ProgressView()
-//            ProgressView()
-//                .progressViewStyle(.linear)
-
-            Divider()
-                .frame(maxWidth: 200)
-
-            ProgressView("Loading...")
-//            ProgressView("Loading...")
-//                .progressViewStyle(.linear)
-
-            Divider()
-                .frame(maxWidth: 200)
-
-
             VStack {
+                Text("Indeterminate progress")
+                    .font(.subheadline)
+
+                Divider()
+                    .frame(maxWidth: 200)
+
+                ProgressView()
+
+                Divider()
+                    .frame(maxWidth: 200)
+
+                ProgressView("Loading...")
+
+                Divider()
+                    .frame(maxWidth: 200)
+
                 ProgressView {
                     Text("Loading...")
                         .font(.title)
                         .bold()
                 }
             }
-            .padding()
-            .border(.blue, width: 1)
+
+            Divider()
 
             VStack {
-//                ProgressView(value: progress)
-//                    .progressViewStyle(.circular)
-//
-//                Divider()
-//                    .frame(maxWidth: 200)
+                Text("Determinate progress")
+                    .font(.subheadline)
+
+                Divider()
+                    .frame(maxWidth: 200)
+
 
                 ProgressView(value: progress/100)
-            }
-            .padding()
-            .border(.blue, width: 1)
 
-            VStack {
+                Divider()
+                    .frame(maxWidth: 200)
+
                 ProgressView("Downloading…", value: progress, total: 100)
+
+                Divider()
+                    .frame(maxWidth: 200)
+
+                VStack {
+                    ProgressView(value: progress, total: 100, label: {
+                        HStack {
+                            Text("label :")
+                            Image(systemName: "hourglass")
+                                .rotationEffect(.degrees(360*4/100*progress))
+                        }
+                    }, currentValueLabel: {
+                        Text("currentValueLabel: \(Int(progress))")
+                    })
+                }
             }
             .padding()
-            .border(.blue, width: 1)
             .onReceive(timer) { time in
                 if progress < 100 {
                     progress += 2
