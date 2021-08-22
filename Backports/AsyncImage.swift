@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import os.log
 import Combine
 
 @available(iOS, introduced: 13, obsoleted: 15.0,
@@ -85,33 +86,26 @@ public struct AsyncImage<Content>: View where Content: View {
         guard let url = url, case .empty = self.phase else {
             return
         }
-        cancellable = Just(1)
-            .receive(on: DispatchQueue.global(qos: .default), options: nil)
-            .setFailureType(to: Error.self) // this is required for iOS 13!
-            .flatMap({ _ -> AnyPublisher<UIImage, Error> in
-                URLSession.shared.dataTaskPublisher(for: url)
-                    .tryMap({
-                        guard let image = UIImage(data: $0.data) else {
-                            throw Errors.imageDecodingError
-                        }
-                        return image
-                    })
-                    .eraseToAnyPublisher()
+        cancellable = URLSession.shared.dataTaskPublisher(for: url)
+            .tryMap({
+                guard let image = UIImage(data: $0.data) else {
+                    throw Errors.imageDecodingError
+                }
+                return image
             })
+            .receive(on: RunLoop.main, options: nil)
             .sink(receiveCompletion: { result in
-                switch result {
-                case .failure(let error):
-                    self.phase = .failure(error)
-                case .finished:
-                    // FIXME: This should not happen!
-                    if case .empty = self.phase {
-                        print("🔴🔴🔴 Error: no image was load! Restarting fetchImage again!")
-                        fetchImage()
+                if case .failure(let error) = result {
+                    phase = .failure(error)
+                } else {
+                    if case .empty = phase {
+                        // This should not happen!
+                        os_log("🔴 Error: no image was load!")
+                        cancellable = nil
                     }
-                    break
                 }
             }, receiveValue: { image in
-                self.phase = .success(Image(uiImage: image))
+                phase = .success(Image(uiImage: image))
             })
     }
 }
