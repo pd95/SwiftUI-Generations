@@ -45,19 +45,23 @@ public struct AsyncImage<Content>: View where Content: View {
     private var url: URL?
     private var contentBuilder: ((AsyncImagePhase) -> Content)?
 
+    private let backgroundQueue: DispatchQueue
+
     public enum Errors: Error {
         case imageDecodingError
     }
 
     @State private var phase = AsyncImagePhase.empty
     @State private var cancellable: AnyCancellable?
-    @State private var size: CGSize = .zero
+    @State private var fileURL: URL?
+    @State private var sizeSubject = CurrentValueSubject<CGSize, Never>(.zero)
 
     @Environment(\.displayScale) private var displayScale
 
     public init(url: URL?, @ViewBuilder content: @escaping (AsyncImagePhase) -> Content) {
         self.url = url
         self.contentBuilder = content
+        self.backgroundQueue = DispatchQueue.global(qos: .userInitiated)
     }
 
     public init(url: URL?) where Content == Image {
@@ -82,27 +86,71 @@ public struct AsyncImage<Content>: View where Content: View {
 
     public var body: some View {
         contentBuilder?(phase)
-            .onAppear(perform: fetchImage)
+            .onAppear(perform: refreshImage)
             .background(GeometryReader { proxy in
                 Color.clear
-                    .onAppear {
-                        print(proxy.size)
-                        size = proxy.size
-                    }
+                    .preference(key: ViewGeometryPreferenceKey.self, value: proxy.frame(in: .local))
+            })
+            .onPreferenceChange(ViewGeometryPreferenceKey.self, perform: { newValue in
+                let newSize = newValue.size
+                sizeSubject.send(newSize)
             })
     }
 
-    private func fetchImage() {
-        guard let url = url, case .empty = self.phase else {
-            return
+    private var localURLPublisher: AnyPublisher<URL, Never> {
+        let urlPublisher: AnyPublisher<URL, Never>
+        if let fileURL = fileURL {
+            // return the existing local URL
+            urlPublisher = Just(fileURL)
+                .eraseToAnyPublisher()
+        } else if let url = url {
+
+            // Start a download task to fetch the remote url
+            urlPublisher = URLSession.shared.downloadTaskPublisher(for: url)
+                .map({ (url, response) in
+                    do {
+                        // Move file to our local url (in temp directory)
+                        let newTempUrl = FileManager.default.temporaryDirectory
+                            .appendingPathComponent("AsyncImage-Temp-"+url.lastPathComponent)
+                        try FileManager.default.moveItem(at: url, to: newTempUrl)
+                        os_log("AsyncImage: Moved image to %{public}@", newTempUrl.absoluteString)
+
+                        DispatchQueue.main.async {
+                            // Make sure we keep the local url for image refresh
+                            fileURL = newTempUrl
+                        }
+                        return Optional.some(newTempUrl)
+                    } catch {
+                        os_log("AsyncImage: 🔴 Error during file move %{public}@", url.absoluteString)
+                    }
+                    return nil
+                })
+                .replaceError(with: nil)
+                .compactMap({ $0 })
+                .eraseToAnyPublisher()
+        } else {
+            urlPublisher = Empty()
+                .eraseToAnyPublisher()
         }
-        cancellable = URLSession.shared.downloadTaskPublisher(for: url)
-            .tryMap({
+        return urlPublisher
+    }
+
+    private func refreshImage() {
+        // Debounce the size changes to reduce succession of downsampling due to animation
+        let sizePublisher = sizeSubject
+            .debounce(for: 0.02, scheduler: backgroundQueue)
+            .removeDuplicates()
+            .eraseToAnyPublisher()
+
+        cancellable = Publishers.CombineLatest(localURLPublisher, sizePublisher)
+            .subscribe(on: backgroundQueue)
+            .tryMap({ (url, size) in
+
                 let image: UIImage?
                 if size != .zero {
-                    image = downsample(imageAt: $0.url, to: size, scale: displayScale)
+                    image = downsample(imageAt: url, to: size, scale: displayScale)
                 } else {
-                    image = UIImage(contentsOfFile: $0.url.path)
+                    image = UIImage(contentsOfFile: url.path)
                 }
                 guard let image = image else {
                     throw Errors.imageDecodingError
@@ -113,10 +161,11 @@ public struct AsyncImage<Content>: View where Content: View {
             .sink(receiveCompletion: { result in
                 if case .failure(let error) = result {
                     phase = .failure(error)
+                    os_log("AsyncImage: 🔴 Error: loading image %{public}@!", error.localizedDescription)
                 } else {
                     if case .empty = phase {
                         // This should not happen!
-                        os_log("🔴 Error: no image was load!")
+                        os_log("AsyncImage: 🔴 Error: no image was load for an unknown reason!")
                         cancellable = nil
                     }
                 }
@@ -131,6 +180,7 @@ public struct AsyncImage<Content>: View where Content: View {
     private func downsample(imageAt imageURL: URL, to pointSize: CGSize, scale: CGFloat) -> UIImage? {
         let imageSourceOptions = [kCGImageSourceShouldCache: false] as CFDictionary
         guard let imageSource = CGImageSourceCreateWithURL(imageURL as CFURL, imageSourceOptions) else {
+            os_log("AsyncImage: 🔴 CGImageSourceCreateWithURL failed due to an unknown reason!")
             return nil
         }
 
@@ -143,6 +193,7 @@ public struct AsyncImage<Content>: View where Content: View {
         ] as CFDictionary
 
         guard let downsampledImage = CGImageSourceCreateThumbnailAtIndex(imageSource, 0, downsampleOptions) else {
+            os_log("AsyncImage: 🔴 CGImageSourceCreateThumbnailAtIndex failed due to an unknown reason!")
             return nil
         }
         return UIImage(cgImage: downsampledImage)
