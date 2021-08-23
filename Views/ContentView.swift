@@ -20,6 +20,11 @@ struct ContentView: View {
                 .tabItem {
                     Label("Image", systemImage: "photo")
                 }
+
+            StateObjectDemo()
+                .tabItem {
+                    Label("Main", systemImage: "house")
+                }
         }
     }
 }
@@ -40,7 +45,6 @@ struct BasicStuff: View {
                 ProgressViewDemo()
                 Spacer()
             }
-            .accentColor(.red)
         }
     }
 }

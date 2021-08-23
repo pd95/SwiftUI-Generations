@@ -38,6 +38,11 @@
 		1788790826D3C58B001C59FF /* ViewGeometryPreferenceKey.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1788790726D3C58B001C59FF /* ViewGeometryPreferenceKey.swift */; };
 		1788790926D3C58B001C59FF /* ViewGeometryPreferenceKey.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1788790726D3C58B001C59FF /* ViewGeometryPreferenceKey.swift */; };
 		1788790A26D3C58B001C59FF /* ViewGeometryPreferenceKey.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1788790726D3C58B001C59FF /* ViewGeometryPreferenceKey.swift */; };
+		1788790C26D41101001C59FF /* StateObjectDemo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1788790B26D41101001C59FF /* StateObjectDemo.swift */; };
+		1788790D26D41101001C59FF /* StateObjectDemo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1788790B26D41101001C59FF /* StateObjectDemo.swift */; };
+		1788790E26D41101001C59FF /* StateObjectDemo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1788790B26D41101001C59FF /* StateObjectDemo.swift */; };
+		1788791026D41113001C59FF /* StateObject.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1788790F26D41113001C59FF /* StateObject.swift */; };
+		1788791126D41113001C59FF /* StateObject.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1788790F26D41113001C59FF /* StateObject.swift */; };
 		17B25DD926CEFCC20004DC50 /* Label.swift in Sources */ = {isa = PBXBuildFile; fileRef = 17B25DD826CEFCC20004DC50 /* Label.swift */; };
 		17C9CC0D26D393BA00459FA2 /* URLSession+DownloadTaskPublisher.swift in Sources */ = {isa = PBXBuildFile; fileRef = 17C9CC0C26D393BA00459FA2 /* URLSession+DownloadTaskPublisher.swift */; };
 		17C9CC0E26D393BA00459FA2 /* URLSession+DownloadTaskPublisher.swift in Sources */ = {isa = PBXBuildFile; fileRef = 17C9CC0C26D393BA00459FA2 /* URLSession+DownloadTaskPublisher.swift */; };
@@ -73,6 +78,8 @@
 		175D32A926D0381B002322AB /* ProgressViewDemo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProgressViewDemo.swift; sourceTree = "<group>"; };
 		1785AACE26CE9DAC0009572F /* AsyncImage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AsyncImage.swift; sourceTree = "<group>"; };
 		1788790726D3C58B001C59FF /* ViewGeometryPreferenceKey.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewGeometryPreferenceKey.swift; sourceTree = "<group>"; };
+		1788790B26D41101001C59FF /* StateObjectDemo.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StateObjectDemo.swift; sourceTree = "<group>"; };
+		1788790F26D41113001C59FF /* StateObject.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StateObject.swift; sourceTree = "<group>"; };
 		17B25DD826CEFCC20004DC50 /* Label.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Label.swift; sourceTree = "<group>"; };
 		17C9CC0C26D393BA00459FA2 /* URLSession+DownloadTaskPublisher.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "URLSession+DownloadTaskPublisher.swift"; sourceTree = "<group>"; };
 		17C9CC1026D3977C00459FA2 /* UnfairLock.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UnfairLock.swift; sourceTree = "<group>"; };
@@ -139,6 +146,7 @@
 				175D329D26D03603002322AB /* AsyncImageDemo.swift */,
 				175D32A526D03731002322AB /* LabelDemo.swift */,
 				175D32A926D0381B002322AB /* ProgressViewDemo.swift */,
+				1788790B26D41101001C59FF /* StateObjectDemo.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -179,6 +187,7 @@
 				17EFA68826D049420094D483 /* Font-extension.swift */,
 				17B25DD826CEFCC20004DC50 /* Label.swift */,
 				174C439126CECF3D009D6D94 /* ProgressView.swift */,
+				1788790F26D41113001C59FF /* StateObject.swift */,
 			);
 			path = Backports;
 			sourceTree = "<group>";
@@ -326,9 +335,11 @@
 				17EFA68C26D049D80094D483 /* NewFontsDemo.swift in Sources */,
 				17C9CC0E26D393BA00459FA2 /* URLSession+DownloadTaskPublisher.swift in Sources */,
 				173D286826CE9C7F00039D17 /* ContentView.swift in Sources */,
+				1788790D26D41101001C59FF /* StateObjectDemo.swift in Sources */,
 				175D329F26D03603002322AB /* AsyncImageDemo.swift in Sources */,
 				17C9CC1226D3977C00459FA2 /* UnfairLock.swift in Sources */,
 				1785AACF26CE9DAC0009572F /* AsyncImage.swift in Sources */,
+				1788791126D41113001C59FF /* StateObject.swift in Sources */,
 				175D32AB26D0381B002322AB /* ProgressViewDemo.swift in Sources */,
 				1788790926D3C58B001C59FF /* ViewGeometryPreferenceKey.swift in Sources */,
 				173D286626CE9C7F00039D17 /* iOS14App.swift in Sources */,
@@ -339,6 +350,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				1788791026D41113001C59FF /* StateObject.swift in Sources */,
 				17EFA68B26D049540094D483 /* NewFontsDemo.swift in Sources */,
 				174C43BE26CEF897009D6D94 /* AppDelegate.swift in Sources */,
 				175D32A626D03731002322AB /* LabelDemo.swift in Sources */,
@@ -352,6 +364,7 @@
 				175D329E26D03603002322AB /* AsyncImageDemo.swift in Sources */,
 				17EFA68926D049420094D483 /* Font-extension.swift in Sources */,
 				17C9CC0D26D393BA00459FA2 /* URLSession+DownloadTaskPublisher.swift in Sources */,
+				1788790C26D41101001C59FF /* StateObjectDemo.swift in Sources */,
 				17B25DD926CEFCC20004DC50 /* Label.swift in Sources */,
 				174C43A826CEF7D0009D6D94 /* Color-extension.swift in Sources */,
 				175D32AA26D0381B002322AB /* ProgressViewDemo.swift in Sources */,
@@ -362,6 +375,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				1788790E26D41101001C59FF /* StateObjectDemo.swift in Sources */,
 				1788790A26D3C58B001C59FF /* ViewGeometryPreferenceKey.swift in Sources */,
 				17C9CC1326D3977C00459FA2 /* UnfairLock.swift in Sources */,
 				175D32A026D03603002322AB /* AsyncImageDemo.swift in Sources */,
