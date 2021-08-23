@@ -51,6 +51,9 @@ public struct AsyncImage<Content>: View where Content: View {
 
     @State private var phase = AsyncImagePhase.empty
     @State private var cancellable: AnyCancellable?
+    @State private var size: CGSize = .zero
+
+    @Environment(\.displayScale) private var displayScale
 
     public init(url: URL?, @ViewBuilder content: @escaping (AsyncImagePhase) -> Content) {
         self.url = url
@@ -80,15 +83,28 @@ public struct AsyncImage<Content>: View where Content: View {
     public var body: some View {
         contentBuilder?(phase)
             .onAppear(perform: fetchImage)
+            .background(GeometryReader { proxy in
+                Color.clear
+                    .onAppear {
+                        print(proxy.size)
+                        size = proxy.size
+                    }
+            })
     }
 
     private func fetchImage() {
         guard let url = url, case .empty = self.phase else {
             return
         }
-        cancellable = URLSession.shared.dataTaskPublisher(for: url)
+        cancellable = URLSession.shared.downloadTaskPublisher(for: url)
             .tryMap({
-                guard let image = UIImage(data: $0.data) else {
+                let image: UIImage?
+                if size != .zero {
+                    image = downsample(imageAt: $0.url, to: size, scale: displayScale)
+                } else {
+                    image = UIImage(contentsOfFile: $0.url.path)
+                }
+                guard let image = image else {
                     throw Errors.imageDecodingError
                 }
                 return image
@@ -107,6 +123,29 @@ public struct AsyncImage<Content>: View where Content: View {
             }, receiveValue: { image in
                 phase = .success(Image(uiImage: image))
             })
+    }
+
+    /// Loading an appropriately sized image from the given URL
+    ///
+    /// Downsampling code has been shown at WWDC 2018: Image and Graphics Best Practices
+    private func downsample(imageAt imageURL: URL, to pointSize: CGSize, scale: CGFloat) -> UIImage? {
+        let imageSourceOptions = [kCGImageSourceShouldCache: false] as CFDictionary
+        guard let imageSource = CGImageSourceCreateWithURL(imageURL as CFURL, imageSourceOptions) else {
+            return nil
+        }
+
+        let maxDimensionInPixels = max(pointSize.width, pointSize.height) * scale
+        let downsampleOptions = [
+            kCGImageSourceCreateThumbnailFromImageAlways: true,
+            kCGImageSourceShouldCacheImmediately: true,
+            kCGImageSourceCreateThumbnailWithTransform: true,
+            kCGImageSourceThumbnailMaxPixelSize: maxDimensionInPixels
+        ] as CFDictionary
+
+        guard let downsampledImage = CGImageSourceCreateThumbnailAtIndex(imageSource, 0, downsampleOptions) else {
+            return nil
+        }
+        return UIImage(cgImage: downsampledImage)
     }
 }
 
