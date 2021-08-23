@@ -10,6 +10,22 @@ import SwiftUI
 struct ContentView: View {
 
     var body: some View {
+        TabView {
+            BasicStuff()
+                .tabItem {
+                    Label("List", systemImage: "list.bullet")
+                }
+
+            AsyncImageDemo()
+                .tabItem {
+                    Label("Image", systemImage: "photo")
+                }
+        }
+    }
+}
+
+struct BasicStuff: View {
+    var body: some View {
         ScrollView {
             VStack {
                 NewColorsDemo()
@@ -23,9 +39,6 @@ struct ContentView: View {
 
                 ProgressViewDemo()
                 Spacer()
-                Divider()
-
-                AsyncImageDemo()
             }
             .accentColor(.red)
         }
