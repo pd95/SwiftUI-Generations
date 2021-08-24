@@ -51,7 +51,7 @@ struct AsyncImageDemo: View {
                     }
                 }
 
-                Spacer()
+                Divider()
 
                 Text("This image is high-resolution (1024 pixels):\n(Turn your phone to appreciate it!)")
 
@@ -73,13 +73,29 @@ struct AsyncImageDemo: View {
                     }
                 }
             }
+            .frame(minHeight: minScrollViewHeight, alignment: .top)
+        }
+    }
+
+    var minScrollViewHeight: CGFloat? {
+        if #available(iOS 14, *) {
+            return nil
+        }
+        else {
+            // iOS 13 has a buggy ScrollView implementation which is bad at adapting dynamically
+            return 500+(imageWidth(state2) ?? 0)+(imageWidth(state1) ?? 0)
         }
     }
 
     func imageWidth(_ state: Int) -> CGFloat? {
         let remainder = CGFloat(state % 4)
         if remainder == 0 {
-            return nil
+            if #available(iOS 14, *) {
+                return nil
+            }
+            else {
+                return 400
+            }
         }
         else {
             return 100.0 * remainder
