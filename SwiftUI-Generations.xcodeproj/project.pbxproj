@@ -42,7 +42,6 @@
 		1788790D26D41101001C59FF /* StateObjectDemo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1788790B26D41101001C59FF /* StateObjectDemo.swift */; };
 		1788790E26D41101001C59FF /* StateObjectDemo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1788790B26D41101001C59FF /* StateObjectDemo.swift */; };
 		1788791026D41113001C59FF /* StateObject.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1788790F26D41113001C59FF /* StateObject.swift */; };
-		1788791126D41113001C59FF /* StateObject.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1788790F26D41113001C59FF /* StateObject.swift */; };
 		17B25DD926CEFCC20004DC50 /* Label.swift in Sources */ = {isa = PBXBuildFile; fileRef = 17B25DD826CEFCC20004DC50 /* Label.swift */; };
 		17C9CC0D26D393BA00459FA2 /* URLSession+DownloadTaskPublisher.swift in Sources */ = {isa = PBXBuildFile; fileRef = 17C9CC0C26D393BA00459FA2 /* URLSession+DownloadTaskPublisher.swift */; };
 		17C9CC0E26D393BA00459FA2 /* URLSession+DownloadTaskPublisher.swift in Sources */ = {isa = PBXBuildFile; fileRef = 17C9CC0C26D393BA00459FA2 /* URLSession+DownloadTaskPublisher.swift */; };
@@ -339,7 +338,6 @@
 				175D329F26D03603002322AB /* AsyncImageDemo.swift in Sources */,
 				17C9CC1226D3977C00459FA2 /* UnfairLock.swift in Sources */,
 				1785AACF26CE9DAC0009572F /* AsyncImage.swift in Sources */,
-				1788791126D41113001C59FF /* StateObject.swift in Sources */,
 				175D32AB26D0381B002322AB /* ProgressViewDemo.swift in Sources */,
 				1788790926D3C58B001C59FF /* ViewGeometryPreferenceKey.swift in Sources */,
 				173D286626CE9C7F00039D17 /* iOS14App.swift in Sources */,

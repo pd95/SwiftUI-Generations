@@ -12,10 +12,49 @@ import os.log
 @available(iOS, introduced: 13, obsoleted: 14.0,
            message: "Backport not necessary as of iOS 14", renamed: "SwiftUI.StateObject")
 @propertyWrapper
-struct StateObject<ObjectType>: DynamicProperty where ObjectType: ObservableObject {
+public struct StateObject<ObjectType>: DynamicProperty where ObjectType: ObservableObject {
 
-    @State private var stateObject: [ObjectType] = []
-    @ObservedObject private var object: ObjectType
+    private class Storage<ObjectType: ObservableObject>: ObservableObject {
+
+        private var _object: ObjectType?
+        private var _observedObject: ObservedObject<ObjectType>?
+        private var cancellable: AnyCancellable?
+
+        var object: ObjectType {
+            get {
+                guard let object = _object else {
+                    fatalError("Storage has never been initialized")
+                }
+                return object
+            }
+            set {
+                _object = newValue
+                _observedObject = .init(initialValue: newValue)
+                trackChanges()
+            }
+        }
+
+        var observedObject: ObservedObject<ObjectType> {
+            get {
+                guard let observedObject = _observedObject else {
+                    fatalError("Storage has never been initialized")
+                }
+                return observedObject
+            }
+        }
+
+        func trackChanges() {
+            print("⚫️ trackChanges()")
+            cancellable = object.objectWillChange
+                .sink(receiveValue: { _ in
+                    self.objectWillChange.send()
+                })
+        }
+    }
+
+    @ObservedObject private var storage = Storage<ObjectType>()
+
+    let initObject: () -> ObjectType
 
     /// Creates a new state object with an initial wrapped value.
     ///
@@ -23,30 +62,40 @@ struct StateObject<ObjectType>: DynamicProperty where ObjectType: ObservableObje
     /// with the `@StateObject` attribute in a ``SwiftUI/View``,
     ///
     /// - Parameter thunk: An initial value for the state object.
-    @inlinable public init(wrappedValue thunk: @autoclosure @escaping () -> ObjectType) {
-        if let object = _stateObject.wrappedValue.first {
-            os_log("🟡 reinit StateObject wrappedValue with existing value")
-            self._object = .init(wrappedValue: object)
-        } else {
-            os_log("🟡 init StateObject wrappedValue: executing thunk()")
-            let object = thunk()
-            self._object = .init(wrappedValue: object)
-            self._stateObject.wrappedValue.append(object)
-        }
-        os_log("🟡 init StateObject wrappedValue %@", String(describing: self))
+    public init(wrappedValue thunk: @autoclosure @escaping () -> ObjectType) {
+        initObject = thunk
+        os_log("🟡 StateObject.init wrappedValue %@", String(describing: self))
     }
 
 
     /// The underlying value referenced by the state object.
     public var wrappedValue: ObjectType {
-        os_log("🟡 wrappedValue %@", String(describing: object))
-        return object
+        os_log("🟡 StateObject.wrappedValue %@", String(describing: storage.object))
+        return storage.object
     }
 
     /// A projection of the state object that creates bindings to its
     /// properties.
     public var projectedValue: ObservedObject<ObjectType>.Wrapper {
-        os_log("🟡 projectedValue %@", String(describing: $object))
-        return $object
+        os_log("🟡 StateObject.projectedValue %@", String(describing: storage.observedObject))
+        return storage.observedObject.projectedValue
+    }
+
+    // This function is called by SwiftUI to allow this DynamicProperty to take actions
+    // due to some storage update (?)
+    public mutating func update() {
+        os_log("🟡 StateObject.update")
+        print("before", self)
+
+        // FIXME: HACK! We rely on the internal _seed variable of `ObservedObject` which gets initialized to 1
+        let mirror = Mirror(reflecting: _storage)
+        for child in mirror.children {
+            print(child)
+            if child.label == "_seed" && child.value as? Int == 1 {
+                let object = initObject()
+                storage.object = object
+                os_log("🟡 StateObject.update: executed initObject()", String(describing: self))
+            }
+        }
     }
 }
