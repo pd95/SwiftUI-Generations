@@ -86,7 +86,7 @@ public struct AsyncImage<Content>: View where Content: View {
 
     public var body: some View {
         contentBuilder?(phase)
-            .onAppear(perform: refreshImage)
+            .onAppear(perform: fetchImage)
             .background(GeometryReader { proxy in
                 Color.clear
                     .preference(key: ViewGeometryPreferenceKey.self, value: proxy.frame(in: .local))
@@ -135,7 +135,11 @@ public struct AsyncImage<Content>: View where Content: View {
         return urlPublisher
     }
 
-    private func refreshImage() {
+    private func fetchImage() {
+        guard cancellable == nil else {
+            return
+        }
+
         // Debounce the size changes to reduce succession of downsampling due to animation
         let sizePublisher = sizeSubject
             .debounce(for: 0.02, scheduler: backgroundQueue)
