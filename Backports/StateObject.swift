@@ -14,47 +14,45 @@ import os.log
 @propertyWrapper
 public struct StateObject<ObjectType>: DynamicProperty where ObjectType: ObservableObject {
 
-    private class Storage<ObjectType: ObservableObject>: ObservableObject {
+    /// Storage object wrapping an `ObjectType` which may not yet been initialized (=Optional)
+    ///
+    /// (Re-)initialization happens upon first access or a call to `reset()`.
+    /// All changes to the underlying object are republished as changes to this wrapper.
+    private class Storage: ObservableObject {
+
+        private var newObject: () -> ObjectType
 
         private var _object: ObjectType?
-        private var _observedObject: ObservedObject<ObjectType>?
-        private var cancellable: AnyCancellable?
+        private var subscriber: AnyCancellable?
 
         var object: ObjectType {
-            get {
-                guard let object = _object else {
-                    fatalError("Storage has never been initialized")
-                }
-                return object
-            }
-            set {
-                _object = newValue
-                _observedObject = .init(initialValue: newValue)
-                trackChanges()
-            }
+            _object ?? reset()
         }
 
         var observedObject: ObservedObject<ObjectType> {
-            get {
-                guard let observedObject = _observedObject else {
-                    fatalError("Storage has never been initialized")
-                }
-                return observedObject
-            }
+            ObservedObject(wrappedValue: object)
         }
 
-        func trackChanges() {
-            print("⚫️ trackChanges()")
-            cancellable = object.objectWillChange
-                .sink(receiveValue: { _ in
-                    self.objectWillChange.send()
+        init(newObject: @escaping () -> ObjectType) {
+            self.newObject = newObject
+        }
+
+        @discardableResult
+        func reset() -> ObjectType {
+            // initialize a new instance
+            let newObject = newObject()
+            _object = newObject
+
+            // Subscribe to its changes and republish them as our changes
+            subscriber = newObject.objectWillChange
+                .sink(receiveValue: { [weak self] _ in
+                    self?.objectWillChange.send()
                 })
+            return newObject
         }
     }
 
-    @ObservedObject private var storage = Storage<ObjectType>()
-
-    let initObject: () -> ObjectType
+    @ObservedObject private var storage: Storage
 
     /// Creates a new state object with an initial wrapped value.
     ///
@@ -63,10 +61,9 @@ public struct StateObject<ObjectType>: DynamicProperty where ObjectType: Observa
     ///
     /// - Parameter thunk: An initial value for the state object.
     public init(wrappedValue thunk: @autoclosure @escaping () -> ObjectType) {
-        initObject = thunk
-        os_log("🟡 StateObject.init wrappedValue %@", String(describing: self))
+        _storage = ObservedObject(wrappedValue: Storage(newObject: thunk))
+        os_log("🟡 StateObject.init %@", String(describing: self))
     }
-
 
     /// The underlying value referenced by the state object.
     public var wrappedValue: ObjectType {
@@ -85,15 +82,13 @@ public struct StateObject<ObjectType>: DynamicProperty where ObjectType: Observa
     // due to some storage update (?)
     public mutating func update() {
         os_log("🟡 StateObject.update")
-        print("before", self)
+        _storage.update()
 
         // FIXME: HACK! We rely on the internal _seed variable of `ObservedObject` which gets initialized to 1
         let mirror = Mirror(reflecting: _storage)
         for child in mirror.children {
-            print(child)
             if child.label == "_seed" && child.value as? Int == 1 {
-                let object = initObject()
-                storage.object = object
+                storage.reset()
                 os_log("🟡 StateObject.update: executed initObject()", String(describing: self))
             }
         }
