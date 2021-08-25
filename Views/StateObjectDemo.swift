@@ -7,35 +7,11 @@
 
 import SwiftUI
 
-class ViewModel: ObservableObject {
-    @Published var selected = false
-    @Published var text = ""
-
-    func reset() {
-        withAnimation {
-            selected = false
-            text = ""
-        }
-    }
-}
-
 struct StateObjectDemo: View {
-
-    @StateObject var model = ViewModel()
-
-    init() {
-        print("🟢 StateObjectDemo init called")
-    }
-
     var body: some View {
         NavigationView {
             Form {
-                Section {
-                    TextField("Write something", text: $model.text)
-                    Toggle("Selected", isOn: $model.selected)
-                }
-
-                NavigationLink("Child view", destination: ChildView(model: model))
+                NavigationLink("Child using onChange", destination: ViewOnChangeDemo())
 
                 Section {
                     NavigationLink("Child with StateObject", destination: StateObjectTestView())
@@ -44,21 +20,6 @@ struct StateObjectDemo: View {
             }
         }
         .navigationViewStyle(.stack)
-    }
-}
-
-struct ChildView: View {
-    @ObservedObject var model: ViewModel
-
-    var body: some View {
-        VStack {
-            Text("Hello world: \(model.text)")
-                .navigationBarTitle("Child")
-
-            Button("Reset") {
-                model.reset()
-            }
-        }
     }
 }
 
@@ -92,9 +53,9 @@ struct StateObjectTestView: View {
             })
         }
         .padding()
-//        .onChange(of: stateObject.num) { newStateObject in
-//            print("State: \(newStateObject) <> \(stateObject.num)")
-//        }
+        .onChange(of: stateObject.num) { newStateObject in
+            print("State: \(newStateObject) <> \(stateObject.num)")
+        }
     }
 }
 
