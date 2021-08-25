@@ -78,6 +78,54 @@ extension Color {
 
 #endif
 
+extension Color {
+    @available(iOS, introduced: 13, obsoleted: 15.0,
+               message: "Backport not necessary as of iOS 15", renamed: "SwiftUI.Color(cgColor:)")
+    public init(cgColor color: CGColor) {
+        self = Color(UIColor(cgColor: color))
+    }
+
+    @available(iOS, introduced: 13, obsoleted: 15.0,
+               message: "Backport not necessary as of iOS 15", renamed: "SwiftUI.Color(uiColor:)")
+    public init(uiColor color: UIColor) {
+        self = Color(color)
+    }
+
+    /// A Core Graphics representation of the color, if available.
+    @available(iOS, introduced: 13, obsoleted: 14.0,
+               message: "Backport not necessary as of iOS 14", renamed: "SwiftUI.Color.cgColor")
+    public var cgColor: CGColor? {
+
+        let mirror = Mirror(reflecting: self)
+
+        // Handle linear RGB
+        if let red = mirror.descendant("provider", "base", "linearRed") as? Float,
+           let green = mirror.descendant("provider", "base", "linearGreen") as? Float,
+           let blue = mirror.descendant("provider", "base", "linearBlue") as? Float,
+           let alpha = mirror.descendant("provider", "base", "opacity") as? Float
+        {
+            return CGColor(red: CGFloat(red), green: CGFloat(green), blue: CGFloat(blue), alpha: CGFloat(alpha))
+        }
+
+        // Handle P3
+        if  String(describing: type(of: mirror.descendant("provider", "base")!)) == "DisplayP3",
+            let red = mirror.descendant("provider", "base", "red") as? CGFloat,
+            let green = mirror.descendant("provider", "base", "green") as? CGFloat,
+            let blue = mirror.descendant("provider", "base", "blue") as? CGFloat,
+            let alpha = mirror.descendant("provider", "base", "opacity") as? Float
+        {
+            let colorSpace = CGColorSpace(name: CGColorSpace.displayP3)
+            return CGColor(colorSpace: colorSpace!,
+                    components: [red, green, blue, CGFloat(alpha)])
+        }
+
+        // All dynamic colors using UIDynamicSystemColor or UIDynamicProviderColor
+        // won't return a value
+        return nil
+    }
+}
+
+
 #if DEBUG
 // MARK: - Preview for testing
 struct Color_Previews: PreviewProvider {
