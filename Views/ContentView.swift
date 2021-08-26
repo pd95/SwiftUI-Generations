@@ -8,7 +8,13 @@
 import SwiftUI
 
 struct ContentView: View {
-    @State private var selectedTab = 3
+
+    enum Tab: Int {
+        case none
+        case basic, asyncImage, stateObject
+    }
+
+    @AppStorage("mainTab") private var selectedTab: Tab = Tab.none
 
     var body: some View {
         TabView(selection: $selectedTab) {
@@ -16,19 +22,19 @@ struct ContentView: View {
                 .tabItem {
                     Label("List", systemImage: "list.bullet")
                 }
-                .tag(1)
+                .tag(Tab.basic)
 
             AsyncImageDemo()
                 .tabItem {
                     Label("Image", systemImage: "photo")
                 }
-                .tag(2)
+                .tag(Tab.asyncImage)
 
             StateObjectDemo()
                 .tabItem {
                     Label("Main", systemImage: "house")
                 }
-                .tag(3)
+                .tag(Tab.stateObject)
         }
     }
 }
