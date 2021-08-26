@@ -48,6 +48,8 @@ public struct StateObject<ObjectType>: DynamicProperty where ObjectType: Observa
                 .sink(receiveValue: { [weak self] _ in
                     self?.objectWillChange.send()
                 })
+
+            os_log("🟡 StateObject.Storage.reset > executed initObject()", String(describing: self))
             return newObject
         }
     }
@@ -86,11 +88,9 @@ public struct StateObject<ObjectType>: DynamicProperty where ObjectType: Observa
 
         // FIXME: HACK! We rely on the internal _seed variable of `ObservedObject` which gets initialized to 1
         let mirror = Mirror(reflecting: _storage)
-        for child in mirror.children {
-            if child.label == "_seed" && child.value as? Int == 1 {
-                storage.reset()
-                os_log("🟡 StateObject.update: executed initObject()", String(describing: self))
-            }
+        if let seed = mirror.descendant("_seed") as? Int, seed == 1 {
+            storage.reset()
+            os_log("🟡 StateObject.update: executed initObject()", String(describing: self))
         }
     }
 }
