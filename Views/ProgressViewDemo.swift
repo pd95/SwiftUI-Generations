@@ -10,8 +10,8 @@ import SwiftUI
 struct ProgressViewDemo: View {
     @State private var progress = 0.0
 
-    let startTime = Date()
-    let timer = Timer.publish(every: 0.1, on: .main, in: .common).autoconnect()
+    @State private var timer = Timer.publish(every: 0.1, on: .main, in: .common).autoconnect()
+    @State private var endTime: Date?
 
     var body: some View {
         VStack(spacing: 8) {
@@ -79,11 +79,18 @@ struct ProgressViewDemo: View {
                 if progress < 100 {
                     progress += 2
                 }
-                if floor(startTime.distance(to: time)
-                            .truncatingRemainder(dividingBy: 10)) == 0 {
-                    progress = 0
+                else if let endTime = endTime {
+                    if endTime.distance(to: time) > 2 {
+                        progress = 0
+                        self.endTime = nil
+                    }
+                } else {
+                    endTime = Date()
                 }
             }
+            .onAppear(perform: {
+                timer = Timer.publish(every: 0.1, on: .main, in: .common).autoconnect()
+            })
         }
     }
 }
