@@ -40,11 +40,3 @@ private struct ValueChangeDetectionWrapper<V: Equatable, Content: View>: View {
     }
 
 }
-
-#if DEBUG
-struct View_onChange_Previews: PreviewProvider {
-    static var previews: some View {
-        ViewOnChangeDemo()
-    }
-}
-#endif

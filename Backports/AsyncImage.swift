@@ -203,11 +203,3 @@ public struct AsyncImage<Content>: View where Content: View {
         return UIImage(cgImage: downsampledImage)
     }
 }
-
-#if DEBUG
-struct AsyncImage_Previews: PreviewProvider {
-    static var previews: some View {
-        AsyncImageDemo()
-    }
-}
-#endif

@@ -124,13 +124,3 @@ extension Color {
         return nil
     }
 }
-
-
-#if DEBUG
-// MARK: - Preview for testing
-struct Color_Previews: PreviewProvider {
-    static var previews: some View {
-        NewColorsDemo()
-    }
-}
-#endif

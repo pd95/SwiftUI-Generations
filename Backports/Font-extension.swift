@@ -30,9 +30,3 @@ extension Font {
         return Font(f)
     }
 }
-
-struct Font_extension_Previews: PreviewProvider {
-    static var previews: some View {
-        NewFontsDemo()
-    }
-}

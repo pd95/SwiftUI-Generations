@@ -160,11 +160,3 @@ private struct CircularProgressView: UIViewRepresentable {
     func updateUIView(_ uiView: UIActivityIndicatorView, context: Context) {
     }
 }
-
-#if DEBUG
-struct ProgressView_Previews: PreviewProvider {
-    static var previews: some View {
-        ProgressViewDemo()
-    }
-}
-#endif
