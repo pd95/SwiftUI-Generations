@@ -22,6 +22,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         print(#function)
 
         let contentView = ContentView()
+            .defaultAppStorage(UserDefaults(suiteName: "group.com.yourcompany.test")!)
 
         // Use a UIHostingController as window root view controller.
         if let windowScene = scene as? UIWindowScene {

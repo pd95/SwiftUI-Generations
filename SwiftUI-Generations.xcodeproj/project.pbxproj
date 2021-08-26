@@ -93,6 +93,7 @@
 		17DE260326D80A4800AB5B07 /* AppStorage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppStorage.swift; sourceTree = "<group>"; };
 		17EFA68826D049420094D483 /* Font-extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Font-extension.swift"; sourceTree = "<group>"; };
 		17EFA68A26D049540094D483 /* NewFontsDemo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewFontsDemo.swift; sourceTree = "<group>"; };
+		17F21A5A26D846C300D13BE0 /* iOS13-App.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = "iOS13-App.entitlements"; sourceTree = "<group>"; };
 		17F3AAE526D7826200F5E2FF /* NavigationView-extension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "NavigationView-extension.swift"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -163,6 +164,7 @@
 		174C439826CEF754009D6D94 /* iOS13-App */ = {
 			isa = PBXGroup;
 			children = (
+				17F21A5A26D846C300D13BE0 /* iOS13-App.entitlements */,
 				174C43BC26CEF896009D6D94 /* AppDelegate.swift */,
 				174C43BD26CEF896009D6D94 /* SceneDelegate.swift */,
 				174C43C026CEF928009D6D94 /* Info.plist */,
@@ -574,6 +576,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++17";
+				CODE_SIGN_ENTITLEMENTS = "iOS13-App/iOS13-App.entitlements";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = P8CC95REUG;
@@ -599,6 +602,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++17";
+				CODE_SIGN_ENTITLEMENTS = "iOS13-App/iOS13-App.entitlements";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = P8CC95REUG;
