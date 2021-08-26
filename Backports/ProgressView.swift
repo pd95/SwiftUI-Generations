@@ -136,7 +136,7 @@ private struct LinearProgressView: View {
                 .overlay(
                     RoundedRectangle(cornerRadius: 2)
                         .foregroundColor(.accentColor)
-                        .frame(width: proxy.size.width * fractionCompleted),
+                        .frame(width: proxy.size.width * CGFloat(fractionCompleted)),
                     alignment: .leading
                 )
         }

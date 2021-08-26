@@ -20,16 +20,19 @@ struct LabelDemo: View {
                 .frame(maxWidth: 200)
 
             Label("Lightning", systemImage: "bolt.fill")
-                .labelStyle(.iconOnly)
+                //.labelStyle(.iconOnly)
+                .labelStyle(IconOnlyLabelStyle())
             Label("Lightning", systemImage: "bolt.fill")
-                .labelStyle(.titleOnly)
+                //.labelStyle(.titleOnly)
+                .labelStyle(TitleOnlyLabelStyle())
 
             HStack {
                 Label("Rain", systemImage: "cloud.rain")
                 Label("Snow", systemImage: "snow")
                 Label("Sun", systemImage: "sun.max")
             }
-            .labelStyle(.iconOnly)
+            //.labelStyle(.iconOnly)
+            .labelStyle(IconOnlyLabelStyle())
 
             Label {
                 Text("Philipp")

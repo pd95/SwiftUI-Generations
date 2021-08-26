@@ -19,7 +19,8 @@ struct StateObjectDemo: View {
 
             }
         }
-        .navigationViewStyle(.stack)
+        //.navigationViewStyle(.stack)
+        .navigationViewStyle(StackNavigationViewStyle())
     }
 }
 
