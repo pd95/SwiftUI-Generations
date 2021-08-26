@@ -18,6 +18,7 @@ struct StateObjectDemo: View {
                 }
 
             }
+            .navigationTitle("State Management")
         }
         //.navigationViewStyle(.stack)
         .navigationViewStyle(StackNavigationViewStyle())
@@ -57,6 +58,7 @@ struct StateObjectTestView: View {
         .onChange(of: stateObject.num) { newStateObject in
             print("State: \(newStateObject) <> \(stateObject.num)")
         }
+        .navigationTitle(Text("@StateObject"))
     }
 }
 

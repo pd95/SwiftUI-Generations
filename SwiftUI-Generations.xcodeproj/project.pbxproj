@@ -57,6 +57,7 @@
 		17EFA68B26D049540094D483 /* NewFontsDemo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 17EFA68A26D049540094D483 /* NewFontsDemo.swift */; };
 		17EFA68C26D049D80094D483 /* NewFontsDemo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 17EFA68A26D049540094D483 /* NewFontsDemo.swift */; };
 		17EFA68D26D049D90094D483 /* NewFontsDemo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 17EFA68A26D049540094D483 /* NewFontsDemo.swift */; };
+		17F3AAE626D7826200F5E2FF /* NavigationView-extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 17F3AAE526D7826200F5E2FF /* NavigationView-extension.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -90,6 +91,7 @@
 		17C9CC1026D3977C00459FA2 /* UnfairLock.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UnfairLock.swift; sourceTree = "<group>"; };
 		17EFA68826D049420094D483 /* Font-extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Font-extension.swift"; sourceTree = "<group>"; };
 		17EFA68A26D049540094D483 /* NewFontsDemo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewFontsDemo.swift; sourceTree = "<group>"; };
+		17F3AAE526D7826200F5E2FF /* NavigationView-extension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "NavigationView-extension.swift"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -192,6 +194,7 @@
 				174C438F26CEC88A009D6D94 /* Color-extension.swift */,
 				17EFA68826D049420094D483 /* Font-extension.swift */,
 				17B25DD826CEFCC20004DC50 /* Label.swift */,
+				17F3AAE526D7826200F5E2FF /* NavigationView-extension.swift */,
 				174C439126CECF3D009D6D94 /* ProgressView.swift */,
 				1788790F26D41113001C59FF /* StateObject.swift */,
 				1766B77126D61AC2006B096E /* View-onChange.swift */,
@@ -376,6 +379,7 @@
 				1788790C26D41101001C59FF /* StateObjectDemo.swift in Sources */,
 				17B25DD926CEFCC20004DC50 /* Label.swift in Sources */,
 				174C43A826CEF7D0009D6D94 /* Color-extension.swift in Sources */,
+				17F3AAE626D7826200F5E2FF /* NavigationView-extension.swift in Sources */,
 				175D32AA26D0381B002322AB /* ProgressViewDemo.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
