@@ -20,15 +20,26 @@ public struct AppStorage<Value>: DynamicProperty {
 
     /// A wrapper class of ObservableObject to ensure SwiftUI is notified whan a value is set
     /// There is effectively no storage. All accesses are done with the given get() and set() methods.
-    private class StorageWrapper<Value>: ObservableObject {
+    private class StorageWrapper<Value>: NSObject, ObservableObject {
 
-        var store: UserDefaults = .standard
+        private let key: String
+        private var store: UserDefaults
+
         let get: (UserDefaults) -> Value
         let set: (UserDefaults, Value) -> Void
 
-        init(get: @escaping (UserDefaults) -> Value, set: @escaping (UserDefaults, Value) -> Void) {
+        init(key: String, get: @escaping (UserDefaults) -> Value, set: @escaping (UserDefaults, Value) -> Void) {
+            self.store = .standard
+            self.key = key
             self.get = get
             self.set = set
+            super.init()
+
+            store.addObserver(self, forKeyPath: key, options: [], context: nil)
+        }
+
+        deinit {
+            store.removeObserver(self, forKeyPath: key)
         }
 
         var wrappedValue: Value {
@@ -36,7 +47,6 @@ public struct AppStorage<Value>: DynamicProperty {
                 self.get(store)
             }
             set {
-                self.objectWillChange.send()
                 self.set(store, newValue)
             }
         }
@@ -48,6 +58,23 @@ public struct AppStorage<Value>: DynamicProperty {
             )
         }
 
+        override func observeValue(forKeyPath keyPath: String?,
+                                   of object: Any?,
+                                   change: [NSKeyValueChangeKey : Any]?,
+                                   context: UnsafeMutableRawPointer?) {
+
+            self.objectWillChange.send()
+        }
+
+        func updateStore(_ store: UserDefaults) {
+            guard self.store != store else {
+                return
+            }
+            // Make sure we reset us as observer if the UserDefaults store has changed
+            self.store.removeObserver(self, forKeyPath: key)
+            self.store = store
+            store.addObserver(self, forKeyPath: key, options: [], context: nil)
+        }
     }
 
     @ObservedObject private var storage: StorageWrapper<Value>
@@ -70,7 +97,7 @@ public struct AppStorage<Value>: DynamicProperty {
         _storage.update()
 
         // Update storage with latest environment setting
-        storage.store = defaultStore
+        storage.updateStore(defaultStore)
     }
 }
 
@@ -81,7 +108,7 @@ extension AppStorage {
 
     /// Creates a property that can read and write to a boolean user default.
     public init(wrappedValue: Value, _ key: String, store: UserDefaults? = nil) where Value == Bool {
-        storage = StorageWrapper(get: { store in
+        storage = StorageWrapper(key: key, get: { store in
             return (store.object(forKey: key) as? Value) ?? wrappedValue
         }, set: { store, newValue in
             store.set(newValue, forKey: key)
@@ -90,7 +117,7 @@ extension AppStorage {
 
     /// Creates a property that can read and write to an integer user default.
     public init(wrappedValue: Value, _ key: String, store: UserDefaults? = nil) where Value == Int {
-        storage = StorageWrapper(get: { store in
+        storage = StorageWrapper(key: key, get: { store in
             return (store.object(forKey: key) as? Value) ?? wrappedValue
         }, set: { store, newValue in
             store.set(newValue, forKey: key)
@@ -99,7 +126,7 @@ extension AppStorage {
 
     /// Creates a property that can read and write to a double user default.
     public init(wrappedValue: Value, _ key: String, store: UserDefaults? = nil) where Value == Double {
-        storage = StorageWrapper(get: { store in
+        storage = StorageWrapper(key: key, get: { store in
             return (store.object(forKey: key) as? Value) ?? wrappedValue
         }, set: { store, newValue in
             store.set(newValue, forKey: key)
@@ -108,7 +135,7 @@ extension AppStorage {
 
     /// Creates a property that can read and write to a string user default.
     public init(wrappedValue: Value, _ key: String, store: UserDefaults? = nil) where Value == String {
-        storage = StorageWrapper(get: { store in
+        storage = StorageWrapper(key: key, get: { store in
             return (store.object(forKey: key) as? Value) ?? wrappedValue
         }, set: { store, newValue in
             store.set(newValue, forKey: key)
@@ -117,7 +144,7 @@ extension AppStorage {
 
     /// Creates a property that can read and write to a url user default.
     public init(wrappedValue: Value, _ key: String, store: UserDefaults? = nil) where Value == URL {
-        storage = StorageWrapper(get: { store in
+        storage = StorageWrapper(key: key, get: { store in
             return (store.object(forKey: key) as? Value) ?? wrappedValue
         }, set: { store, newValue in
             store.set(newValue, forKey: key)
@@ -126,7 +153,7 @@ extension AppStorage {
 
     /// Creates a property that can read and write to a user default as data.
     public init(wrappedValue: Value, _ key: String, store: UserDefaults? = nil) where Value == Data {
-        storage = StorageWrapper(get: { store in
+        storage = StorageWrapper(key: key, get: { store in
             return (store.object(forKey: key) as? Value) ?? wrappedValue
         }, set: { store, newValue in
             store.set(newValue, forKey: key)
@@ -136,7 +163,7 @@ extension AppStorage {
     /// Creates a property that can read and write to an integer user default,
     /// transforming that to `RawRepresentable` data type.
     public init(wrappedValue: Value, _ key: String, store: UserDefaults? = nil) where Value : RawRepresentable, Value.RawValue == Int {
-        storage = StorageWrapper(get: { store in
+        storage = StorageWrapper(key: key, get: { store in
             if let rawValue = store.object(forKey: key) as? Value.RawValue {
                 return Value(rawValue: rawValue) ?? wrappedValue
             }
@@ -149,7 +176,7 @@ extension AppStorage {
     /// Creates a property that can read and write to a string user default,
     /// transforming that to `RawRepresentable` data type.
     public init(wrappedValue: Value, _ key: String, store: UserDefaults? = nil) where Value : RawRepresentable, Value.RawValue == String {
-        storage = StorageWrapper(get: { store in
+        storage = StorageWrapper(key: key, get: { store in
             if let rawValue = store.object(forKey: key) as? Value.RawValue {
                 return Value(rawValue: rawValue) ?? wrappedValue
             }
@@ -167,7 +194,7 @@ extension AppStorage where Value : ExpressibleByNilLiteral {
 
     /// Creates a property that can read and write an Optional boolean user default.
     public init(_ key: String, store: UserDefaults? = nil) where Value == Bool? {
-        storage = StorageWrapper(get: { store in
+        storage = StorageWrapper(key: key, get: { store in
             guard let value = (store.object(forKey: key) as? Value) else {
                 return nil
             }
@@ -179,7 +206,7 @@ extension AppStorage where Value : ExpressibleByNilLiteral {
 
     /// Creates a property that can read and write an Optional integer user default.
     public init(_ key: String, store: UserDefaults? = nil) where Value == Int? {
-        storage = StorageWrapper(get: { store in
+        storage = StorageWrapper(key: key, get: { store in
             guard let value = (store.object(forKey: key) as? Value) else {
                 return nil
             }
@@ -191,7 +218,7 @@ extension AppStorage where Value : ExpressibleByNilLiteral {
 
     /// Creates a property that can read and write an Optional double user default.
     public init(_ key: String, store: UserDefaults? = nil) where Value == Double? {
-        storage = StorageWrapper(get: { store in
+        storage = StorageWrapper(key: key, get: { store in
             guard let value = (store.object(forKey: key) as? Value) else {
                 return nil
             }
@@ -203,7 +230,7 @@ extension AppStorage where Value : ExpressibleByNilLiteral {
 
     /// Creates a property that can read and write an Optional string user default.
     public init(_ key: String, store: UserDefaults? = nil) where Value == String? {
-        storage = StorageWrapper(get: { store in
+        storage = StorageWrapper(key: key, get: { store in
             guard let value = (store.object(forKey: key) as? Value) else {
                 return nil
             }
@@ -215,7 +242,7 @@ extension AppStorage where Value : ExpressibleByNilLiteral {
 
     /// Creates a property that can read and write an Optional URL user default.
     public init(_ key: String, store: UserDefaults? = nil) where Value == URL? {
-        storage = StorageWrapper(get: { store in
+        storage = StorageWrapper(key: key, get: { store in
             guard let value = (store.object(forKey: key) as? Value) else {
                 return nil
             }
@@ -227,7 +254,7 @@ extension AppStorage where Value : ExpressibleByNilLiteral {
 
     /// Creates a property that can read and write an Optional data user default.
     public init(_ key: String, store: UserDefaults? = nil) where Value == Data? {
-        storage = StorageWrapper(get: { store in
+        storage = StorageWrapper(key: key, get: { store in
             guard let value = (store.object(forKey: key) as? Value) else {
                 return nil
             }
@@ -245,7 +272,7 @@ extension AppStorage {
     /// Creates a property that can save and restore an Optional string,
     /// transforming it to an Optional `RawRepresentable` data type.
     public init<R>(_ key: String, store: UserDefaults? = nil) where Value == R?, R : RawRepresentable, R.RawValue == String {
-        storage = StorageWrapper(get: { store in
+        storage = StorageWrapper(key: key, get: { store in
             if let rawValue = store.object(forKey: key) as? R.RawValue {
                 return R(rawValue: rawValue)
             }
@@ -258,7 +285,7 @@ extension AppStorage {
     /// Creates a property that can save and restore an Optional integer,
     /// transforming it to an Optional `RawRepresentable` data type.
     public init<R>(_ key: String, store: UserDefaults? = nil) where Value == R?, R : RawRepresentable, R.RawValue == Int {
-        storage = StorageWrapper(get: { store in
+        storage = StorageWrapper(key: key, get: { store in
             if let rawValue = store.object(forKey: key) as? R.RawValue {
                 return R(rawValue: rawValue)
             }
