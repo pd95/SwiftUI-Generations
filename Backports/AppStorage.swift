@@ -23,7 +23,7 @@ extension UserDefaultsValueTransformable {
     }
 
     public static func writeValue(_ value: Any?, to store: UserDefaults, key: String) {
-        store.setValue(value, forKey: key)
+        store.set(value as? Self, forKey: key)
     }
 }
 
@@ -32,7 +32,11 @@ extension Bool: UserDefaultsValueTransformable {}
 extension Int: UserDefaultsValueTransformable {}
 extension Double: UserDefaultsValueTransformable {}
 extension String: UserDefaultsValueTransformable {}
-extension URL: UserDefaultsValueTransformable {}
+extension URL: UserDefaultsValueTransformable {
+    public static func writeValue(_ value: Any?, to store: UserDefaults, key: String) {
+        store.set(value as? Self, forKey: key)
+    }
+}
 extension Data: UserDefaultsValueTransformable {}
 
 
