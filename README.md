@@ -1,14 +1,20 @@
 # SwiftUI Generations
 
-Apple brought many improvements to SwiftUI since the introduction in 2019 (in iOS 13) year over year.
-But simetimes it is frustrating that you cannot use a certain functionality because it is meant to be used on the newer
-OS version. For example: `AsyncImage`: this is not a View which does some magic. Everything it does can be done already
-on iOS 13. It simply brings the "Apple approved" API.
+Apple brought many improvements to SwiftUI year over year since its introduction in 2019 (with iOS 13).
+But sometimes it is frustrating that you cannot use certain functionality because it is meant to be
+used with more recent iOS version. `AsyncImage`, for example, is not a view doing magic tricks. 
+Everything it does can already be done on iOS 13. It simply is packaged in a "Apple approved" API 
+and therefore will be available for the next few years.
 
-So in this project I am trying to bring some of the new SwiftUI features of iOS 15 back to iOS 14 and even iOS 13 if
-possible.
+So if you are limited to use a non-current SwiftUI version (e.g. iOS 13 and iOS 14 as of September
+2021)3, you can build workarounds for the missing features or use third party libraries which 
+implement the feature with their custom API.
 
-So far I have the following working (and compatible with iOS 15 SwiftUI API):
+With this project I'm proposing an alternate solution: we backport the new Apple APIs to iOS 13 in 
+the best/most compatible way. I'm trying to bring the most important SwiftUI features of iOS 14 and 15
+back to iOS 13.
+
+So far I have the following implemented:
 
 - `AsyncImage`
 - `Label`
@@ -17,8 +23,13 @@ So far I have the following working (and compatible with iOS 15 SwiftUI API):
 - basic parts of `ProgressView`: 
     - Indeterminate progress with or without `Text` label
     - Determinate progress linear progress with or without `Text` label
-- Basic `StateObject` object wrapper for iOS 13. **This really needs testing!!!**
-- Basic `AppStorage` object wrapper for iOS 13.
+- `onChange(of: V, perform: @escaping (V) -> Void)` value tracker for iOS 13. 
+- `navigationTitle(...)` for iOS 13
+- `StateObject` object wrapper for iOS 13.
+- `AppStorage` object wrapper for iOS 13.
+- `SceneStorage` object wrapper for iOS 13. (Needs integration into `SceneDelegate` to manage the
+  persistence of the values.)
+- `ScenePhase` for iOS 13 (requires the custom `SceneManager` to hook into the `UIScene`)
 
 The sources can be found in the [Backports](Backports) directory. All `struct`s and `protocol`s have been amended with
 with `@available` to make clear, as of which iOS target the source should be removed because SwiftUI contains the
@@ -26,7 +37,7 @@ native functionality.
 
 The project consists of 3 targets which I use to test the implementations:
 
-- iOS15-App: iOS 15.0 deployment target (and includes none of the backports)
+- iOS15-App: iOS 15.0 deployment target (includes none of the backports as it uses the "modern" API)
 - iOS14-App: iOS 14.5 deployment target (adding `AsyncImage` and new colors)
 - iOS13-App: iOS 13.6 deployment target (adding all backports available)
 
