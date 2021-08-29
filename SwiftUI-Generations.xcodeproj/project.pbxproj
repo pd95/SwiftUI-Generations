@@ -9,6 +9,8 @@
 /* Begin PBXBuildFile section */
 		1719DCC626D0077900A12F1C /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 174C439D26CEF755009D6D94 /* Assets.xcassets */; };
 		1719DCC726D0077A00A12F1C /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 174C439D26CEF755009D6D94 /* Assets.xcassets */; };
+		172CCD4F26DBF88200DD1D4D /* ScenePhase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 172CCD4E26DBF88200DD1D4D /* ScenePhase.swift */; };
+		172CCD5126DC049F00DD1D4D /* SceneManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 172CCD5026DC049F00DD1D4D /* SceneManager.swift */; };
 		173D286626CE9C7F00039D17 /* iOS14App.swift in Sources */ = {isa = PBXBuildFile; fileRef = 173D286526CE9C7F00039D17 /* iOS14App.swift */; };
 		173D286826CE9C7F00039D17 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 173D286726CE9C7F00039D17 /* ContentView.swift */; };
 		174C439026CEC88A009D6D94 /* Color-extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 174C438F26CEC88A009D6D94 /* Color-extension.swift */; };
@@ -38,6 +40,7 @@
 		1766B77826D61D86006B096E /* ViewOnChangeDemo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1766B77726D61D86006B096E /* ViewOnChangeDemo.swift */; };
 		1766B77926D61D92006B096E /* ViewOnChangeDemo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1766B77726D61D86006B096E /* ViewOnChangeDemo.swift */; };
 		1766B77A26D61D92006B096E /* ViewOnChangeDemo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1766B77726D61D86006B096E /* ViewOnChangeDemo.swift */; };
+		1772986026DB7AF400CA2A8B /* SceneStorage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1772985F26DB7AF400CA2A8B /* SceneStorage.swift */; };
 		1785AACF26CE9DAC0009572F /* AsyncImage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1785AACE26CE9DAC0009572F /* AsyncImage.swift */; };
 		1788790826D3C58B001C59FF /* ViewGeometryPreferenceKey.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1788790726D3C58B001C59FF /* ViewGeometryPreferenceKey.swift */; };
 		1788790926D3C58B001C59FF /* ViewGeometryPreferenceKey.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1788790726D3C58B001C59FF /* ViewGeometryPreferenceKey.swift */; };
@@ -63,6 +66,8 @@
 
 /* Begin PBXFileReference section */
 		171029E526CFF239004E9440 /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
+		172CCD4E26DBF88200DD1D4D /* ScenePhase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScenePhase.swift; sourceTree = "<group>"; };
+		172CCD5026DC049F00DD1D4D /* SceneManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneManager.swift; sourceTree = "<group>"; };
 		173D286226CE9C7F00039D17 /* iOS14-App.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "iOS14-App.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		173D286526CE9C7F00039D17 /* iOS14App.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = iOS14App.swift; sourceTree = "<group>"; };
 		173D286726CE9C7F00039D17 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
@@ -83,6 +88,7 @@
 		175D32A926D0381B002322AB /* ProgressViewDemo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProgressViewDemo.swift; sourceTree = "<group>"; };
 		1766B77126D61AC2006B096E /* View-onChange.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "View-onChange.swift"; sourceTree = "<group>"; };
 		1766B77726D61D86006B096E /* ViewOnChangeDemo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewOnChangeDemo.swift; sourceTree = "<group>"; };
+		1772985F26DB7AF400CA2A8B /* SceneStorage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneStorage.swift; sourceTree = "<group>"; };
 		1785AACE26CE9DAC0009572F /* AsyncImage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AsyncImage.swift; sourceTree = "<group>"; };
 		1788790726D3C58B001C59FF /* ViewGeometryPreferenceKey.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewGeometryPreferenceKey.swift; sourceTree = "<group>"; };
 		1788790B26D41101001C59FF /* StateObjectDemo.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StateObjectDemo.swift; sourceTree = "<group>"; };
@@ -201,6 +207,8 @@
 				17B25DD826CEFCC20004DC50 /* Label.swift */,
 				17F3AAE526D7826200F5E2FF /* NavigationView-extension.swift */,
 				174C439126CECF3D009D6D94 /* ProgressView.swift */,
+				172CCD4E26DBF88200DD1D4D /* ScenePhase.swift */,
+				1772985F26DB7AF400CA2A8B /* SceneStorage.swift */,
 				1788790F26D41113001C59FF /* StateObject.swift */,
 				1766B77126D61AC2006B096E /* View-onChange.swift */,
 			);
@@ -210,6 +218,7 @@
 		17C9CC1426D3A0BF00459FA2 /* Utilities */ = {
 			isa = PBXGroup;
 			children = (
+				172CCD5026DC049F00DD1D4D /* SceneManager.swift */,
 				17C9CC0C26D393BA00459FA2 /* URLSession+DownloadTaskPublisher.swift */,
 				17C9CC1026D3977C00459FA2 /* UnfairLock.swift */,
 				1788790726D3C58B001C59FF /* ViewGeometryPreferenceKey.swift */,
@@ -367,10 +376,12 @@
 			files = (
 				1788791026D41113001C59FF /* StateObject.swift in Sources */,
 				17EFA68B26D049540094D483 /* NewFontsDemo.swift in Sources */,
+				172CCD4F26DBF88200DD1D4D /* ScenePhase.swift in Sources */,
 				174C43BE26CEF897009D6D94 /* AppDelegate.swift in Sources */,
 				175D32A626D03731002322AB /* LabelDemo.swift in Sources */,
 				17C9CC1126D3977C00459FA2 /* UnfairLock.swift in Sources */,
 				174C43BF26CEF897009D6D94 /* SceneDelegate.swift in Sources */,
+				1772986026DB7AF400CA2A8B /* SceneStorage.swift in Sources */,
 				1766B77226D61AC2006B096E /* View-onChange.swift in Sources */,
 				1788790826D3C58B001C59FF /* ViewGeometryPreferenceKey.swift in Sources */,
 				174C43A726CEF7CD009D6D94 /* AsyncImage.swift in Sources */,
@@ -385,6 +396,7 @@
 				1788790C26D41101001C59FF /* StateObjectDemo.swift in Sources */,
 				17B25DD926CEFCC20004DC50 /* Label.swift in Sources */,
 				174C43A826CEF7D0009D6D94 /* Color-extension.swift in Sources */,
+				172CCD5126DC049F00DD1D4D /* SceneManager.swift in Sources */,
 				17F3AAE626D7826200F5E2FF /* NavigationView-extension.swift in Sources */,
 				175D32AA26D0381B002322AB /* ProgressViewDemo.swift in Sources */,
 			);
