@@ -45,8 +45,6 @@ public struct AsyncImage<Content>: View where Content: View {
     private var url: URL?
     private var contentBuilder: ((AsyncImagePhase) -> Content)?
 
-    private let backgroundQueue: DispatchQueue
-
     public enum Errors: Error {
         case imageDecodingError
     }
@@ -61,7 +59,6 @@ public struct AsyncImage<Content>: View where Content: View {
     public init(url: URL?, @ViewBuilder content: @escaping (AsyncImagePhase) -> Content) {
         self.url = url
         self.contentBuilder = content
-        self.backgroundQueue = DispatchQueue.global(qos: .userInitiated)
     }
 
     public init(url: URL?) where Content == Image {
@@ -142,12 +139,12 @@ public struct AsyncImage<Content>: View where Content: View {
 
         // Debounce the size changes to reduce succession of downsampling due to animation
         let sizePublisher = sizeSubject
-            .debounce(for: 0.02, scheduler: backgroundQueue)
+            .debounce(for: 0.02, scheduler: DispatchQueue.global(qos: .userInitiated))
             .removeDuplicates()
             .eraseToAnyPublisher()
 
         cancellable = Publishers.CombineLatest(localURLPublisher, sizePublisher)
-            .subscribe(on: backgroundQueue)
+            .receive(on: DispatchQueue.global(qos: .userInitiated))
             .tryMap({ (url, size) in
 
                 let image: UIImage?
@@ -161,7 +158,7 @@ public struct AsyncImage<Content>: View where Content: View {
                 }
                 return image
             })
-            .receive(on: RunLoop.main, options: nil)
+            .receive(on: RunLoop.main)
             .sink(receiveCompletion: { result in
                 if case .failure(let error) = result {
                     phase = .failure(error)
