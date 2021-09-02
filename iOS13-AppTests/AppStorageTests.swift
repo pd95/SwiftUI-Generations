@@ -229,7 +229,6 @@ class AppStorageTests: XCTestCase {
 
         // Prepare setup
         let store = UserDefaults(suiteName: #function)!
-        print(store.dictionaryRepresentation()[key])
         store.removeObject(forKey: key)
         XCTAssertEqual(store.value(forKey: key) as? String, nil, "No value should be set after removal")
 
