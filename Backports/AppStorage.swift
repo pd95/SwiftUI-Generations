@@ -32,6 +32,10 @@ extension Int: UserDefaultsValueTransform {}
 extension Double: UserDefaultsValueTransform {}
 extension String: UserDefaultsValueTransform {}
 extension URL: UserDefaultsValueTransform {
+    public static func readValue(from store: UserDefaults, key: String) -> Any? {
+        store.url(forKey: key)
+    }
+
     public static func writeValue(_ value: Any?, to store: UserDefaults, key: String) {
         store.set(value as? Self, forKey: key)
     }

@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		170A607826DC2CE900FDEC94 /* AppStorageTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 170A607726DC2CE900FDEC94 /* AppStorageTests.swift */; };
 		1719DCC626D0077900A12F1C /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 174C439D26CEF755009D6D94 /* Assets.xcassets */; };
 		1719DCC726D0077A00A12F1C /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 174C439D26CEF755009D6D94 /* Assets.xcassets */; };
 		172CCD4F26DBF88200DD1D4D /* ScenePhase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 172CCD4E26DBF88200DD1D4D /* ScenePhase.swift */; };
@@ -61,7 +62,19 @@
 		17F3AAE626D7826200F5E2FF /* NavigationView-extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 17F3AAE526D7826200F5E2FF /* NavigationView-extension.swift */; };
 /* End PBXBuildFile section */
 
+/* Begin PBXContainerItemProxy section */
+		170A607926DC2CE900FDEC94 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 173D285A26CE9C7F00039D17 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 174C439626CEF754009D6D94;
+			remoteInfo = "iOS13-App";
+		};
+/* End PBXContainerItemProxy section */
+
 /* Begin PBXFileReference section */
+		170A607526DC2CE900FDEC94 /* iOS13-AppTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "iOS13-AppTests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
+		170A607726DC2CE900FDEC94 /* AppStorageTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppStorageTests.swift; sourceTree = "<group>"; };
 		171029E526CFF239004E9440 /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
 		172CCD4E26DBF88200DD1D4D /* ScenePhase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScenePhase.swift; sourceTree = "<group>"; };
 		172CCD5026DC049F00DD1D4D /* SceneManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneManager.swift; sourceTree = "<group>"; };
@@ -101,6 +114,13 @@
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
+		170A607226DC2CE900FDEC94 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		173D285F26CE9C7F00039D17 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
@@ -125,6 +145,14 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		170A607626DC2CE900FDEC94 /* iOS13-AppTests */ = {
+			isa = PBXGroup;
+			children = (
+				170A607726DC2CE900FDEC94 /* AppStorageTests.swift */,
+			);
+			path = "iOS13-AppTests";
+			sourceTree = "<group>";
+		};
 		173D285926CE9C7F00039D17 = {
 			isa = PBXGroup;
 			children = (
@@ -134,6 +162,7 @@
 				174C43AF26CEF843009D6D94 /* iOS15-App */,
 				174C43A526CEF7B2009D6D94 /* iOS14-App */,
 				174C439826CEF754009D6D94 /* iOS13-App */,
+				170A607626DC2CE900FDEC94 /* iOS13-AppTests */,
 				174C439D26CEF755009D6D94 /* Assets.xcassets */,
 				173D286326CE9C7F00039D17 /* Products */,
 			);
@@ -145,6 +174,7 @@
 				173D286226CE9C7F00039D17 /* iOS14-App.app */,
 				174C439726CEF754009D6D94 /* iOS13-App.app */,
 				174C43AE26CEF843009D6D94 /* iOS15-App.app */,
+				170A607526DC2CE900FDEC94 /* iOS13-AppTests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -226,6 +256,24 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
+		170A607426DC2CE900FDEC94 /* iOS13-AppTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 170A607D26DC2CE900FDEC94 /* Build configuration list for PBXNativeTarget "iOS13-AppTests" */;
+			buildPhases = (
+				170A607126DC2CE900FDEC94 /* Sources */,
+				170A607226DC2CE900FDEC94 /* Frameworks */,
+				170A607326DC2CE900FDEC94 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				170A607A26DC2CE900FDEC94 /* PBXTargetDependency */,
+			);
+			name = "iOS13-AppTests";
+			productName = "iOS13-AppTests";
+			productReference = 170A607526DC2CE900FDEC94 /* iOS13-AppTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
 		173D286126CE9C7F00039D17 /* iOS14-App */ = {
 			isa = PBXNativeTarget;
 			buildConfigurationList = 173D287126CE9C8000039D17 /* Build configuration list for PBXNativeTarget "iOS14-App" */;
@@ -286,6 +334,10 @@
 				LastSwiftUpdateCheck = 1300;
 				LastUpgradeCheck = 1250;
 				TargetAttributes = {
+					170A607426DC2CE900FDEC94 = {
+						CreatedOnToolsVersion = 13.0;
+						TestTargetID = 174C439626CEF754009D6D94;
+					};
 					173D286126CE9C7F00039D17 = {
 						CreatedOnToolsVersion = 12.5.1;
 					};
@@ -313,11 +365,19 @@
 				174C439626CEF754009D6D94 /* iOS13-App */,
 				173D286126CE9C7F00039D17 /* iOS14-App */,
 				174C43AD26CEF843009D6D94 /* iOS15-App */,
+				170A607426DC2CE900FDEC94 /* iOS13-AppTests */,
 			);
 		};
 /* End PBXProject section */
 
 /* Begin PBXResourcesBuildPhase section */
+		170A607326DC2CE900FDEC94 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		173D286026CE9C7F00039D17 /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -346,6 +406,14 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
+		170A607126DC2CE900FDEC94 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				170A607826DC2CE900FDEC94 /* AppStorageTests.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		173D285E26CE9C7F00039D17 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -417,7 +485,63 @@
 		};
 /* End PBXSourcesBuildPhase section */
 
+/* Begin PBXTargetDependency section */
+		170A607A26DC2CE900FDEC94 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 174C439626CEF754009D6D94 /* iOS13-App */;
+			targetProxy = 170A607926DC2CE900FDEC94 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
 /* Begin XCBuildConfiguration section */
+		170A607B26DC2CE900FDEC94 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++17";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = P8CC95REUG;
+				GENERATE_INFOPLIST_FILE = YES;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = "com.yourcompany.iOS13-AppTests";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/iOS13-App.app/iOS13-App";
+			};
+			name = Debug;
+		};
+		170A607C26DC2CE900FDEC94 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++17";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = P8CC95REUG;
+				GENERATE_INFOPLIST_FILE = YES;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = "com.yourcompany.iOS13-AppTests";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/iOS13-App.app/iOS13-App";
+			};
+			name = Release;
+		};
 		173D286F26CE9C8000039D17 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -469,7 +593,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 13.5;
 				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
 				MTL_FAST_MATH = YES;
 				ONLY_ACTIVE_ARCH = YES;
@@ -524,7 +648,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 13.5;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				MTL_FAST_MATH = YES;
 				SDKROOT = iphoneos;
@@ -588,7 +712,6 @@
 				DEVELOPMENT_TEAM = P8CC95REUG;
 				ENABLE_PREVIEWS = YES;
 				INFOPLIST_FILE = "iOS13-App/Info.plist";
-				IPHONEOS_DEPLOYMENT_TARGET = 13.6;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -614,7 +737,6 @@
 				DEVELOPMENT_TEAM = P8CC95REUG;
 				ENABLE_PREVIEWS = YES;
 				INFOPLIST_FILE = "iOS13-App/Info.plist";
-				IPHONEOS_DEPLOYMENT_TARGET = 13.6;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -645,6 +767,7 @@
 				INFOPLIST_KEY_UISupportedInterfaceOrientations = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -675,6 +798,7 @@
 				INFOPLIST_KEY_UISupportedInterfaceOrientations = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -691,6 +815,15 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
+		170A607D26DC2CE900FDEC94 /* Build configuration list for PBXNativeTarget "iOS13-AppTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				170A607B26DC2CE900FDEC94 /* Debug */,
+				170A607C26DC2CE900FDEC94 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
 		173D285D26CE9C7F00039D17 /* Build configuration list for PBXProject "SwiftUI-Generations" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
