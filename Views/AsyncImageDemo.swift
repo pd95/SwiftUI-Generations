@@ -20,7 +20,8 @@ struct AsyncImageDemo: View {
                 VStack {
                     Text("Loading images asynchronously:")
                         .font(.headline)
-                        .padding(.bottom)
+                        .frame(maxWidth: .infinity, alignment: .leading)
+                        .padding()
 
                     Text("Image is clipped (as the original image is bigger than the available frame and it is `.resizable` cannot be attached.")
                         .multilineTextAlignment(.leading)

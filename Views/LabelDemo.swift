@@ -12,6 +12,7 @@ struct LabelDemo: View {
         VStack(spacing: 8) {
             Text("Labels in various styles:")
                 .font(.headline)
+                .frame(maxWidth: .infinity, alignment: .leading)
 
             Label("Profile", systemImage: "person.circle")
             Label("Lightning", systemImage: "bolt.fill")
@@ -48,6 +49,7 @@ struct LabelDemo: View {
                     .overlay(Text("PD"))
             }
         }
+        .padding()
     }
 }
 

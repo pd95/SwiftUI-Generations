@@ -13,6 +13,7 @@ struct NewFontsDemo: View {
         VStack {
             Text("SwiftUI fonts:")
                 .font(.headline)
+                .frame(maxWidth: .infinity, alignment: .leading)
 
             HStack {
                 VStack {
@@ -43,6 +44,7 @@ struct NewFontsDemo: View {
                 }
             }
         }
+        .padding()
     }
 }
 

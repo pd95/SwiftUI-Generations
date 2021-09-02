@@ -19,10 +19,12 @@ struct ProgressViewDemo: View {
         VStack(spacing: 8) {
             Text("ProgressViews:")
                 .font(.headline)
+                .frame(maxWidth: .infinity, alignment: .leading)
 
             VStack {
                 Text("Indeterminate progress")
                     .font(.subheadline)
+                    .frame(maxWidth: .infinity, alignment: .leading)
 
                 Divider()
                     .frame(maxWidth: 200)
@@ -41,6 +43,7 @@ struct ProgressViewDemo: View {
                     Text("Loading...")
                         .font(.title)
                         .bold()
+                        .foregroundColor(.red)
                 }
             }
 
@@ -49,6 +52,7 @@ struct ProgressViewDemo: View {
             VStack {
                 Text("Determinate progress")
                     .font(.subheadline)
+                    .frame(maxWidth: .infinity, alignment: .leading)
 
                 Divider()
                     .frame(maxWidth: 200)
@@ -76,7 +80,6 @@ struct ProgressViewDemo: View {
                     })
                 }
             }
-            .padding()
             .onReceive(timer) { time in
                 guard scenePhase == .active else {
                     return
@@ -97,6 +100,7 @@ struct ProgressViewDemo: View {
                 timer = Timer.publish(every: 0.1, on: .main, in: .common).autoconnect()
             })
         }
+        .padding()
     }
 }
 

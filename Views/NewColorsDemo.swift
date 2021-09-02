@@ -12,6 +12,7 @@ struct NewColorsDemo: View {
         VStack {
             Text("New SwiftUI colors:")
                 .font(.headline)
+                .frame(maxWidth: .infinity, alignment: .leading)
 
             // Showing new Colors in light mode
             HStack(spacing: 2) {
@@ -41,6 +42,7 @@ struct NewColorsDemo: View {
                 .environment(\.colorScheme, .dark)
             }
         }
+        .padding()
     }
 }
 
