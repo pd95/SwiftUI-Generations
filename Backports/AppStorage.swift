@@ -10,14 +10,13 @@ import Combine
 import os.log
 
 /// A protocol for types compatible which can be read from and written to UserDefaults
-public protocol UserDefaultsValueTransformable {
+public protocol UserDefaultsValueTransform {
     static func readValue(from store: UserDefaults, key: String) -> Any?
     static func writeValue(_ value: Any?, to store: UserDefaults, key: String)
 }
 
-
 // Default implementation protocol
-extension UserDefaultsValueTransformable {
+extension UserDefaultsValueTransform {
     public static func readValue(from store: UserDefaults, key: String) -> Any? {
         store.value(forKey: key)
     }
@@ -28,20 +27,20 @@ extension UserDefaultsValueTransformable {
 }
 
 // The following types are known to be compatible with UserDefaults
-extension Bool: UserDefaultsValueTransformable {}
-extension Int: UserDefaultsValueTransformable {}
-extension Double: UserDefaultsValueTransformable {}
-extension String: UserDefaultsValueTransformable {}
-extension URL: UserDefaultsValueTransformable {
+extension Bool: UserDefaultsValueTransform {}
+extension Int: UserDefaultsValueTransform {}
+extension Double: UserDefaultsValueTransform {}
+extension String: UserDefaultsValueTransform {}
+extension URL: UserDefaultsValueTransform {
     public static func writeValue(_ value: Any?, to store: UserDefaults, key: String) {
         store.set(value as? Self, forKey: key)
     }
 }
-extension Data: UserDefaultsValueTransformable {}
+extension Data: UserDefaultsValueTransform {}
 
 
 // For enums which are `RawRepresentable` use the `rawValue` for storing in `UserDefaults`
-struct RawRepresentableTransform<T>: UserDefaultsValueTransformable where T: RawRepresentable, T.RawValue: UserDefaultsValueTransformable {
+struct RawRepresentableTransform<T>: UserDefaultsValueTransform where T: RawRepresentable, T.RawValue: UserDefaultsValueTransform {
     public static func readValue(from store: UserDefaults, key: String) -> Any? {
         if let rawValue = store.value(forKey: key) as? T.RawValue {
             return T(rawValue: rawValue)
@@ -59,57 +58,47 @@ struct RawRepresentableTransform<T>: UserDefaultsValueTransformable where T: Raw
 private class UserDefaultLocation<Value>: NSObject, ObservableObject
 {
     private let key: String
-    private let transform: UserDefaultsValueTransformable.Type
+    private let transform: UserDefaultsValueTransform.Type
     private let defaultValue: Value
+    private var cachedValue: Value?
 
-    var defaultStore: UserDefaults {
+    var store: UserDefaults {
         didSet {
-            if oldValue != defaultStore {
+            if oldValue != store {
                 oldValue.removeObserver(self, forKeyPath: key)
-                defaultStore.addObserver(self, forKeyPath: key, options: [], context: nil)
-                wasRead = false
+                store.addObserver(self, forKeyPath: key, options: [], context: nil)
             }
         }
     }
 
-    private var cachedValue: Value
-    private var wasRead: Bool = false
-    private var store: UserDefaults {
-        defaultStore
-    }
-
     func get() -> Value {
-        if wasRead {
-            return cachedValue
-        }
-        if let value = transform.readValue(from: store, key: key) as? Value {
-            wasRead = true
-            cachedValue = value
+        if let value = cachedValue {
             return value
         }
-
-        return defaultValue
-    }
-
-    func set(_ value: Value) {
+        let value = transform.readValue(from: store, key:key) as? Value ?? defaultValue
         cachedValue = value
-        transform.writeValue(value, to: store, key: key)
+
+        return value
     }
 
-    init(key: String, transform: UserDefaultsValueTransformable.Type, store: UserDefaults?, defaultValue: Value) {
+    func set(_ newValue: Value) {
+        cachedValue = newValue
+        transform.writeValue(newValue, to: store, key: key)
+    }
+
+    init(key: String, transform: UserDefaultsValueTransform.Type, store: UserDefaults?, defaultValue: Value) {
         self.key = key
         self.transform = transform
-        self.defaultStore = store ?? .standard
+        self.store = store ?? .standard
         self.defaultValue = defaultValue
-        cachedValue = defaultValue
 
         super.init()
 
-        self.defaultStore.addObserver(self, forKeyPath: key, options: [], context: nil)
+        self.store.addObserver(self, forKeyPath: key, options: [], context: nil)
     }
 
     deinit {
-        defaultStore.removeObserver(self, forKeyPath: key)
+        store.removeObserver(self, forKeyPath: key)
     }
 
     // Called whenever the related UserDefaults value changed
@@ -118,7 +107,7 @@ private class UserDefaultLocation<Value>: NSObject, ObservableObject
                                change: [NSKeyValueChangeKey : Any]?,
                                context: UnsafeMutableRawPointer?) {
         self.objectWillChange.send()
-        wasRead = false
+        cachedValue = nil
     }
 }
 
@@ -147,7 +136,7 @@ public struct AppStorage<Value>: DynamicProperty
             set: { self.wrappedValue = $0 }
     }
 
-    fileprivate init(key: String, transform: UserDefaultsValueTransformable.Type, store: UserDefaults?, defaultValue: Value) {
+    fileprivate init(key: String, transform: UserDefaultsValueTransform.Type, store: UserDefaults?, defaultValue: Value) {
         location = UserDefaultLocation(key: key, transform: transform, store: store, defaultValue: defaultValue)
     }
 
@@ -155,7 +144,7 @@ public struct AppStorage<Value>: DynamicProperty
         _location.update()
 
         // Update storage with latest environment setting
-        location.defaultStore = defaultStore
+        location.store = defaultStore
     }
 }
 
@@ -163,12 +152,12 @@ public struct AppStorage<Value>: DynamicProperty
            message: "Backport not necessary as of iOS 14", renamed: "SwiftUI.AppStorage")
 extension AppStorage {
     /// Creates a property that can read and write to a plain user default type.
-    public init(wrappedValue: Value, _ key: String, store: UserDefaults? = nil) where Value: UserDefaultsValueTransformable {
+    public init(wrappedValue: Value, _ key: String, store: UserDefaults? = nil) where Value: UserDefaultsValueTransform {
         self.init(key: key, transform: Value.self, store: store, defaultValue: wrappedValue)
     }
 
     /// Creates a property that can read and write a scalar  user default, transforming that from and to `RawRepresentable` data type.
-    public init(wrappedValue: Value, _ key: String, store: UserDefaults? = nil) where Value: RawRepresentable, Value.RawValue: UserDefaultsValueTransformable {
+    public init(wrappedValue: Value, _ key: String, store: UserDefaults? = nil) where Value: RawRepresentable, Value.RawValue: UserDefaultsValueTransform {
         self.init(key: key, transform: RawRepresentableTransform<Value>.self, store: store, defaultValue: wrappedValue)
     }
 }
@@ -177,12 +166,12 @@ extension AppStorage {
            message: "Backport not necessary as of iOS 14", renamed: "SwiftUI.AppStorage")
 extension AppStorage where Value: ExpressibleByNilLiteral {
     /// Creates a property that can read and write an optional scalar user default.
-    public init<WrappedType>(_ key: String, store: UserDefaults? = nil) where Value == Optional<WrappedType>, WrappedType: UserDefaultsValueTransformable {
+    public init<WrappedType>(_ key: String, store: UserDefaults? = nil) where Value == Optional<WrappedType>, WrappedType: UserDefaultsValueTransform {
         self.init(key: key, transform: WrappedType.self, store: store, defaultValue: nil)
     }
 
     /// Creates a property that can save and restore an optional value, transforming it to an optional `RawRepresentable` data type.
-    public init<WrappedType>(_ key: String, store: UserDefaults? = nil) where Value == Optional<WrappedType>, WrappedType: RawRepresentable, WrappedType.RawValue: UserDefaultsValueTransformable {
+    public init<WrappedType>(_ key: String, store: UserDefaults? = nil) where Value == Optional<WrappedType>, WrappedType: RawRepresentable, WrappedType.RawValue: UserDefaultsValueTransform {
         self.init(key: key, transform: RawRepresentableTransform<WrappedType>.self, store: store, defaultValue: nil)
     }
 }
