@@ -15,65 +15,68 @@ struct AsyncImageDemo: View {
     @State private var state2 = 1
 
     var body: some View {
-        ScrollView {
-            VStack {
-                Text("Loading images asynchronously:")
-                    .font(.headline)
-                    .padding(.bottom)
+        NavigationView {
+            ScrollView {
+                VStack {
+                    Text("Loading images asynchronously:")
+                        .font(.headline)
+                        .padding(.bottom)
 
-                Text("Image is clipped (as the original image is bigger than the available frame and it is `.resizable` cannot be attached.")
-                    .multilineTextAlignment(.leading)
-                    .minimumScaleFactor(0.99)
-                    .padding(.horizontal)
+                    Text("Image is clipped (as the original image is bigger than the available frame and it is `.resizable` cannot be attached.")
+                        .multilineTextAlignment(.leading)
+                        .minimumScaleFactor(0.99)
+                        .padding(.horizontal)
 
-                AsyncImage(url: url)
-                    .frame(width: 100, height: 100)
-                    .clipped()
+                    AsyncImage(url: url)
+                        .frame(width: 100, height: 100)
+                        .clipped()
 
-                Divider()
+                    Divider()
 
-                Text("Tap the images below for resize effect.")
-                    .padding(.horizontal)
+                    Text("Tap the images below for resize effect.")
+                        .padding(.horizontal)
 
 
-                Text("This image is resizable with low-resolution")
-                    .padding(.horizontal)
-                AsyncImage(url: url) { image in
-                    image.resizable()
-                } placeholder: {
-                    ProgressView()
-                }
-                .aspectRatio(1, contentMode: .fit)
-                .frame(maxWidth: imageWidth(state1))
-                .onTapGesture {
-                    withAnimation {
-                        state1 += 1
+                    Text("This image is resizable with low-resolution")
+                        .padding(.horizontal)
+                    AsyncImage(url: url) { image in
+                        image.resizable()
+                    } placeholder: {
+                        ProgressView()
+                    }
+                    .aspectRatio(1, contentMode: .fit)
+                    .frame(maxWidth: imageWidth(state1))
+                    .onTapGesture {
+                        withAnimation {
+                            state1 += 1
+                        }
+                    }
+
+                    Divider()
+
+                    Text("This image is high-resolution (1024 pixels):\n(Turn your phone to appreciate it!)")
+
+                    AsyncImage(url: urlHQ) { phase in
+                        if let image = phase.image {
+                            image // Displays the loaded image.
+                                .resizable()
+                        } else if phase.error != nil {
+                            Color.red // Indicates an error.
+                        } else {
+                            Color.blue // Acts as a placeholder.
+                        }
+                    }
+                    .aspectRatio(1, contentMode: .fit)
+                    .frame(maxWidth: imageWidth(state2))
+                    .onTapGesture {
+                        withAnimation {
+                            state2 += 1
+                        }
                     }
                 }
-
-                Divider()
-
-                Text("This image is high-resolution (1024 pixels):\n(Turn your phone to appreciate it!)")
-
-                AsyncImage(url: urlHQ) { phase in
-                    if let image = phase.image {
-                        image // Displays the loaded image.
-                            .resizable()
-                    } else if phase.error != nil {
-                        Color.red // Indicates an error.
-                    } else {
-                        Color.blue // Acts as a placeholder.
-                    }
-                }
-                .aspectRatio(1, contentMode: .fit)
-                .frame(maxWidth: imageWidth(state2))
-                .onTapGesture {
-                    withAnimation {
-                        state2 += 1
-                    }
-                }
+                .frame(minHeight: minScrollViewHeight, alignment: .top)
             }
-            .frame(minHeight: minScrollViewHeight, alignment: .top)
+            .navigationTitle("AsyncImage Demo")
         }
     }
 

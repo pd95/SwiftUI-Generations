@@ -42,6 +42,9 @@
 		1766B77926D61D92006B096E /* ViewOnChangeDemo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1766B77726D61D86006B096E /* ViewOnChangeDemo.swift */; };
 		1766B77A26D61D92006B096E /* ViewOnChangeDemo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1766B77726D61D86006B096E /* ViewOnChangeDemo.swift */; };
 		1772986026DB7AF400CA2A8B /* SceneStorage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1772985F26DB7AF400CA2A8B /* SceneStorage.swift */; };
+		177CDA1626E0FEA400A46E2B /* BasicsDemo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 177CDA1526E0FEA400A46E2B /* BasicsDemo.swift */; };
+		177CDA1726E0FEA400A46E2B /* BasicsDemo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 177CDA1526E0FEA400A46E2B /* BasicsDemo.swift */; };
+		177CDA1826E0FEA400A46E2B /* BasicsDemo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 177CDA1526E0FEA400A46E2B /* BasicsDemo.swift */; };
 		1785AACF26CE9DAC0009572F /* AsyncImage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1785AACE26CE9DAC0009572F /* AsyncImage.swift */; };
 		1788790826D3C58B001C59FF /* ViewGeometryPreferenceKey.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1788790726D3C58B001C59FF /* ViewGeometryPreferenceKey.swift */; };
 		1788790926D3C58B001C59FF /* ViewGeometryPreferenceKey.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1788790726D3C58B001C59FF /* ViewGeometryPreferenceKey.swift */; };
@@ -99,6 +102,7 @@
 		1766B77126D61AC2006B096E /* View-onChange.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "View-onChange.swift"; sourceTree = "<group>"; };
 		1766B77726D61D86006B096E /* ViewOnChangeDemo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewOnChangeDemo.swift; sourceTree = "<group>"; };
 		1772985F26DB7AF400CA2A8B /* SceneStorage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneStorage.swift; sourceTree = "<group>"; };
+		177CDA1526E0FEA400A46E2B /* BasicsDemo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BasicsDemo.swift; sourceTree = "<group>"; };
 		1785AACE26CE9DAC0009572F /* AsyncImage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AsyncImage.swift; sourceTree = "<group>"; };
 		1788790726D3C58B001C59FF /* ViewGeometryPreferenceKey.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewGeometryPreferenceKey.swift; sourceTree = "<group>"; };
 		1788790B26D41101001C59FF /* StateObjectDemo.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StateObjectDemo.swift; sourceTree = "<group>"; };
@@ -183,11 +187,12 @@
 			isa = PBXGroup;
 			children = (
 				173D286726CE9C7F00039D17 /* ContentView.swift */,
+				177CDA1526E0FEA400A46E2B /* BasicsDemo.swift */,
 				175D32A126D036BF002322AB /* NewColorsDemo.swift */,
 				17EFA68A26D049540094D483 /* NewFontsDemo.swift */,
-				175D329D26D03603002322AB /* AsyncImageDemo.swift */,
 				175D32A526D03731002322AB /* LabelDemo.swift */,
 				175D32A926D0381B002322AB /* ProgressViewDemo.swift */,
+				175D329D26D03603002322AB /* AsyncImageDemo.swift */,
 				1788790B26D41101001C59FF /* StateObjectDemo.swift */,
 				1766B77726D61D86006B096E /* ViewOnChangeDemo.swift */,
 			);
@@ -419,6 +424,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				175D32A726D03731002322AB /* LabelDemo.swift in Sources */,
+				177CDA1726E0FEA400A46E2B /* BasicsDemo.swift in Sources */,
 				175D32A326D036BF002322AB /* NewColorsDemo.swift in Sources */,
 				17EFA68C26D049D80094D483 /* NewFontsDemo.swift in Sources */,
 				173D286826CE9C7F00039D17 /* ContentView.swift in Sources */,
@@ -440,6 +446,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				1788791026D41113001C59FF /* StateObject.swift in Sources */,
+				177CDA1626E0FEA400A46E2B /* BasicsDemo.swift in Sources */,
 				17EFA68B26D049540094D483 /* NewFontsDemo.swift in Sources */,
 				172CCD4F26DBF88200DD1D4D /* ScenePhase.swift in Sources */,
 				174C43BE26CEF897009D6D94 /* AppDelegate.swift in Sources */,
@@ -472,6 +479,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				1788790E26D41101001C59FF /* StateObjectDemo.swift in Sources */,
+				177CDA1826E0FEA400A46E2B /* BasicsDemo.swift in Sources */,
 				175D32A026D03603002322AB /* AsyncImageDemo.swift in Sources */,
 				175D32A826D03731002322AB /* LabelDemo.swift in Sources */,
 				175D32AC26D0381B002322AB /* ProgressViewDemo.swift in Sources */,

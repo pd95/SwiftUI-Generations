@@ -18,9 +18,9 @@ struct ContentView: View {
 
     var body: some View {
         TabView(selection: $selectedTab) {
-            BasicStuff()
+            BasicsDemo()
                 .tabItem {
-                    Label("List", systemImage: "list.bullet")
+                    Label("Basics", systemImage: "list.bullet")
                 }
                 .tag(Tab.basic)
 
@@ -32,29 +32,9 @@ struct ContentView: View {
 
             StateObjectDemo()
                 .tabItem {
-                    Label("Main", systemImage: "house")
+                    Label("State", systemImage: "house")
                 }
                 .tag(Tab.stateObject)
-        }
-    }
-}
-
-struct BasicStuff: View {
-    var body: some View {
-        ScrollView {
-            VStack {
-                NewColorsDemo()
-                Divider()
-
-                NewFontsDemo()
-                Divider()
-
-                LabelDemo()
-                Divider()
-
-                ProgressViewDemo()
-                Spacer()
-            }
         }
     }
 }

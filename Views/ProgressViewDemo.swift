@@ -8,6 +8,8 @@
 import SwiftUI
 
 struct ProgressViewDemo: View {
+    @Environment(\.scenePhase) var scenePhase
+
     @State private var progress = 0.0
 
     @State private var timer = Timer.publish(every: 0.1, on: .main, in: .common).autoconnect()
@@ -76,6 +78,9 @@ struct ProgressViewDemo: View {
             }
             .padding()
             .onReceive(timer) { time in
+                guard scenePhase == .active else {
+                    return
+                }
                 if progress < 100 {
                     progress += 2
                 }
