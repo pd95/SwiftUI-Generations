@@ -19,30 +19,28 @@ import SwiftUI
 public struct ProgressView<Label, CurrentValueLabel>: View
 where Label: View, CurrentValueLabel: View {
 
-    private var label: Label?
-    private var currentValueLabel: CurrentValueLabel?
-    private var fractionCompleted: Double?
+    private var configuration: ProgressViewStyleConfiguration
 
     public var body: some View {
-        if let fractionCompleted = fractionCompleted {
+        if let fractionCompleted = configuration.fractionCompleted {
             // Determinate process
             VStack(alignment: .leading, spacing: 4) {
-                if let label = label {
-                    label
+                if let label = configuration.label {
+                    label.wrappedView
                 }
                 LinearProgressView(fractionCompleted: fractionCompleted)
-                if let currentValueLabel = currentValueLabel {
-                    currentValueLabel
+                if let currentValueLabel = configuration.currentValueLabel {
+                    currentValueLabel.wrappedView
                         .foregroundColor(.secondary)
                         .font(.caption)
                 }
             }
         } else {
             // Indeterminate process
-            if let label = label {
+            if let label = configuration.label {
                 VStack {
                     CircularProgressView()
-                    label
+                    label.wrappedView
                         .foregroundColor(.secondary)
                 }
             } else {
@@ -58,12 +56,16 @@ extension ProgressView where CurrentValueLabel == EmptyView {
     /// Creates a progress view for showing indeterminate progress, without a
     /// label.
     public init() where Label == EmptyView {
+        self.configuration = ProgressViewStyleConfiguration(fractionCompleted: nil)
     }
 
     /// Creates a progress view for showing indeterminate progress that displays
     /// a custom label.
     public init(@ViewBuilder label: () -> Label) {
-        self.label = label()
+        self.configuration = ProgressViewStyleConfiguration(
+            fractionCompleted: nil,
+            label: .init(label())
+        )
     }
 
     /// Creates a progress view for showing indeterminate progress that
@@ -85,15 +87,17 @@ extension ProgressView {
     /// Creates a progress view for showing determinate progress.
     public init<V>(value: V?, total: V = 1.0)
     where Label == EmptyView, CurrentValueLabel == EmptyView, V: BinaryFloatingPoint {
-        self.fractionCompleted = Double((value ?? 0)/total)
+        self.configuration = ProgressViewStyleConfiguration(fractionCompleted: Double((value ?? 0)/total))
     }
 
     /// Creates a progress view for showing determinate progress, with a
     /// custom label.
     public init<V>(value: V?, total: V = 1.0, @ViewBuilder label: () -> Label)
     where CurrentValueLabel == EmptyView, V: BinaryFloatingPoint {
-        self.label = label()
-        self.fractionCompleted = Double((value ?? 0)/total)
+        self.configuration = ProgressViewStyleConfiguration(
+            fractionCompleted: Double((value ?? 0)/total),
+            label: .init(label())
+        )
     }
 
     /// Creates a progress view for showing determinate progress, with a
@@ -102,9 +106,11 @@ extension ProgressView {
                    @ViewBuilder label: () -> Label,
                    @ViewBuilder currentValueLabel: () -> CurrentValueLabel)
     where V: BinaryFloatingPoint {
-        self.label = label()
-        self.currentValueLabel = currentValueLabel()
-        self.fractionCompleted = Double((value ?? 0)/total)
+        self.configuration = ProgressViewStyleConfiguration(
+            fractionCompleted: Double((value ?? 0)/total),
+            label: .init(label()),
+            currentValueLabel: .init(currentValueLabel())
+        )
     }
 
     /// Creates a progress view for showing determinate progress that generates
@@ -112,8 +118,10 @@ extension ProgressView {
     public init<V>(_ titleKey: LocalizedStringKey,
                    value: V?, total: V = 1.0)
     where Label == Text, CurrentValueLabel == EmptyView, V: BinaryFloatingPoint {
-        self.label = Text(titleKey)
-        self.fractionCompleted = Double((value ?? 0)/total)
+        self.configuration = ProgressViewStyleConfiguration(
+            fractionCompleted: Double((value ?? 0)/total),
+            label: .init(Text(titleKey))
+        )
     }
 
     /// Creates a progress view for showing determinate progress that generates
@@ -121,8 +129,10 @@ extension ProgressView {
     public init<S, V>(_ title: S,
                       value: V?, total: V = 1.0)
     where Label == Text, CurrentValueLabel == EmptyView, S: StringProtocol, V: BinaryFloatingPoint {
-        self.label = Text(title)
-        self.fractionCompleted = Double((value ?? 0)/total)
+        self.configuration = ProgressViewStyleConfiguration(
+            fractionCompleted: Double((value ?? 0)/total),
+            label: .init(Text(title))
+        )
     }
 }
 
@@ -154,6 +164,61 @@ extension ProgressView {
         )
     }
 }
+
+
+// MARK: - ProgressViewStyleConfiguration
+/// The properties of a progress view instance.
+@available(iOS, introduced: 13, obsoleted: 14.0,
+           message: "Backport not necessary as of iOS 14", renamed: "SwiftUI.ProgressViewStyleConfiguration")
+public struct ProgressViewStyleConfiguration {
+
+    /// A type-erased label describing the task represented by the progress
+    /// view.
+    public struct Label: View {
+
+        private let _view: AnyView
+
+        fileprivate init<T: View>(_ view: T) {
+            self._view = AnyView(view)
+        }
+
+        fileprivate var wrappedView: AnyView {
+            _view
+        }
+
+        /// The type of view representing the body of this view.
+        public typealias Body = Never
+    }
+
+    /// A type-erased label that describes the current value of a progress view.
+    public struct CurrentValueLabel: View {
+
+        private let _view: AnyView
+
+        fileprivate init<T: View>(_ view: T) {
+            self._view = AnyView(view)
+        }
+
+        fileprivate var wrappedView: AnyView {
+            _view
+        }
+
+        /// The type of view representing the body of this view.
+        public typealias Body = Never
+    }
+
+    /// The completed fraction of the task represented by the progress view,
+    /// from `0.0` (not yet started) to `1.0` (fully complete), or `nil` if the
+    /// progress is indeterminate.
+    public let fractionCompleted: Double?
+
+    /// A view that describes the task represented by the progress view.
+    public var label: ProgressViewStyleConfiguration.Label?
+
+    /// A view that describes the current value of a progress view.
+    public var currentValueLabel: ProgressViewStyleConfiguration.CurrentValueLabel?
+}
+
 
 private struct LinearProgressView: View {
     let fractionCompleted: Double
