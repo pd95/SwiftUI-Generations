@@ -145,13 +145,48 @@ struct ProgressViewDemo: View {
                     ProgressView(value: progress/100)
                 }
                 .progressViewStyle(.circular)
-            }
 
+                Divider()
+
+                Group {
+                    Text("Custom styled progress")
+                        .font(.headline)
+                    ProgressView(value: progress/100,
+                                 label: {Text("Loading...")})
+                        .frame(width: 120, height: 120, alignment: .center)
+                }
+                .progressViewStyle(CustomProgressViewStyle())
+            }
         }
         .padding()
     }
+}
 
-    @State private var forceLinear = false
+// Inspired by Prafulla Singh's article:
+// https://prafullkumar77.medium.com/swiftui-how-to-make-circular-progress-view-97d32656c312
+public struct CustomProgressViewStyle: ProgressViewStyle {
+    public func makeBody(configuration: Configuration) -> some View {
+        VStack(spacing: 10) {
+            configuration.label
+                .foregroundColor(Color.secondary)
+            ZStack {
+                Circle()
+                    .stroke(lineWidth: 15.0)
+                    .opacity(0.3)
+                    .foregroundColor(.accentColor.opacity(0.5))
+
+                Circle()
+                    .trim(from: 0.0, to: CGFloat(configuration.fractionCompleted ?? 0))
+                    .rotation(.degrees(-90))
+                    .stroke(style: StrokeStyle(lineWidth: 15.0, lineCap: .round, lineJoin: .round))
+                    .foregroundColor(.accentColor)
+
+                Text("\(Int((configuration.fractionCompleted ?? 0) * 100))%")
+                    .font(.headline)
+                    .foregroundColor(.secondary)
+            }
+        }
+    }
 }
 
 struct ProgressViewDemo_Previews: PreviewProvider {
