@@ -126,6 +126,35 @@ extension ProgressView {
     }
 }
 
+// MARK: - Determinate progress initializer based on Foundation `Progress` object
+extension ProgressView {
+    /// Creates a progress view for visualizing the given progress instance.
+    public init(_ progress: Progress)
+    where Label == Text, CurrentValueLabel == Text { // FIXME: This should be EmptyView, EmptyView instead of Text,Text!
+        let value: Double = Double(progress.completedUnitCount)
+        let total: Double = progress.totalUnitCount > 0 ? Double(progress.totalUnitCount) : 1.0
+
+        let description: String
+        if let localizedDescription = progress.localizedDescription {
+            description = localizedDescription
+        } else {
+            description = "\(Int(value/total*100))% completed"
+        }
+
+        self.init(
+            value: value, total: total,
+            label: {
+                Text(description)
+            },
+            currentValueLabel: {
+                Text("\(progress.completedUnitCount) of \(progress.totalUnitCount)")
+                    .font(.caption)
+                    .foregroundColor(.secondary)
+            }
+        )
+    }
+}
+
 private struct LinearProgressView: View {
     let fractionCompleted: Double
 

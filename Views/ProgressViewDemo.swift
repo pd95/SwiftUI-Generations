@@ -10,6 +10,9 @@ import SwiftUI
 struct ProgressViewDemo: View {
     @Environment(\.scenePhase) var scenePhase
 
+    @State private var withLabel = false
+    @State private var progressObject = Progress()
+
     @State private var progress = 0.0
 
     @State private var timer = Timer.publish(every: 0.1, on: .main, in: .common).autoconnect()
@@ -79,6 +82,11 @@ struct ProgressViewDemo: View {
                         Text("currentValueLabel: \(Int(progress))")
                     })
                 }
+
+                Divider()
+                    .frame(maxWidth: 200)
+
+                ProgressView(progressObject)
             }
             .onReceive(timer) { time in
                 guard scenePhase == .active else {
@@ -91,10 +99,16 @@ struct ProgressViewDemo: View {
                     if endTime.distance(to: time) > 2 {
                         progress = 0
                         self.endTime = nil
+                        withLabel.toggle()
                     }
                 } else {
                     endTime = Date()
                 }
+
+                // Update Progress object accordingly
+                progressObject.totalUnitCount = Int64(100*20)
+                progressObject.completedUnitCount = Int64(progress*20)
+                progressObject.localizedDescription = withLabel ? "\(progressObject.totalUnitCount - progressObject.completedUnitCount) files remaining..." : nil
             }
             .onAppear(perform: {
                 timer = Timer.publish(every: 0.1, on: .main, in: .common).autoconnect()
