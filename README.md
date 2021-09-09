@@ -1,13 +1,13 @@
 # SwiftUI Generations
 
-Apple brought many improvements to SwiftUI year over year since its introduction in 2019 (with iOS 13).
-But sometimes it is frustrating that you cannot use certain functionality because it is meant to be
-used with more recent iOS version. `AsyncImage`, for example, is not a view doing magic tricks. 
-Everything it does can already be done on iOS 13. It simply is packaged in a "Apple approved" API 
+Apple brought many improvements to SwiftUI year over year since iOS 13 was introduced in 2019.
+But sometimes it is frustrating that we cannot use certain functionality because it is meant to be
+used with a more recent iOS version. `AsyncImage`, for example, is not a view doing magic tricks. 
+Everything it does can already be done on iOS 13. It simply is packaged in an "Apple approved" API 
 and therefore will be available for the next few years.
 
 So if you are limited to use a non-current SwiftUI version (e.g. iOS 13 and iOS 14 as of September
-2021)3, you can build workarounds for the missing features or use third party libraries which 
+2021), you can build workarounds for the missing features or use third party libraries which 
 implement the feature with their custom API.
 
 With this project I'm proposing an alternate solution: we backport the new Apple APIs to iOS 13 in 
@@ -17,12 +17,11 @@ back to iOS 13.
 So far I have the following implemented:
 
 - `AsyncImage`
-- `Label`
+- `Label` (including `LabelStyle` protocol and `LabelStyleConfiguration`)
+- `ProgressView` (including `ProgressViewStyle` protocol and `ProgressViewStyleConfiguration`), but 
+  without tint color initializer.
 - iOS 15 `Color`s like `mint`, `teal`, `cyan`, `indigo` and `brown`
 - iOS 14 `Font`s like `title2`, `title3` and `caption2`
-- basic parts of `ProgressView`: 
-    - Indeterminate progress with or without `Text` label
-    - Determinate progress linear progress with or without `Text` label
 - `onChange(of: V, perform: @escaping (V) -> Void)` value tracker for iOS 13. 
 - `navigationTitle(...)` for iOS 13
 - `StateObject` object wrapper for iOS 13.
