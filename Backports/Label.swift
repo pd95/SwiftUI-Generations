@@ -130,7 +130,7 @@ extension LabelStyle {
 public struct LabelStyleConfiguration {
 
     /// A type-erased title view of a label.
-    public struct Title {
+    public struct Title: View {
         private let _view: AnyView
 
         fileprivate init<T: View>(_ view: T) {
@@ -145,7 +145,7 @@ public struct LabelStyleConfiguration {
     }
 
     /// A type-erased icon view of a label.
-    public struct Icon {
+    public struct Icon: View {
         private let _view: AnyView
 
         fileprivate init<I: View>(_ view: I) {
@@ -169,18 +169,6 @@ public struct LabelStyleConfiguration {
 
     public var title: LabelStyleConfiguration.Title { _title }
     public var icon: LabelStyleConfiguration.Icon { _icon }
-}
-
-extension LabelStyleConfiguration.Title: View {
-    public var body: Never {
-        fatalError("Unsupported - don't call this")
-    }
-}
-
-extension LabelStyleConfiguration.Icon: View {
-    public var body: Never {
-        fatalError("Unsupported - don't call this")
-    }
 }
 
 // MARK: - DefaultLabelstyle
