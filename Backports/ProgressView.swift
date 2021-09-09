@@ -114,6 +114,30 @@ extension ProgressView {
     }
 }
 
+
+// TODO: To allow styling customizations as shown below, we would need this initializer.
+// FIXME: Currently we cannot compose/modify styles, only replacing styles is supported!
+//
+//      struct DarkBlueShadowProgressViewStyle: ProgressViewStyle {
+//          func makeBody(configuration: Configuration) -> some View {
+//              ProgressView(configuration)
+//                  .shadow(color: Color(red: 0, green: 0, blue: 0.6),
+//                          radius: 4.0, x: 1.0, y: 2.0)
+//          }
+//      }
+//
+//extension ProgressView {
+//
+//    /// Creates a progress view based on a style configuration.
+//    public init(_ configuration: ProgressViewStyleConfiguration)
+//    where Label == ProgressViewStyleConfiguration.Label, CurrentValueLabel == ProgressViewStyleConfiguration.CurrentValueLabel {
+//        print("ProgressView.init() - Configuration", configuration)
+//        self.configuration = configuration
+//    }
+//}
+//
+
+
 // MARK: - Determinate progress initializer based on Foundation `Progress` object
 extension ProgressView {
     /// Creates a progress view for visualizing the given progress instance.
@@ -233,7 +257,7 @@ public struct CircularProgressViewStyle: ProgressViewStyle {
         if let label = configuration.label {
             VStack {
                 CircularProgressView()
-                label.wrappedView
+                label
                     .foregroundColor(.secondary)
             }
         } else {
@@ -257,11 +281,11 @@ public struct LinearProgressViewStyle: ProgressViewStyle {
         // Determinate process
         VStack(alignment: .leading, spacing: 4) {
             if let label = configuration.label {
-                label.wrappedView
+                label
             }
             LinearProgressView(fractionCompleted: configuration.fractionCompleted ?? 0)
             if let currentValueLabel = configuration.currentValueLabel {
-                currentValueLabel.wrappedView
+                currentValueLabel
                     .foregroundColor(.secondary)
                     .font(.caption)
             }
@@ -328,35 +352,21 @@ public struct ProgressViewStyleConfiguration {
     /// view.
     public struct Label: View {
 
-        private let _view: AnyView
-
         fileprivate init<T: View>(_ view: T) {
-            self._view = AnyView(view)
+            self.body = AnyView(view)
         }
 
-        fileprivate var wrappedView: AnyView {
-            _view
-        }
-
-        /// The type of view representing the body of this view.
-        public typealias Body = Never
+        public let body: AnyView
     }
 
     /// A type-erased label that describes the current value of a progress view.
     public struct CurrentValueLabel: View {
 
-        private let _view: AnyView
-
         fileprivate init<T: View>(_ view: T) {
-            self._view = AnyView(view)
+            self.body = AnyView(view)
         }
 
-        fileprivate var wrappedView: AnyView {
-            _view
-        }
-
-        /// The type of view representing the body of this view.
-        public typealias Body = Never
+        public let body: AnyView
     }
 
     /// The completed fraction of the task represented by the progress view,
