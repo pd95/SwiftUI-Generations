@@ -113,9 +113,45 @@ struct ProgressViewDemo: View {
             .onAppear(perform: {
                 timer = Timer.publish(every: 0.1, on: .main, in: .common).autoconnect()
             })
+
+            Divider()
+
+            VStack {
+                Text("ProgressViewStyle testing")
+                    .font(.title2)
+                    .frame(maxWidth: .infinity, alignment: .leading)
+
+                Group {
+                    Text("Automatic Style").font(.headline)
+                    ProgressView("Loading...")
+                    ProgressView(value: progress/100)
+                }
+                .progressViewStyle(.automatic)
+
+                Divider()
+
+                Group {
+                    Text("Forced Linear").font(.headline)
+                    ProgressView("Loading...")
+                    ProgressView(value: progress/100)
+                }
+                .progressViewStyle(.linear)
+
+                Divider()
+
+                Group {
+                    Text("Forced Circular").font(.headline)
+                    ProgressView("Loading...")
+                    ProgressView(value: progress/100)
+                }
+                .progressViewStyle(.circular)
+            }
+
         }
         .padding()
     }
+
+    @State private var forceLinear = false
 }
 
 struct ProgressViewDemo_Previews: PreviewProvider {

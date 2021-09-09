@@ -19,34 +19,12 @@ import SwiftUI
 public struct ProgressView<Label, CurrentValueLabel>: View
 where Label: View, CurrentValueLabel: View {
 
+    @Environment(\.progressViewStyle) private var progressViewStyle: AnyProgressViewStyle
+
     private var configuration: ProgressViewStyleConfiguration
 
     public var body: some View {
-        if let fractionCompleted = configuration.fractionCompleted {
-            // Determinate process
-            VStack(alignment: .leading, spacing: 4) {
-                if let label = configuration.label {
-                    label.wrappedView
-                }
-                LinearProgressView(fractionCompleted: fractionCompleted)
-                if let currentValueLabel = configuration.currentValueLabel {
-                    currentValueLabel.wrappedView
-                        .foregroundColor(.secondary)
-                        .font(.caption)
-                }
-            }
-        } else {
-            // Indeterminate process
-            if let label = configuration.label {
-                VStack {
-                    CircularProgressView()
-                    label.wrappedView
-                        .foregroundColor(.secondary)
-                }
-            } else {
-                CircularProgressView()
-            }
-        }
+        progressViewStyle.makeBody(configuration: configuration)
     }
 }
 
@@ -166,6 +144,180 @@ extension ProgressView {
 }
 
 
+// MARK: - ProgressViewStyle Protocol
+/// A type that applies standard interaction behavior to all progress views
+/// within a view hierarchy.
+///
+/// To configure the current progress view style for a view hierarchy, use the
+/// ``View/progressViewStyle(_:)`` modifier.
+///
+/// See documentation and usage in Apple documentation
+///     <https://developer.apple.com/documentation/SwiftUI/ProgressViewStyle>
+///
+@available(iOS, introduced: 13, obsoleted: 14.0,
+           message: "Backport not necessary as of iOS 14", renamed: "SwiftUI.ProgressViewStyle")
+public protocol ProgressViewStyle {
+    /// A view that represents the body of a label.
+    associatedtype Body: View
+
+    /// Creates a view that represents the body of a label.
+    @ViewBuilder func makeBody(configuration: Self.Configuration) -> Self.Body
+
+    /// The properties of a label.
+    typealias Configuration = ProgressViewStyleConfiguration
+}
+
+
+@available(iOS, introduced: 13, obsoleted: 14.0,
+           message: "Backport not necessary as of iOS 14", renamed: "SwiftUI.ProgressViewStyle")
+extension ProgressViewStyle where Self == DefaultProgressViewStyle {
+
+    /// The default progress view style in the current context of the view being
+    /// styled.
+    public static var automatic: DefaultProgressViewStyle { DefaultProgressViewStyle() }
+}
+
+@available(iOS, introduced: 13, obsoleted: 14.0,
+           message: "Backport not necessary as of iOS 14", renamed: "SwiftUI.ProgressViewStyle")
+extension ProgressViewStyle where Self == CircularProgressViewStyle {
+
+    /// A progress view that visually indicates its progress using a circular
+    /// gauge.
+    public static var circular: CircularProgressViewStyle { CircularProgressViewStyle() }
+}
+
+@available(iOS, introduced: 13, obsoleted: 14.0,
+           message: "Backport not necessary as of iOS 14", renamed: "SwiftUI.ProgressViewStyle")
+extension ProgressViewStyle where Self == LinearProgressViewStyle {
+
+    /// A progress view that visually indicates its progress using a horizontal
+    /// bar.
+    public static var linear: LinearProgressViewStyle { LinearProgressViewStyle() }
+}
+
+
+// MARK: - DefaultProgressViewStyle
+/// A progress view that visually indicates its progress using a horizontal bar.
+@available(iOS, introduced: 13, obsoleted: 14.0,
+           message: "Backport not necessary as of iOS 14", renamed: "SwiftUI.DefaultProgressViewStyle")
+public struct DefaultProgressViewStyle: ProgressViewStyle {
+
+    /// Creates a linear progress view style.
+    public init() {}
+
+    /// Creates a view representing the body of a progress view.
+    public func makeBody(configuration: DefaultProgressViewStyle.Configuration) -> some View {
+        if configuration.fractionCompleted == nil {
+            // Indeterminate process
+            CircularProgressViewStyle().makeBody(configuration: configuration)
+        } else {
+            // Determinate process
+            LinearProgressViewStyle().makeBody(configuration: configuration)
+        }
+    }
+}
+
+
+// MARK: - CircularProgressViewStyle
+/// A progress view that visually indicates its progress using a horizontal bar.
+@available(iOS, introduced: 13, obsoleted: 14.0,
+           message: "Backport not necessary as of iOS 14", renamed: "SwiftUI.CircularProgressViewStyle")
+public struct CircularProgressViewStyle: ProgressViewStyle {
+
+    /// Creates a linear progress view style.
+    public init() {}
+
+    /// Creates a view representing the body of a progress view.
+    public func makeBody(configuration: CircularProgressViewStyle.Configuration) -> some View {
+        // Indeterminate process
+        if let label = configuration.label {
+            VStack {
+                CircularProgressView()
+                label.wrappedView
+                    .foregroundColor(.secondary)
+            }
+        } else {
+            CircularProgressView()
+        }
+    }
+}
+
+
+// MARK: - LinearProgressViewStyle
+/// A progress view that visually indicates its progress using a horizontal bar.
+@available(iOS, introduced: 13, obsoleted: 14.0,
+           message: "Backport not necessary as of iOS 14", renamed: "SwiftUI.LinearProgressViewStyle")
+public struct LinearProgressViewStyle: ProgressViewStyle {
+
+    /// Creates a linear progress view style.
+    public init() {}
+
+    /// Creates a view representing the body of a progress view.
+    public func makeBody(configuration: LinearProgressViewStyle.Configuration) -> some View {
+        // Determinate process
+        VStack(alignment: .leading, spacing: 4) {
+            if let label = configuration.label {
+                label.wrappedView
+            }
+            LinearProgressView(fractionCompleted: configuration.fractionCompleted ?? 0)
+            if let currentValueLabel = configuration.currentValueLabel {
+                currentValueLabel.wrappedView
+                    .foregroundColor(.secondary)
+                    .font(.caption)
+            }
+        }
+    }
+}
+
+
+// MARK: - Type Erased ProgressViewStyle
+@available(iOS, introduced: 13, obsoleted: 14.0,
+           message: "Backport not necessary as of iOS 14", renamed: "SwiftUI.AnyProgressViewStyle")
+private struct AnyProgressViewStyle: ProgressViewStyle {
+    private let _makeBody: (ProgressViewStyle.Configuration) -> AnyView
+
+    init<S: ProgressViewStyle>(_ style: S) {
+        self._makeBody = style.makeBodyTypeErased
+    }
+
+    func makeBody(configuration: ProgressViewStyle.Configuration) -> AnyView {
+        return self._makeBody(configuration)
+    }
+}
+
+extension ProgressViewStyle {
+    fileprivate func makeBodyTypeErased(configuration: Self.Configuration) -> AnyView {
+        AnyView(self.makeBody(configuration: configuration))
+    }
+}
+
+
+// MARK: - Custom environment for ProgressViewStyle
+@available(iOS, introduced: 13, obsoleted: 14.0,
+           message: "Backport not necessary as of iOS 14", renamed: "SwiftUI.DefaultProgressViewStyle")
+private struct ProgressViewStyleEnvironmentKey: EnvironmentKey {
+    static var defaultValue: AnyProgressViewStyle = AnyProgressViewStyle(DefaultProgressViewStyle())
+}
+
+@available(iOS, introduced: 13, obsoleted: 14.0,
+           message: "Backport not necessary as of iOS 14", renamed: "SwiftUI.EnvironmentValues.progressViewStyle")
+extension EnvironmentValues {
+    fileprivate var progressViewStyle: AnyProgressViewStyle {
+        get { self[ProgressViewStyleEnvironmentKey.self] }
+        set { self[ProgressViewStyleEnvironmentKey.self] = newValue }
+    }
+}
+
+// MARK: - View extension
+@available(iOS, introduced: 13, obsoleted: 14.0,
+           message: "Backport not necessary as of iOS 14", renamed: "SwiftUI.View.progressViewStyle")
+extension View {
+    public func progressViewStyle<S>(_ style: S) -> some View where S: ProgressViewStyle {
+        self.environment(\.progressViewStyle, AnyProgressViewStyle(style))
+    }
+}
+
+
 // MARK: - ProgressViewStyleConfiguration
 /// The properties of a progress view instance.
 @available(iOS, introduced: 13, obsoleted: 14.0,
@@ -220,6 +372,7 @@ public struct ProgressViewStyleConfiguration {
 }
 
 
+// MARK: - LinearProgressView
 private struct LinearProgressView: View {
     let fractionCompleted: Double
 
@@ -238,6 +391,8 @@ private struct LinearProgressView: View {
     }
 }
 
+
+// MARK: - CircularProgressView
 private struct CircularProgressView: UIViewRepresentable {
     let style: UIActivityIndicatorView.Style
 
