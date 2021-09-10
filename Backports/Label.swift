@@ -21,50 +21,50 @@ import SwiftUI
            message: "Backport not necessary as of iOS 14", renamed: "SwiftUI.Label")
 public struct Label<Title, Icon>: View where Title: View, Icon: View {
 
-    @Environment(\.labelStyle) private var style: AnyLabelStyle
+    @Environment(\.labelStyle) private var styles
 
-    fileprivate let title: Title
-    fileprivate let icon: Icon
+    private var configuration: LabelStyleConfiguration
 
     public init(@ViewBuilder title: () -> Title, @ViewBuilder icon: () -> Icon) {
-        self.title = title()
-        self.icon = icon()
+        configuration = .init(title: .init(title()), icon: .init(icon()))
     }
 
     public var body: some View {
-        let configuration = LabelStyleConfiguration(title: .init(title), icon: .init(icon))
-        return style.makeBody(configuration: configuration)
+        if let style = styles.last {
+            let remainingStyles = Array(styles.dropLast())
+
+            style.makeBody(configuration: configuration)
+                .environment(\.labelStyle, remainingStyles)
+
+        } else {
+            DefaultLabelStyle().makeBody(configuration: configuration)
+        }
     }
 }
 
 extension Label where Title == Text, Icon == Image {
 
     public init(_ titleKey: LocalizedStringKey, image name: String) {
-        title = Text(titleKey)
-        icon = Image(name)
+        self.init(title: {Text(titleKey)}, icon: {Image(name)})
     }
 
     public init(_ titleKey: LocalizedStringKey, systemImage name: String) {
-        title = Text(titleKey)
-        icon = Image(systemName: name)
+        self.init(title: {Text(titleKey)}, icon: {Image(systemName: name)})
     }
 
     public init<S>(_ titleKey: S, image name: String) where S: StringProtocol {
-        title = Text(titleKey)
-        icon = Image(name)
+        self.init(title: {Text(titleKey)}, icon: {Image(name)})
     }
 
     public init<S>(_ titleKey: S, systemImage name: String) where S: StringProtocol {
-        title = Text(titleKey)
-        icon = Image(systemName: name)
+        self.init(title: {Text(titleKey)}, icon: {Image(systemName: name)})
     }
 }
 
 extension Label where Title == LabelStyleConfiguration.Title, Icon == LabelStyleConfiguration.Icon {
 
     public init(_ configuration: LabelStyleConfiguration) {
-        title = configuration.title
-        icon = configuration.icon
+        self.configuration = configuration
     }
 }
 
@@ -111,14 +111,8 @@ extension LabelStyle where Self == TitleAndIconLabelStyle {
 
 @available(iOS, introduced: 13, obsoleted: 14.0,
            message: "Backport not necessary as of iOS 14", renamed: "SwiftUI.LabelStyle.automatic")
-extension LabelStyle where Self == DefaultLabelstyle {
-    public static var automatic: DefaultLabelstyle { DefaultLabelstyle() }
-}
-
-extension LabelStyle {
-    fileprivate func makeBodyTypeErased(configuration: Self.Configuration) -> AnyView {
-        AnyView(self.makeBody(configuration: configuration))
-    }
+extension LabelStyle where Self == DefaultLabelStyle {
+    public static var automatic: DefaultLabelStyle { DefaultLabelStyle() }
 }
 
 // MARK: - LabelStyleConfiguration
@@ -131,32 +125,20 @@ public struct LabelStyleConfiguration {
 
     /// A type-erased title view of a label.
     public struct Title: View {
-        private let _view: AnyView
-
-        fileprivate init<T: View>(_ view: T) {
-            self._view = AnyView(view)
+        fileprivate init<I: View>(_ view: I) {
+            body = AnyView(view)
         }
 
-        fileprivate var wrappedView: AnyView {
-            _view
-        }
-
-        public typealias Body = Never
+        public let body: AnyView
     }
 
     /// A type-erased icon view of a label.
     public struct Icon: View {
-        private let _view: AnyView
-
         fileprivate init<I: View>(_ view: I) {
-            self._view = AnyView(view)
+            body = AnyView(view)
         }
 
-        fileprivate var wrappedView: AnyView {
-            _view
-        }
-
-        public typealias Body = Never
+        public let body: AnyView
     }
 
     fileprivate init(title: Title, icon: Icon) {
@@ -171,15 +153,15 @@ public struct LabelStyleConfiguration {
     public var icon: LabelStyleConfiguration.Icon { _icon }
 }
 
-// MARK: - DefaultLabelstyle
+// MARK: - DefaultLabelStyle
 @available(iOS, introduced: 13, obsoleted: 14.0,
-           message: "Backport not necessary as of iOS 14", renamed: "SwiftUI.DefaultLabelstyle")
-public struct DefaultLabelstyle: LabelStyle {
+           message: "Backport not necessary as of iOS 14", renamed: "SwiftUI.DefaultLabelStyle")
+public struct DefaultLabelStyle: LabelStyle {
     public init() {}
     public func makeBody(configuration: Configuration) -> some View {
         HStack {
-            configuration.icon.wrappedView
-            configuration.title.wrappedView
+            configuration.icon
+            configuration.title
         }
     }
 }
@@ -190,7 +172,7 @@ public struct DefaultLabelstyle: LabelStyle {
 public struct IconOnlyLabelStyle: LabelStyle {
     public init() {}
     public func makeBody(configuration: Configuration) -> some View {
-        configuration.icon.wrappedView
+        configuration.icon
     }
 }
 
@@ -201,8 +183,8 @@ public struct TitleAndIconLabelStyle: LabelStyle {
     public init() {}
     public func makeBody(configuration: Configuration) -> some View {
         HStack {
-            configuration.icon.wrappedView
-            configuration.title.wrappedView
+            configuration.icon
+            configuration.title
         }
     }
 }
@@ -213,7 +195,7 @@ public struct TitleAndIconLabelStyle: LabelStyle {
 public struct TitleOnlyLabelStyle: LabelStyle {
     public init() {}
     public func makeBody(configuration: Configuration) -> some View {
-        configuration.title.wrappedView
+        configuration.title
     }
 }
 
@@ -224,35 +206,66 @@ private struct AnyLabelStyle: LabelStyle {
     private let _makeBody: (LabelStyle.Configuration) -> AnyView
 
     init<S: LabelStyle>(_ style: S) {
-        self._makeBody = style.makeBodyTypeErased
+        _makeBody = style.makeBodyTypeErased
     }
 
     func makeBody(configuration: LabelStyle.Configuration) -> AnyView {
-        return self._makeBody(configuration)
+        _makeBody(configuration)
+    }
+}
+
+@available(iOS, introduced: 13, obsoleted: 14.0,
+           message: "Backport not necessary as of iOS 14")
+extension LabelStyle {
+    fileprivate func makeBodyTypeErased(configuration: Self.Configuration) -> AnyView {
+        AnyView(self.makeBody(configuration: configuration))
     }
 }
 
 // MARK: - Custom environment for LabelStyle
 @available(iOS, introduced: 13, obsoleted: 14.0,
-           message: "Backport not necessary as of iOS 14", renamed: "SwiftUI.DefaultLabelstyle")
-private struct LabelStyleEnvironmentKey: EnvironmentKey {
-    static var defaultValue: AnyLabelStyle = AnyLabelStyle(DefaultLabelstyle())
+           message: "Backport not necessary as of iOS 14")
+fileprivate struct LabelStyleEnvironmentKey: EnvironmentKey {
+    static var defaultValue: [AnyLabelStyle] = []
 }
 
+@available(iOS, introduced: 13, obsoleted: 14.0,
+           message: "Backport not necessary as of iOS 14")
 extension EnvironmentValues {
-    @available(iOS, introduced: 13, obsoleted: 14.0,
-               message: "Backport not necessary as of iOS 14", renamed: "SwiftUI.EnvironmentValues.labelStyle")
-    fileprivate var labelStyle: AnyLabelStyle {
+    fileprivate var labelStyle: [AnyLabelStyle] {
         get { self[LabelStyleEnvironmentKey.self] }
         set { self[LabelStyleEnvironmentKey.self] = newValue }
     }
 }
 
-// MARK: - View extension
+// MARK: - ViewModifier to enhance environment with additional style
+@available(iOS, introduced: 13, obsoleted: 14.0,
+           message: "Backport not necessary as of iOS 14")
+fileprivate struct LabelStyleViewModifier: ViewModifier {
+
+    @Environment(\.labelStyle) private var styles
+
+    let style: AnyLabelStyle
+
+    func body(content: Content) -> some View {
+        content
+            .environment(\.labelStyle, newStyles)
+    }
+
+    private var newStyles: [AnyLabelStyle] {
+        // There is no `Array.appending()` so we have to write it ourselves
+        var newArray = styles
+        newArray.append(style)
+        return newArray
+    }
+}
+
+
+// MARK: - View extension for conveniently setting the label style
 extension View {
     @available(iOS, introduced: 13, obsoleted: 14.0,
                message: "Backport not necessary as of iOS 14", renamed: "SwiftUI.View.labelStyle")
     public func labelStyle<S>(_ style: S) -> some View where S: LabelStyle {
-        self.environment(\.labelStyle, AnyLabelStyle(style))
+        self.modifier(LabelStyleViewModifier(style: AnyLabelStyle(style)))
     }
 }
