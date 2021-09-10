@@ -122,7 +122,9 @@ struct ProgressViewDemo: View {
                     .frame(maxWidth: .infinity, alignment: .leading)
 
                 Group {
-                    Text("Automatic Style").font(.headline)
+                    Text("Automatic Style")
+                        .font(.headline)
+                        .padding(.bottom)
                     ProgressView("Loading...")
                     ProgressView(value: progress/100)
                 }
@@ -131,7 +133,9 @@ struct ProgressViewDemo: View {
                 Divider()
 
                 Group {
-                    Text("Forced Linear").font(.headline)
+                    Text("Forced Linear")
+                        .font(.headline)
+                        .padding(.bottom)
                     ProgressView("Loading...")
                     ProgressView(value: progress/100)
                 }
@@ -140,22 +144,39 @@ struct ProgressViewDemo: View {
                 Divider()
 
                 Group {
-                    Text("Forced Circular").font(.headline)
-                    ProgressView("Loading...")
-                    ProgressView(value: progress/100)
+                    Text("Forced Circular")
+                        .font(.headline)
+                        .padding(.bottom)
+                    HStack {
+                        ProgressView("Loading...")
+                        ProgressView(value: progress/100)
+                    }
+                    .progressViewStyle(.circular)
                 }
-                .progressViewStyle(.circular)
 
                 Divider()
 
                 Group {
                     Text("Custom styled progress")
                         .font(.headline)
+                        .padding(.bottom)
                     ProgressView(value: progress/100,
                                  label: {Text("Loading...")})
                         .frame(width: 120, height: 120, alignment: .center)
                 }
                 .progressViewStyle(CustomProgressViewStyle())
+
+                Divider()
+
+                Group {
+                    Text("Stacked progress view styles")
+                        .font(.headline)
+                        .padding(.bottom)
+                    ProgressView(value: progress/100,
+                                 label: {Text("Loading...").font(.title3)})
+                        .progressViewStyle(DarkBlueShadowProgressViewStyle())
+                }
+                .progressViewStyle(YellowBackgroundProgressViewStyle())
             }
         }
         .padding()
@@ -186,6 +207,27 @@ public struct CustomProgressViewStyle: ProgressViewStyle {
                     .foregroundColor(.secondary)
             }
         }
+    }
+}
+
+// More custom styles from Apple documentation:
+struct DarkBlueShadowProgressViewStyle: ProgressViewStyle {
+    func makeBody(configuration: Configuration) -> some View {
+        ProgressView(configuration)
+            .shadow(color: Color(red: 0, green: 0, blue: 0.6),
+                    radius: 4.0, x: 1.0, y: 2.0)
+    }
+}
+
+// ... and one "self grown":
+struct YellowBackgroundProgressViewStyle: ProgressViewStyle {
+    func makeBody(configuration: Configuration) -> some View {
+        ProgressView(configuration)
+            .padding()
+            .background(
+                Color.yellow
+                    .clipShape(RoundedRectangle(cornerRadius: 8))
+            )
     }
 }
 
