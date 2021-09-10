@@ -45,19 +45,31 @@ public struct Label<Title, Icon>: View where Title: View, Icon: View {
 extension Label where Title == Text, Icon == Image {
 
     public init(_ titleKey: LocalizedStringKey, image name: String) {
-        self.init(title: {Text(titleKey)}, icon: {Image(name)})
+        configuration = LabelStyleConfiguration(
+            title: LabelStyleConfiguration.Title(Text(titleKey)),
+            icon: LabelStyleConfiguration.Icon(Image(name))
+        )
     }
 
     public init(_ titleKey: LocalizedStringKey, systemImage name: String) {
-        self.init(title: {Text(titleKey)}, icon: {Image(systemName: name)})
+        configuration = LabelStyleConfiguration(
+            title: LabelStyleConfiguration.Title(Text(titleKey)),
+            icon: LabelStyleConfiguration.Icon(image: Image(systemName: name))
+        )
     }
 
     public init<S>(_ titleKey: S, image name: String) where S: StringProtocol {
-        self.init(title: {Text(titleKey)}, icon: {Image(name)})
+        configuration = LabelStyleConfiguration(
+            title: LabelStyleConfiguration.Title(Text(titleKey)),
+            icon: LabelStyleConfiguration.Icon(Image(name))
+        )
     }
 
     public init<S>(_ titleKey: S, systemImage name: String) where S: StringProtocol {
-        self.init(title: {Text(titleKey)}, icon: {Image(systemName: name)})
+        configuration = LabelStyleConfiguration(
+            title: LabelStyleConfiguration.Title(Text(titleKey)),
+            icon: LabelStyleConfiguration.Icon(image: Image(systemName: name))
+        )
     }
 }
 
@@ -134,11 +146,18 @@ public struct LabelStyleConfiguration {
 
     /// A type-erased icon view of a label.
     public struct Icon: View {
+        private let _body: AnyView
         fileprivate init<I: View>(_ view: I) {
-            body = AnyView(view)
+            _body = AnyView(view)
         }
 
-        public let body: AnyView
+        fileprivate init(image: Image) {
+            _body = AnyView(ImageSizeEqualizer(image: image))
+        }
+
+        public var body: some View {
+            _body
+        }
     }
 
     fileprivate init(title: Title, icon: Icon) {

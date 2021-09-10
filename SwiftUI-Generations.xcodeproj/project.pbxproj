@@ -37,6 +37,7 @@
 		175D32AA26D0381B002322AB /* ProgressViewDemo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 175D32A926D0381B002322AB /* ProgressViewDemo.swift */; };
 		175D32AB26D0381B002322AB /* ProgressViewDemo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 175D32A926D0381B002322AB /* ProgressViewDemo.swift */; };
 		175D32AC26D0381B002322AB /* ProgressViewDemo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 175D32A926D0381B002322AB /* ProgressViewDemo.swift */; };
+		175E288A26EBF17B00AE71B1 /* ImageSizeEqualizer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 175E288926EBF17B00AE71B1 /* ImageSizeEqualizer.swift */; };
 		1766B77226D61AC2006B096E /* View-onChange.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1766B77126D61AC2006B096E /* View-onChange.swift */; };
 		1766B77826D61D86006B096E /* ViewOnChangeDemo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1766B77726D61D86006B096E /* ViewOnChangeDemo.swift */; };
 		1766B77926D61D92006B096E /* ViewOnChangeDemo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1766B77726D61D86006B096E /* ViewOnChangeDemo.swift */; };
@@ -101,6 +102,7 @@
 		175D32A126D036BF002322AB /* NewColorsDemo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewColorsDemo.swift; sourceTree = "<group>"; };
 		175D32A526D03731002322AB /* LabelDemo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LabelDemo.swift; sourceTree = "<group>"; };
 		175D32A926D0381B002322AB /* ProgressViewDemo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProgressViewDemo.swift; sourceTree = "<group>"; };
+		175E288926EBF17B00AE71B1 /* ImageSizeEqualizer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageSizeEqualizer.swift; sourceTree = "<group>"; };
 		1766B77126D61AC2006B096E /* View-onChange.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "View-onChange.swift"; sourceTree = "<group>"; };
 		1766B77726D61D86006B096E /* ViewOnChangeDemo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewOnChangeDemo.swift; sourceTree = "<group>"; };
 		1772985F26DB7AF400CA2A8B /* SceneStorage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneStorage.swift; sourceTree = "<group>"; };
@@ -260,6 +262,7 @@
 				17C9CC0C26D393BA00459FA2 /* URLSession+DownloadTaskPublisher.swift */,
 				17C9CC1026D3977C00459FA2 /* UnfairLock.swift */,
 				1788790726D3C58B001C59FF /* ViewGeometryPreferenceKey.swift */,
+				175E288926EBF17B00AE71B1 /* ImageSizeEqualizer.swift */,
 			);
 			path = Utilities;
 			sourceTree = "<group>";
@@ -468,6 +471,7 @@
 				175D32A226D036BF002322AB /* NewColorsDemo.swift in Sources */,
 				174C43A626CEF7C9009D6D94 /* ProgressView.swift in Sources */,
 				1766B77826D61D86006B096E /* ViewOnChangeDemo.swift in Sources */,
+				175E288A26EBF17B00AE71B1 /* ImageSizeEqualizer.swift in Sources */,
 				17DE260426D80A4800AB5B07 /* AppStorage.swift in Sources */,
 				175D329E26D03603002322AB /* AsyncImageDemo.swift in Sources */,
 				17EFA68926D049420094D483 /* Font-extension.swift in Sources */,
