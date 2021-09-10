@@ -24,6 +24,7 @@ So far I have the following implemented:
 - iOS 14 `Font`s like `title2`, `title3` and `caption2`
 - `onChange(of: V, perform: @escaping (V) -> Void)` value tracker for iOS 13. 
 - `navigationTitle(...)` for iOS 13
+- renamed `accessibilityXYZ(...)` modifiers for iOS 13
 - `StateObject` object wrapper for iOS 13.
 - `AppStorage` object wrapper for iOS 13 (including `defaultAppStorage()` View modifier).
 - `SceneStorage` object wrapper for iOS 13. (Needs integration into `SceneDelegate` to manage the
