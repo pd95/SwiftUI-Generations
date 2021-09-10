@@ -48,8 +48,52 @@ struct LabelDemo: View {
                     .frame(width: 44, height: 44, alignment: .center)
                     .overlay(Text("PD"))
             }
+
+            Group {
+                Text("Custom label styles")
+                    .font(.title2)
+
+                Text("VerticalLabelStyle:")
+                    .font(.headline)
+                HStack {
+                    Label("Rain", systemImage: "cloud.rain")
+                    Label("Snow", systemImage: "snow")
+                    Label("Sun", systemImage: "sun.max")
+                }
+                .labelStyle(VerticalLabelStyle())
+
+                Text("Combined styles:")
+                    .font(.headline)
+                HStack {
+                    Label("Rain", systemImage: "cloud.rain")
+                    Label("Snow", systemImage: "snow")
+                    Label("Sun", systemImage: "sun.max")
+                }
+                .labelStyle(YellowBackgroundLabelStyle())
+                .labelStyle(VerticalLabelStyle())
+            }
         }
         .padding()
+    }
+}
+
+struct VerticalLabelStyle: LabelStyle {
+    func makeBody(configuration: Configuration) -> some View {
+        VStack(alignment: .center, spacing: 8) {
+            configuration.icon
+            configuration.title
+        }
+    }
+}
+
+struct YellowBackgroundLabelStyle: LabelStyle {
+    func makeBody(configuration: Configuration) -> some View {
+        Label(configuration)
+            .padding(.top, 8)
+            .background(
+                RoundedRectangle(cornerRadius: 8)
+                    .fill(Color.yellow)
+            )
     }
 }
 
