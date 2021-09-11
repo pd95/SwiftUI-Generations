@@ -12,6 +12,36 @@ import Combine
 @available(iOS, introduced: 13, obsoleted: 14.0,
            message: "Backport not necessary as of iOS 14")
 /// Manages the scene related storage (`SceneStorage`) and monitors its activity state
+///
+/// Must be integrated into your `SceneDelegate` as follows:
+///
+///        // A variable to keep a handle to the SceneManager responsible for this scene
+///        var sceneManager: SceneManager?
+///
+///        func scene(_ scene: UIScene, willConnectTo session: UISceneSession, options connectionOptions: UIScene.ConnectionOptions) {
+///
+///            // ... other scene initialization
+///
+///            // Create SceneManager instance and restore existing values
+///            let sceneManager = SceneManager(scene, store: session.stateRestorationActivity?.userInfo)
+///            self.sceneManager = sceneManager
+///
+///            // Attach SceneManager to view hierarchy
+///            let contentView = ContentView()
+///                .sceneManager(sceneManager)
+///
+///            // ... attach contentView to UIWindow
+///
+///        }
+///
+///        // Save current scene state in newly created state restoration activity
+///        func stateRestorationActivity(for scene: UIScene) -> NSUserActivity? {
+///            // Create user activity and add existing scene storage values
+///            let activity = NSUserActivity(activityType: "com.yourcompany.sceneRestoration")
+///            sceneManager?.saveState(in: activity)
+///            return activity
+///        }
+///
 public class SceneManager: ObservableObject {
 
     // The `UIScene` associated with this manager
