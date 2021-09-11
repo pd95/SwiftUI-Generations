@@ -9,6 +9,8 @@ import SwiftUI
 import Combine
 
 
+@available(iOS, introduced: 13, obsoleted: 14.0,
+           message: "Backport not necessary as of iOS 14")
 /// Manages the scene related storage (`SceneStorage`) and monitors its activity state
 public class SceneManager: ObservableObject {
 
@@ -22,7 +24,7 @@ public class SceneManager: ObservableObject {
     private var cancellables = Set<AnyCancellable>()
     @Published var scenePhase = ScenePhase.inactive
 
-    init(_ scene: UIScene, store: [AnyHashable: Any]?) {
+    public init(_ scene: UIScene, store: [AnyHashable: Any]?) {
         print("🟢 SceneManager.init", "sceneIdentifier", scene.session.persistentIdentifier)
         self.scene = scene
         if let valueStore = store {
@@ -79,7 +81,7 @@ public class SceneManager: ObservableObject {
 }
 
 @available(iOS, introduced: 13, obsoleted: 14.0,
-           message: "Backport not necessary as of iOS 14", renamed: "SwiftUI.SceneStorage")
+           message: "Backport not necessary as of iOS 14")
 /// A view modifier used to inject the current `ScenePhase` (monitored by the `SceneManager` object)
 private struct SceneManagerViewModifier: ViewModifier {
     @ObservedObject var sceneManager: SceneManager
@@ -92,7 +94,7 @@ private struct SceneManagerViewModifier: ViewModifier {
 }
 
 @available(iOS, introduced: 13, obsoleted: 14.0,
-           message: "Backport not necessary as of iOS 14", renamed: "SwiftUI.SceneStorage")
+           message: "Backport not necessary as of iOS 14")
 extension View {
     /// The `SceneManager` instance used by `SceneStorage` and `ScenePhase` contained within the view hierarchy.
     public func sceneManager(_ sceneManager: SceneManager) -> some View {
