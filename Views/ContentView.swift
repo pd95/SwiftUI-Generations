@@ -14,7 +14,7 @@ struct ContentView: View {
         case basic, asyncImage, stateObject
     }
 
-    @AppStorage("mainTab") private var selectedTab: Tab = Tab.none
+    @SceneStorage("mainTab") private var selectedTab: Tab = Tab.none
 
     var body: some View {
         TabView(selection: $selectedTab) {
