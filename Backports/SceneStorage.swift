@@ -84,16 +84,16 @@ private class AnyLocation<Value>: NSObject, ObservableObject
 @propertyWrapper
 public struct SceneStorage<Value>: DynamicProperty
 {
-    @EnvironmentObject private var sceneManager: SceneManager
+    @Environment(\.sceneStorageValues) private var store
 
     @ObservedObject private var location: AnyLocation<Value>
 
     public var wrappedValue: Value {
         get {
-            location.get(from: sceneManager.valueStore)
+            location.get(from: store.values)
         }
         nonmutating set {
-            location.set(newValue, to: &sceneManager.valueStore)
+            location.set(newValue, to: &store.values)
         }
     }
 
@@ -104,6 +104,11 @@ public struct SceneStorage<Value>: DynamicProperty
 
     fileprivate init(key: String, transform: PropertyListTransform.Type, defaultValue: Value) {
         location = AnyLocation(key: key, transform: transform, defaultValue: defaultValue)
+    }
+
+    public mutating func update() {
+        _store.update()
+        _location.update()
     }
 }
 
@@ -134,3 +139,39 @@ extension SceneStorage where Value: ExpressibleByNilLiteral {
         self.init(key: key, transform: RawRepresentablePropertyListTransform<WrappedType>.self, defaultValue: nil)
     }
 }
+
+@available(iOS, introduced: 13, obsoleted: 14.0,
+           message: "Backport not necessary as of iOS 14", renamed: "SwiftUI.SceneStorage")
+internal class SceneStorageValues {
+    var values: [AnyHashable: Any]
+
+    init(_ initialStore: [AnyHashable: Any] = [:]) {
+        values = initialStore
+    }
+
+    func value(forKey key: AnyHashable) -> Any? {
+        values[key]
+    }
+
+    func set(_ value: Any, forKey key: AnyHashable) {
+        values[key] = value
+    }
+}
+
+@available(iOS, introduced: 13, obsoleted: 14.0,
+           message: "Backport not necessary as of iOS 14", renamed: "SwiftUI.SceneStorage")
+private struct SceneStorageValuesKey: EnvironmentKey {
+    static var defaultValue: SceneStorageValues = SceneStorageValues()
+}
+
+
+@available(iOS, introduced: 13, obsoleted: 14.0,
+           message: "Backport not necessary as of iOS 14", renamed: "SwiftUI.SceneStorage")
+extension EnvironmentValues {
+    internal var sceneStorageValues: SceneStorageValues {
+        get { self[SceneStorageValuesKey.self] }
+        set { self[SceneStorageValuesKey.self] = newValue }
+    }
+}
+
+

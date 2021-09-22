@@ -48,7 +48,7 @@ public class SceneManager: ObservableObject {
     private let scene: UIScene
 
     // The storage location for all `@SceneStorage` properties
-    var valueStore: [AnyHashable: Any] = [:]
+    fileprivate let store: SceneStorageValues
 
     // The cancellables used when setting up the scene activity monitoring
     private var cancellables = Set<AnyCancellable>()
@@ -59,9 +59,10 @@ public class SceneManager: ObservableObject {
         self.scene = scene
         if let valueStore = store {
             print("🟢 valueStore restored:", valueStore)
-            self.valueStore = valueStore
+            self.store = SceneStorageValues(valueStore)
         } else {
             print("🟢 No valueStore restored")
+            self.store = SceneStorageValues()
         }
 
         // Make sure we get notified of any kind of changes to the UIScene
@@ -105,7 +106,7 @@ public class SceneManager: ObservableObject {
     }
 
     public func saveState(in activity: NSUserActivity) {
-        activity.addUserInfoEntries(from: valueStore)
+        activity.addUserInfoEntries(from: store.values)
         print("🟢 Saved scene state in activity")
     }
 }
@@ -119,7 +120,7 @@ private struct SceneManagerViewModifier: ViewModifier {
     func body(content: Content) -> some View {
         content
             .environment(\.scenePhase, sceneManager.scenePhase)
-            .environmentObject(sceneManager)
+            .environment(\.sceneStorageValues, sceneManager.store)
     }
 }
 
