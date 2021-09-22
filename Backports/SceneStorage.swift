@@ -156,11 +156,15 @@ internal class SceneStorageValues {
     func set(_ value: Any, forKey key: AnyHashable) {
         values[key] = value
     }
+
+    func removeObject(forKey key: AnyHashable) {
+        values.removeValue(forKey: key)
+    }
 }
 
 @available(iOS, introduced: 13, obsoleted: 14.0,
            message: "Backport not necessary as of iOS 14", renamed: "SwiftUI.SceneStorage")
-private struct SceneStorageValuesKey: EnvironmentKey {
+internal struct SceneStorageValuesKey: EnvironmentKey {
     static var defaultValue: SceneStorageValues = SceneStorageValues()
 }
 
