@@ -204,6 +204,7 @@ public struct TitleAndIconLabelStyle: LabelStyle {
     public func makeBody(configuration: Configuration) -> some View {
         HStack {
             configuration.icon
+                .padding(.horizontal, 1.5)
             configuration.title
         }
     }
