@@ -54,7 +54,7 @@ extension Label where Title == Text, Icon == Image {
     public init(_ titleKey: LocalizedStringKey, systemImage name: String) {
         configuration = LabelStyleConfiguration(
             title: LabelStyleConfiguration.Title(Text(titleKey)),
-            icon: LabelStyleConfiguration.Icon(image: Image(systemName: name))
+            icon: LabelStyleConfiguration.Icon(systemName: name)
         )
     }
 
@@ -68,7 +68,7 @@ extension Label where Title == Text, Icon == Image {
     public init<S>(_ titleKey: S, systemImage name: String) where S: StringProtocol {
         configuration = LabelStyleConfiguration(
             title: LabelStyleConfiguration.Title(Text(titleKey)),
-            icon: LabelStyleConfiguration.Icon(image: Image(systemName: name))
+            icon: LabelStyleConfiguration.Icon(systemName: name)
         )
     }
 }
@@ -151,8 +151,12 @@ public struct LabelStyleConfiguration {
             _body = AnyView(view)
         }
 
+        fileprivate init(systemName name: String) {
+            _body = AnyView(ProperlySizedSFSymbol(name: name))
+        }
+
         fileprivate init(image: Image) {
-            _body = AnyView(ImageSizeEqualizer(image: image))
+            _body = AnyView(image)
         }
 
         public var body: some View {
@@ -178,10 +182,7 @@ public struct LabelStyleConfiguration {
 public struct DefaultLabelStyle: LabelStyle {
     public init() {}
     public func makeBody(configuration: Configuration) -> some View {
-        HStack {
-            configuration.icon
-            configuration.title
-        }
+        TitleAndIconLabelStyle().makeBody(configuration: configuration)
     }
 }
 
