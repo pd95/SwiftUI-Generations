@@ -93,6 +93,7 @@ extension AsyncImage {
 private class AsyncImageLoader: ObservableObject {
 
     enum Errors: Error {
+        case selfWasDeallocated
         case imageDecodingError
     }
 
@@ -124,6 +125,8 @@ private class AsyncImageLoader: ObservableObject {
             .removeDuplicates()
             .eraseToAnyPublisher()
 
+        weak var weakSelf = self
+
         let urlPublisher = urlSubject
             .compactMap({ $0 })
             .removeDuplicates()
@@ -137,9 +140,9 @@ private class AsyncImageLoader: ObservableObject {
                             try FileManager.default.moveItem(at: url, to: newTempUrl)
                             os_log("AsyncImage: Moved image to %{public}@", newTempUrl.absoluteString)
 
-                            DispatchQueue.main.async { [weak self] in
+                            DispatchQueue.main.async {
                                 // Make sure we keep the local url for image refresh
-                                self?.fileURL = newTempUrl
+                                weakSelf?.fileURL = newTempUrl
                             }
                             return Optional.some(newTempUrl)
                         } catch {
@@ -156,6 +159,10 @@ private class AsyncImageLoader: ObservableObject {
         cancellable = Publishers.CombineLatest(urlPublisher, sizePublisher)
             .receive(on: DispatchQueue.global(qos: .userInitiated))
             .tryMap({ (url, size) -> (URL, UIImage) in
+                guard let self = weakSelf else {
+                    throw Errors.selfWasDeallocated
+                }
+
                 let image: UIImage?
                 if size != .zero {
                     image = self.downsample(imageAt: url, to: size, scale: self.displayScale)
@@ -168,8 +175,8 @@ private class AsyncImageLoader: ObservableObject {
                 return (url, image)
             })
             .receive(on: RunLoop.main)
-            .sink(receiveCompletion: { [weak self] result in
-                guard let self = self else { return }
+            .sink(receiveCompletion: { result in
+                guard let self = weakSelf else { return }
                 if case .failure(let error) = result {
                     self.phase = .failure(error)
                     os_log("AsyncImage: 🔴 Error: loading image %{public}@!", error.localizedDescription)
@@ -180,8 +187,8 @@ private class AsyncImageLoader: ObservableObject {
                         self.cancellable = nil
                     }
                 }
-            }, receiveValue: { [weak self] (fileURL, image) in
-                guard let self = self, fileURL == self.fileURL else { return }
+            }, receiveValue: { (fileURL, image) in
+                guard let self = weakSelf, fileURL == self.fileURL else { return }
                 self.phase = .success(Image(uiImage: image))
             })
     }
