@@ -38,7 +38,11 @@ public struct StateObject<ObjectType>: DynamicProperty where ObjectType: Observa
         }
 
         @discardableResult
-        func reset() -> ObjectType {
+        func reset(_ seed: Int = 0) -> ObjectType {
+            if seed == 0 {
+                os_log("🔴 StateObject.Storage.reset executed with seed = 0. StateObject not in view?")
+            }
+
             // initialize a new instance
             let newObject = newObject()
             _object = newObject
@@ -49,7 +53,7 @@ public struct StateObject<ObjectType>: DynamicProperty where ObjectType: Observa
                     self?.objectWillChange.send()
                 })
 
-            os_log("🟡 StateObject.Storage.reset > executed initObject()", String(describing: self))
+            os_log("🟡 StateObject.Storage.reset > executed initObject()")
             return newObject
         }
     }
@@ -69,7 +73,7 @@ public struct StateObject<ObjectType>: DynamicProperty where ObjectType: Observa
 
     /// The underlying value referenced by the state object.
     public var wrappedValue: ObjectType {
-        os_log("🟡 StateObject.wrappedValue %@", String(describing: storage.object))
+        os_log("🟡 StateObject.wrappedValue %@", String(describing: _storage))
         return storage.object
     }
 
@@ -83,14 +87,14 @@ public struct StateObject<ObjectType>: DynamicProperty where ObjectType: Observa
     // This function is called by SwiftUI to allow this DynamicProperty to take actions
     // due to some storage update (?)
     public mutating func update() {
-        os_log("🟡 StateObject.update")
+        os_log("🟡 StateObject.update %@", String(describing: self))
         _storage.update()
 
         // FIXME: HACK! We rely on the internal _seed variable of `ObservedObject` which gets initialized to 1
         let mirror = Mirror(reflecting: _storage)
         if let seed = mirror.descendant("_seed") as? Int, seed == 1 {
-            storage.reset()
-            os_log("🟡 StateObject.update: executed initObject()", String(describing: self))
+            storage.reset(seed)
+            os_log("🟡 StateObject.update: executed initObject() %@", String(describing: self))
         }
     }
 }
