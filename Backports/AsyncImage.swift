@@ -45,22 +45,30 @@ public struct AsyncImage<Content>: View where Content: View {
     private var url: URL?
     private var contentBuilder: ((AsyncImagePhase) -> Content)?
 
-    public enum Errors: Error {
-        case imageDecodingError
-    }
-
-    @State private var phase = AsyncImagePhase.empty
-    @State private var cancellable: AnyCancellable?
-    @State private var fileURL: URL?
-    @State private var sizeSubject = CurrentValueSubject<CGSize, Never>(.zero)
-
-    @Environment(\.displayScale) private var displayScale
+    @StateObject private var loader = AsyncImageLoader()
 
     public init(url: URL?, @ViewBuilder content: @escaping (AsyncImagePhase) -> Content) {
         self.url = url
         self.contentBuilder = content
     }
 
+    public var body: some View {
+        let _ = loader.setURL(url)               // update model with latest URL
+        contentBuilder?(loader.phase)
+            .onAppear(perform: loader.fetchImage)
+            .background(GeometryReader { proxy in
+                Color.clear
+                    .preference(key: ViewGeometryPreferenceKey.self, value: proxy.frame(in: .local))
+            })
+            .onPreferenceChange(ViewGeometryPreferenceKey.self, perform: { newValue in
+                loader.setSize(newValue.size)  // update model with latest size
+            })
+    }
+}
+
+@available(iOS, introduced: 13, obsoleted: 15.0,
+           message: "Backport not necessary as of iOS 15", renamed: "SwiftUI.AsyncImage")
+extension AsyncImage {
     public init(url: URL?) where Content == Image {
         self.init(url: url) { phase in
             phase.image ?? Image(uiImage: UIImage())
@@ -80,59 +88,32 @@ public struct AsyncImage<Content>: View where Content: View {
             }
         })
     }
+}
 
-    public var body: some View {
-        contentBuilder?(phase)
-            .onAppear(perform: fetchImage)
-            .background(GeometryReader { proxy in
-                Color.clear
-                    .preference(key: ViewGeometryPreferenceKey.self, value: proxy.frame(in: .local))
-            })
-            .onPreferenceChange(ViewGeometryPreferenceKey.self, perform: { newValue in
-                let newSize = newValue.size
-                sizeSubject.send(newSize)
-            })
+private class AsyncImageLoader: ObservableObject {
+
+    enum Errors: Error {
+        case imageDecodingError
     }
 
-    private var localURLPublisher: AnyPublisher<URL, Never> {
-        let urlPublisher: AnyPublisher<URL, Never>
-        if let fileURL = fileURL {
-            // return the existing local URL
-            urlPublisher = Just(fileURL)
-                .eraseToAnyPublisher()
-        } else if let url = url {
+    @Published private(set) var phase = AsyncImagePhase.empty
+    @Environment(\.displayScale) private var displayScale
 
-            // Start a download task to fetch the remote url
-            urlPublisher = URLSession.shared.downloadTaskPublisher(for: url)
-                .map({ (url, response) in
-                    do {
-                        // Move file to our local url (in temp directory)
-                        let newTempUrl = FileManager.default.temporaryDirectory
-                            .appendingPathComponent("AsyncImage-Temp-"+url.lastPathComponent)
-                        try FileManager.default.moveItem(at: url, to: newTempUrl)
-                        os_log("AsyncImage: Moved image to %{public}@", newTempUrl.absoluteString)
+    private var fileURL: URL?
+    private var urlSubject = CurrentValueSubject<URL?, Never>(nil)
+    private var sizeSubject = CurrentValueSubject<CGSize, Never>(.zero)
+    private var cancellable: AnyCancellable?
 
-                        DispatchQueue.main.async {
-                            // Make sure we keep the local url for image refresh
-                            fileURL = newTempUrl
-                        }
-                        return Optional.some(newTempUrl)
-                    } catch {
-                        os_log("AsyncImage: 🔴 Error during file move %{public}@", url.absoluteString)
-                    }
-                    return nil
-                })
-                .replaceError(with: nil)
-                .compactMap({ $0 })
-                .eraseToAnyPublisher()
-        } else {
-            urlPublisher = Empty()
-                .eraseToAnyPublisher()
-        }
-        return urlPublisher
+    init() {
+        print("🔴 init")
     }
 
-    private func fetchImage() {
+    deinit {
+        print("🔴 deinit")
+    }
+
+    func fetchImage() {
+        print(#function)
         guard cancellable == nil else {
             return
         }
@@ -143,37 +124,81 @@ public struct AsyncImage<Content>: View where Content: View {
             .removeDuplicates()
             .eraseToAnyPublisher()
 
-        cancellable = Publishers.CombineLatest(localURLPublisher, sizePublisher)
-            .receive(on: DispatchQueue.global(qos: .userInitiated))
-            .tryMap({ (url, size) in
+        let urlPublisher = urlSubject
+            .compactMap({ $0 })
+            .removeDuplicates()
+            .flatMap({ (url: URL) -> AnyPublisher<URL, Never> in
+                URLSession.shared.downloadTaskPublisher(for: url)
+                    .map({ (url, response) in
+                        do {
+                            // Move file to our local url (in temp directory)
+                            let newTempUrl = FileManager.default.temporaryDirectory
+                                .appendingPathComponent("AsyncImage-Temp-"+url.lastPathComponent)
+                            try FileManager.default.moveItem(at: url, to: newTempUrl)
+                            os_log("AsyncImage: Moved image to %{public}@", newTempUrl.absoluteString)
 
+                            DispatchQueue.main.async { [weak self] in
+                                // Make sure we keep the local url for image refresh
+                                self?.fileURL = newTempUrl
+                            }
+                            return Optional.some(newTempUrl)
+                        } catch {
+                            os_log("AsyncImage: 🔴 Error during file move %{public}@", url.absoluteString)
+                        }
+                        return nil
+                    })
+                    .replaceError(with: nil)
+                    .compactMap({ $0 })
+                    .eraseToAnyPublisher()
+            })
+            .eraseToAnyPublisher()
+
+        cancellable = Publishers.CombineLatest(urlPublisher, sizePublisher)
+            .receive(on: DispatchQueue.global(qos: .userInitiated))
+            .tryMap({ (url, size) -> (URL, UIImage) in
                 let image: UIImage?
                 if size != .zero {
-                    image = downsample(imageAt: url, to: size, scale: displayScale)
+                    image = self.downsample(imageAt: url, to: size, scale: self.displayScale)
                 } else {
                     image = UIImage(contentsOfFile: url.path)
                 }
                 guard let image = image else {
                     throw Errors.imageDecodingError
                 }
-                return image
+                return (url, image)
             })
             .receive(on: RunLoop.main)
-            .sink(receiveCompletion: { result in
+            .sink(receiveCompletion: { [weak self] result in
+                guard let self = self else { return }
                 if case .failure(let error) = result {
-                    phase = .failure(error)
+                    self.phase = .failure(error)
                     os_log("AsyncImage: 🔴 Error: loading image %{public}@!", error.localizedDescription)
                 } else {
-                    if case .empty = phase {
+                    if case .empty = self.phase {
                         // This should not happen!
                         os_log("AsyncImage: 🔴 Error: no image was load for an unknown reason!")
-                        cancellable = nil
+                        self.cancellable = nil
                     }
                 }
-            }, receiveValue: { image in
-                phase = .success(Image(uiImage: image))
+            }, receiveValue: { [weak self] (fileURL, image) in
+                guard let self = self, fileURL == self.fileURL else { return }
+                self.phase = .success(Image(uiImage: image))
             })
     }
+
+    func setURL(_ url: URL?) {
+        if url != urlSubject.value {
+            print(" 🟡 URL did change:", url)
+            fileURL = nil
+            urlSubject.send(url)
+            phase = .empty
+        }
+    }
+
+    func setSize(_ size: CGSize) {
+        sizeSubject.send(size)
+    }
+
 
     /// Loading an appropriately sized image from the given URL
     ///
@@ -200,3 +225,4 @@ public struct AsyncImage<Content>: View where Content: View {
         return UIImage(cgImage: downsampledImage)
     }
 }
+
