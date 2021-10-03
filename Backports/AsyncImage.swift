@@ -53,9 +53,13 @@ public struct AsyncImage<Content>: View where Content: View {
     }
 
     public var body: some View {
-        let _ = loader.setURL(url)               // update model with latest URL
         contentBuilder?(loader.phase)
-            .onAppear(perform: loader.fetchImage)
+            .onAppear(perform: {
+                loader.fetchImage(url)
+            })
+            .onChange(of: url, perform: { newValue in
+                loader.setURL(newValue)          // update model with latest URL
+            })
             .background(GeometryReader { proxy in
                 Color.clear
                     .preference(key: ViewGeometryPreferenceKey.self, value: proxy.frame(in: .local))
@@ -113,11 +117,17 @@ private class AsyncImageLoader: ObservableObject {
         print("🔴 deinit")
     }
 
-    func fetchImage() {
+    func fetchImage(_ url: URL?) {
         print(#function)
+        setURL(url)               // update model with latest URL
+        setupCombine()
+    }
+
+    func setupCombine() {
         guard cancellable == nil else {
             return
         }
+        print(#function, "running")
 
         // Debounce the size changes to reduce succession of downsampling due to animation
         let sizePublisher = sizeSubject
@@ -195,7 +205,7 @@ private class AsyncImageLoader: ObservableObject {
 
     func setURL(_ url: URL?) {
         if url != urlSubject.value {
-            print(" 🟡 URL did change:", url)
+            os_log("AsyncImage: 🟡 URL did change: %{public}@!", url?.absoluteString ?? "nil")
             fileURL = nil
             urlSubject.send(url)
             phase = .empty
