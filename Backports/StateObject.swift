@@ -22,58 +22,57 @@ public struct StateObject<ObjectType>: DynamicProperty where ObjectType: Observa
 
         private var newObject: () -> ObjectType
 
-        private var subscriber: AnyCancellable?
+        private var cancellable: AnyCancellable?
 
-        //private var _object: ObjectType?
+        private var _object: ObjectType?
         var object: ObjectType {
-            //_object ?? reset()
-            observedObject.wrappedValue
+            _object ?? reset()
         }
 
-        var _observedObject: ObservedObject<ObjectType>?
         var observedObject: ObservedObject<ObjectType> {
-            //ObservedObject(wrappedValue: object)
-            _observedObject ?? reset()
+            ObservedObject(wrappedValue: object)
         }
 
         init(newObject: @escaping () -> ObjectType) {
             self.newObject = newObject
         }
 
-        var needsReset: Bool {
-            //_object == nil
-            _observedObject  == nil
+        var hasObject: Bool {
+            _object != nil
         }
 
         @discardableResult
-        func reset(_ seed: Int = 0) -> ObservedObject<ObjectType> {
+        func reset(_ seed: Int = 0) -> ObjectType {
             if seed == 0 {
-                os_log("🔴 StateObject.Storage.reset executed with seed = 0. StateObject not in view?")
+                os_log("🔴 StateObject.Storage.reset: executed with seed = 0. Is StateObject not in a view?")
             }
 
             // initialize a new instance
             let newObject = newObject()
-            //_object = newObject
-            _observedObject = ObservedObject(wrappedValue: newObject)
+            _object = newObject
 
-            subscribe(objectWillChange)
+            publish(to: objectWillChange)
 
-            os_log("🟡 StateObject.Storage.reset > executed initObject()")
-            return _observedObject!
+            os_log("🟡 StateObject.Storage.reset: executed newObject() and relaying objectWillChange notifications ")
+            return newObject
         }
 
-        func subscribe(_ targetPublisher: ObjectWillChangePublisher) {
-            subscriber = object.objectWillChange
+        func synchronize(to otherStorage: Storage) {
+            _object = otherStorage._object
+            otherStorage.publish(to: objectWillChange)
+        }
+
+        private func publish(to targetPublisher: ObjectWillChangePublisher) {
+            cancellable = object.objectWillChange
                 .sink(receiveValue: { _ in
-                    print("🟢 Did change value")
+                    os_log("🟢 StateObject.Storage.publish: relaying objectWillChange notifications")
                     targetPublisher.send()
                 })
         }
     }
 
-    @State private var state: Storage
-    @ObservedObject private var observedStorageObject: Storage
-    var cancellable: AnyCancellable?
+    @State private var storage: Storage
+    @ObservedObject private var observedStorage: Storage
 
     /// Creates a new state object with an initial wrapped value.
     ///
@@ -83,58 +82,50 @@ public struct StateObject<ObjectType>: DynamicProperty where ObjectType: Observa
     /// - Parameter thunk: An initial value for the state object.
     public init(wrappedValue thunk: @autoclosure @escaping () -> ObjectType) {
         let storage = Storage(newObject: thunk)
-        _state = State(wrappedValue: storage)
-        print("  new", ObjectIdentifier(_state.wrappedValue))
-        _observedStorageObject = ObservedObject(wrappedValue: storage)
-        print("  new", ObjectIdentifier(_observedStorageObject.wrappedValue))
+        _storage = State(wrappedValue: storage)
+        _observedStorage = ObservedObject(wrappedValue: storage)
         os_log("🟡 StateObject.init %@", String(describing: self))
     }
 
     /// The underlying value referenced by the state object.
     public var wrappedValue: ObjectType {
-        os_log("🟡 StateObject.wrappedValue %@", String(describing: self))
-        return state.observedObject.wrappedValue
+        //os_log("🟡 StateObject.wrappedValue %@", String(describing: self))
+        return storage.object
     }
 
-    /// A projection of the state object that creates bindings to its
-    /// properties.
+    /// A projection of the state object that creates bindings to its properties.
     public var projectedValue: ObservedObject<ObjectType>.Wrapper {
-        os_log("🟡 StateObject.projectedValue %@", String(describing: state.observedObject))
-        return state.observedObject.projectedValue
+        //os_log("🟡 StateObject.projectedValue %@", String(describing: observedStorage))
+        return storage.observedObject.projectedValue
     }
 
-    // This function is called by SwiftUI to allow this DynamicProperty to take actions
-    // due to some storage update (?)
+    // This function is called by SwiftUI to allow the DynamicProperty to take actions due to some "graph updates"
     public mutating func update() {
         os_log("🟡 StateObject.update %@", String(describing: self))
-        _state.update()
-        _observedStorageObject.update()
 
-        let mirror = Mirror(reflecting: _observedStorageObject)
-        if let seed = mirror.descendant("_seed") as? Int {
-            if state.needsReset || seed == 1 {
-                state.reset()
-                //object = ObservedObject(wrappedValue: _state.wrappedValue)
-                //object.wrappedValue = _state.wrappedValue
-                os_log("🟡 StateObject.update: executed initObject() %@", String(describing: self))
-            }
+        // Forward update to our underlying property wrappers
+        _storage.update()
+        _observedStorage.update()
+
+        // HACK! We rely on the internal _seed variable of `ObservedObject` to learn when we should call reset()
+        let mirror = Mirror(reflecting: _observedStorage)
+        guard let seed = mirror.descendant("_seed") as? Int else {
+            return
         }
 
-
-        if observedStorageObject.needsReset {
-            print("🔴 Objects mismatch")
-            dump(_observedStorageObject)
-
-            print("  new", ObjectIdentifier(_state.wrappedValue))
-            print("  new", ObjectIdentifier(observedStorageObject))
-
-            _observedStorageObject.wrappedValue._observedObject = _state.wrappedValue._observedObject
-            state.subscribe(observedStorageObject.objectWillChange)
-
-            print("  fixed", ObjectIdentifier(_state.wrappedValue))
-            print("  fixed", ObjectIdentifier(_observedStorageObject.wrappedValue))
+        // Initialize the storage if it has not been initialized so far or the `seed` has been "cleared"
+        if seed == 1 || storage.hasObject == false {
+            storage.reset(seed)
+            os_log("🟡 StateObject.update: executed storage.reset() %@", String(describing: self))
         }
 
-        //print("Same object: ", object.wrappedValue === _state.wrappedValue)
+        // Whenever observedStorage has been reset, it gets disconnected from `storage` and needs synchronising
+        if observedStorage.hasObject == false {
+            os_log("🔴 StateObject.update: observedStorage needs synchronization with storage")
+            dump(_observedStorage)
+            observedStorage.synchronize(to: storage)
+        }
+
+        assert(observedStorage.object === storage.object, "Observed object and storage object must point to the same object!")
     }
 }
