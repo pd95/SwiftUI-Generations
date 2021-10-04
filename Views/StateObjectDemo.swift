@@ -53,6 +53,10 @@ class TestObject: ObservableObject, CustomStringConvertible {
         print("🟢 TestObject init")
     }
 
+    deinit {
+        print("🔴 TestObject deinit")
+    }
+
     var description: String {
         "TestObject(num: \(num))"
     }
