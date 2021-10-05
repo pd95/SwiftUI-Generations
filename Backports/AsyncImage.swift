@@ -112,14 +112,14 @@ private class AsyncImageLoader: ObservableObject {
 
     enum Errors: Error {
         case selfWasDeallocated
+        case httpDownloadError
+        case fileMoveError
         case imageDecodingError
     }
 
     @Published private(set) var phase = AsyncImagePhase.empty
     @Environment(\.displayScale) private var displayScale
 
-    private var fileURL: URL?
-    private var urlSubject = CurrentValueSubject<URL?, Never>(nil)
     private var sizeSubject = CurrentValueSubject<CGSize, Never>(.zero)
     private var cancellable: AnyCancellable?
 
@@ -131,51 +131,56 @@ private class AsyncImageLoader: ObservableObject {
         print("🔴 deinit")
     }
 
-    func fetchImage(_ url: URL?) {
-        print(#function)
-        setURL(url)               // update model with latest URL
-        setupCombine()
-    }
+    private var lastURL: URL?
 
-    func setupCombine() {
-        guard cancellable == nil else {
+    func fetchImage(_ url: URL?) {
+        print(#function, "from", url?.lastPathComponent, "previous was", lastURL?.lastPathComponent)
+        guard lastURL != url else {
+            os_log("AsyncImage: 🟡 Skip refetching same url %{public}@", url?.absoluteString ?? "(nil)")
             return
         }
-        print(#function, "running")
+
+        lastURL = url
+        cancellable?.cancel()
+        phase = .empty
 
         // Debounce the size changes to reduce succession of downsampling due to animation
         let sizePublisher = sizeSubject
             .debounce(for: 0.02, scheduler: DispatchQueue.global(qos: .userInitiated))
             .removeDuplicates()
+            .setFailureType(to: Error.self)
             .eraseToAnyPublisher()
 
         weak var weakSelf = self
 
-        let urlPublisher = urlSubject
+        let urlPublisher = Just(url)
             .compactMap({ $0 })
             .removeDuplicates()
-            .flatMap({ (url: URL) -> AnyPublisher<URL, Never> in
+            .setFailureType(to: Error.self)
+            .flatMap({ (url: URL) -> AnyPublisher<URL, Error> in
                 URLSession.shared.downloadTaskPublisher(for: url)
-                    .map({ (url, response) in
+                    .tryMap({ (fileURL, response) in
+                        guard let urlResponse = response as? HTTPURLResponse,
+                              (200...399).contains(urlResponse.statusCode)
+                        else {
+                            os_log("AsyncImage: 🔴 HTTP error %ld while loading %{public}@", (response as? HTTPURLResponse)?.statusCode ?? -1, url.absoluteString)
+                            throw Errors.httpDownloadError
+                        }
+
                         do {
                             // Move file to our local url (in temp directory)
                             let newTempUrl = FileManager.default.temporaryDirectory
-                                .appendingPathComponent("AsyncImage-Temp-"+url.lastPathComponent)
-                            try FileManager.default.moveItem(at: url, to: newTempUrl)
+                                .appendingPathComponent("AsyncImage-Temp-"+fileURL.lastPathComponent)
+                            try FileManager.default.moveItem(at: fileURL, to: newTempUrl)
                             os_log("AsyncImage: Moved image to %{public}@", newTempUrl.absoluteString)
 
-                            DispatchQueue.main.async {
-                                // Make sure we keep the local url for image refresh
-                                weakSelf?.fileURL = newTempUrl
-                            }
-                            return Optional.some(newTempUrl)
+                            return newTempUrl
                         } catch {
-                            os_log("AsyncImage: 🔴 Error during file move %{public}@", url.absoluteString)
+                            os_log("AsyncImage: 🔴 File processing error %{public}@ for %{public}@", error.localizedDescription, fileURL.absoluteString)
+                            throw Errors.fileMoveError
                         }
-                        return nil
                     })
-                    .replaceError(with: nil)
-                    .compactMap({ $0 })
+                    .mapError({ $0 as Error })
                     .eraseToAnyPublisher()
             })
             .eraseToAnyPublisher()
@@ -210,18 +215,8 @@ private class AsyncImageLoader: ObservableObject {
                 }
                 self.cancellable = nil
             }, receiveValue: { (fileURL, image) in
-                guard let self = weakSelf, fileURL == self.fileURL else { return }
-                self.phase = .success(Image(uiImage: image))
+                weakSelf?.phase = .success(Image(uiImage: image))
             })
-    }
-
-    private func setURL(_ url: URL?) {
-        if url != urlSubject.value {
-            os_log("AsyncImage: 🟡 URL did change: %{public}@!", url?.absoluteString ?? "nil")
-            fileURL = nil
-            urlSubject.send(url)
-            phase = .empty
-        }
     }
 
     func setSize(_ size: CGSize) {
