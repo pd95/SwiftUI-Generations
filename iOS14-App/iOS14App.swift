@@ -7,6 +7,7 @@
 
 import SwiftUI
 
+// swiftlint:disable type_name
 @main
 struct iOS14App: App {
     var body: some Scene {

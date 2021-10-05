@@ -94,8 +94,8 @@ extension AsyncImage {
     }
 
     public init<I, P>(url: URL?,
-               @ViewBuilder content: @escaping (Image) -> I,
-               @ViewBuilder placeholder: @escaping () -> P)
+                      @ViewBuilder content: @escaping (Image) -> I,
+                      @ViewBuilder placeholder: @escaping () -> P)
     where Content == _ConditionalContent<I, P>, I: View, P: View {
 
         self.init(url: url, content: { phase in
@@ -133,8 +133,10 @@ private class AsyncImageLoader: ObservableObject {
 
     private var lastURL: URL?
 
-    func fetchImage(_ url: URL?) {
-        print(#function, "from", url?.lastPathComponent, "previous was", lastURL?.lastPathComponent)
+    // swiftlint:disable function_body_length
+     func fetchImage(_ url: URL?) {
+        print(#function, "from", url?.lastPathComponent ?? "(nil)",
+              "(previous was \(lastURL?.lastPathComponent ?? "(nil)"))")
         guard lastURL != url else {
             os_log("AsyncImage: 🟡 Skip refetching same url %{public}@", url?.absoluteString ?? "(nil)")
             return
@@ -163,7 +165,8 @@ private class AsyncImageLoader: ObservableObject {
                         guard let urlResponse = response as? HTTPURLResponse,
                               (200...399).contains(urlResponse.statusCode)
                         else {
-                            os_log("AsyncImage: 🔴 HTTP error %ld while loading %{public}@", (response as? HTTPURLResponse)?.statusCode ?? -1, url.absoluteString)
+                            os_log("AsyncImage: 🔴 HTTP error %ld while loading %{public}@",
+                                   (response as? HTTPURLResponse)?.statusCode ?? -1, url.absoluteString)
                             throw Errors.httpDownloadError
                         }
 
@@ -176,7 +179,8 @@ private class AsyncImageLoader: ObservableObject {
 
                             return newTempUrl
                         } catch {
-                            os_log("AsyncImage: 🔴 File processing error %{public}@ for %{public}@", error.localizedDescription, fileURL.absoluteString)
+                            os_log("AsyncImage: 🔴 File processing error %{public}@ for %{public}@",
+                                   error.localizedDescription, fileURL.absoluteString)
                             throw Errors.fileMoveError
                         }
                     })
@@ -214,7 +218,7 @@ private class AsyncImageLoader: ObservableObject {
                     os_log("AsyncImage: 🔴 Error: no image was load for an unknown reason!")
                 }
                 self.cancellable = nil
-            }, receiveValue: { (fileURL, image) in
+            }, receiveValue: { (_, image) in
                 weakSelf?.phase = .success(Image(uiImage: image))
             })
     }
@@ -222,7 +226,6 @@ private class AsyncImageLoader: ObservableObject {
     func setSize(_ size: CGSize) {
         sizeSubject.send(size)
     }
-
 
     /// Loading an appropriately sized image from the given URL
     ///
@@ -249,4 +252,3 @@ private class AsyncImageLoader: ObservableObject {
         return UIImage(cgImage: downsampledImage)
     }
 }
-

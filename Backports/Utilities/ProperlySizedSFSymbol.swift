@@ -28,7 +28,6 @@ struct ProperlySizedSFSymbol: View {
             Color.clear
                 .frame(width: rect2.size.width, height: rect2.size.height)
 
-
             // The (capped) symbol view, overlaid with a resizable symbol
             let symbol = Image(systemName: name)
             symbol
@@ -51,7 +50,6 @@ struct ProperlySizedSFSymbol: View {
                 let rect2 = geometry[boundsAnchorImage2]
 
                 if rect1.height != self.rect1.height {
-                    //let _ = print("\(name): 1", rect1, "/ 2", rect2)
                     DispatchQueue.main.async {
                         self.rect1 = rect1
                         self.rect2 = rect2
@@ -61,10 +59,10 @@ struct ProperlySizedSFSymbol: View {
                 return Color.clear
             }
         }
-        .alignmentGuide(.firstTextBaseline, computeValue: { d in
+        .alignmentGuide(.firstTextBaseline, computeValue: { _ in
             return rect1.height - rect2.origin.y
         })
-        .alignmentGuide(.lastTextBaseline, computeValue: { d in
+        .alignmentGuide(.lastTextBaseline, computeValue: { _ in
             return rect1.height - rect2.origin.y
         })
     }

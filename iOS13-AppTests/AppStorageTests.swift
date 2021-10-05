@@ -8,6 +8,7 @@
 import XCTest
 @testable import iOS13_App
 
+// swiftlint:disable type_body_length
 class AppStorageTests: XCTestCase {
 
     // MARK: Bool
@@ -36,7 +37,8 @@ class AppStorageTests: XCTestCase {
         XCTAssertEqual(store.value(forKey: key) as? Bool, newValue, "the new value should be persisted in UserDefaults")
 
         store.set(externallySetValue, forKey: key)
-        XCTAssertEqual(value.wrappedValue, externallySetValue, "if modified externally, the new value should be returned")
+        XCTAssertEqual(value.wrappedValue, externallySetValue,
+                       "if modified externally, the new value should be returned")
     }
 
     // MARK: Bool?
@@ -65,9 +67,9 @@ class AppStorageTests: XCTestCase {
         XCTAssertEqual(store.value(forKey: key) as? Bool, newValue, "the new value should be persisted in UserDefaults")
 
         store.set(externallySetValue, forKey: key)
-        XCTAssertEqual(value.wrappedValue, externallySetValue, "if modified externally, the new value should be returned")
+        XCTAssertEqual(value.wrappedValue, externallySetValue,
+                       "if modified externally, the new value should be returned")
     }
-
 
     // MARK: Int
     func testAppStorageInteger() {
@@ -95,7 +97,8 @@ class AppStorageTests: XCTestCase {
         XCTAssertEqual(store.value(forKey: key) as? Int, newValue, "the new value should be persisted in UserDefaults")
 
         store.set(externallySetValue, forKey: key)
-        XCTAssertEqual(value.wrappedValue, externallySetValue, "if modified externally, the new value should be returned")
+        XCTAssertEqual(value.wrappedValue, externallySetValue,
+                       "if modified externally, the new value should be returned")
     }
 
     // MARK: Int?
@@ -124,9 +127,9 @@ class AppStorageTests: XCTestCase {
         XCTAssertEqual(store.value(forKey: key) as? Int, newValue, "the new value should be persisted in UserDefaults")
 
         store.set(externallySetValue, forKey: key)
-        XCTAssertEqual(value.wrappedValue, externallySetValue, "if modified externally, the new value should be returned")
+        XCTAssertEqual(value.wrappedValue, externallySetValue,
+                       "if modified externally, the new value should be returned")
     }
-
 
     // MARK: Double
     func testAppStorageDouble() {
@@ -151,10 +154,12 @@ class AppStorageTests: XCTestCase {
 
         value.wrappedValue = newValue
         XCTAssertEqual(value.wrappedValue, newValue, "if set, the new value should be returned.")
-        XCTAssertEqual(store.value(forKey: key) as? Double, newValue, "the new value should be persisted in UserDefaults")
+        XCTAssertEqual(store.value(forKey: key) as? Double, newValue,
+                       "the new value should be persisted in UserDefaults")
 
         store.set(externallySetValue, forKey: key)
-        XCTAssertEqual(value.wrappedValue, externallySetValue, "if modified externally, the new value should be returned")
+        XCTAssertEqual(value.wrappedValue, externallySetValue,
+                       "if modified externally, the new value should be returned")
     }
 
     // MARK: Double?
@@ -180,12 +185,13 @@ class AppStorageTests: XCTestCase {
 
         value.wrappedValue = newValue
         XCTAssertEqual(value.wrappedValue, newValue, "if set, the new value should be returned.")
-        XCTAssertEqual(store.value(forKey: key) as? Double, newValue, "the new value should be persisted in UserDefaults")
+        XCTAssertEqual(store.value(forKey: key) as? Double, newValue,
+                       "the new value should be persisted in UserDefaults")
 
         store.set(externallySetValue, forKey: key)
-        XCTAssertEqual(value.wrappedValue, externallySetValue, "if modified externally, the new value should be returned")
+        XCTAssertEqual(value.wrappedValue, externallySetValue,
+                       "if modified externally, the new value should be returned")
     }
-
 
     // MARK: String
     func testAppStorageString() {
@@ -210,10 +216,12 @@ class AppStorageTests: XCTestCase {
 
         value.wrappedValue = newValue
         XCTAssertEqual(value.wrappedValue, newValue, "if set, the new value should be returned.")
-        XCTAssertEqual(store.value(forKey: key) as? String, newValue, "the new value should be persisted in UserDefaults")
+        XCTAssertEqual(store.value(forKey: key) as? String, newValue,
+                       "the new value should be persisted in UserDefaults")
 
         store.set(externallySetValue, forKey: key)
-        XCTAssertEqual(value.wrappedValue, externallySetValue, "if modified externally, the new value should be returned")
+        XCTAssertEqual(value.wrappedValue, externallySetValue,
+                       "if modified externally, the new value should be returned")
     }
 
     // MARK: String?
@@ -239,12 +247,13 @@ class AppStorageTests: XCTestCase {
 
         value.wrappedValue = newValue
         XCTAssertEqual(value.wrappedValue, newValue, "if set, the new value should be returned.")
-        XCTAssertEqual(store.value(forKey: key) as? String, newValue, "the new value should be persisted in UserDefaults")
+        XCTAssertEqual(store.value(forKey: key) as? String, newValue,
+                       "the new value should be persisted in UserDefaults")
 
         store.set(externallySetValue, forKey: key)
-        XCTAssertEqual(value.wrappedValue, externallySetValue, "if modified externally, the new value should be returned")
+        XCTAssertEqual(value.wrappedValue, externallySetValue,
+                       "if modified externally, the new value should be returned")
     }
-
 
     // MARK: URL
     func testAppStorageURL() {
@@ -272,7 +281,8 @@ class AppStorageTests: XCTestCase {
         XCTAssertEqual(store.url(forKey: key), newValue, "the new value should be persisted in UserDefaults")
 
         store.set(externallySetValue, forKey: key)
-        XCTAssertEqual(value.wrappedValue, externallySetValue, "if modified externally, the new value should be returned")
+        XCTAssertEqual(value.wrappedValue, externallySetValue,
+                       "if modified externally, the new value should be returned")
     }
 
     // MARK: URL?
@@ -301,7 +311,8 @@ class AppStorageTests: XCTestCase {
         XCTAssertEqual(store.url(forKey: key), newValue, "the new value should be persisted in UserDefaults")
 
         store.set(externallySetValue, forKey: key)
-        XCTAssertEqual(value.wrappedValue, externallySetValue, "if modified externally, the new value should be returned")
+        XCTAssertEqual(value.wrappedValue, externallySetValue,
+                       "if modified externally, the new value should be returned")
     }
 
     // MARK: Data
@@ -330,7 +341,8 @@ class AppStorageTests: XCTestCase {
         XCTAssertEqual(store.data(forKey: key), newValue, "the new value should be persisted in UserDefaults")
 
         store.set(externallySetValue, forKey: key)
-        XCTAssertEqual(value.wrappedValue, externallySetValue, "if modified externally, the new value should be returned")
+        XCTAssertEqual(value.wrappedValue, externallySetValue,
+                       "if modified externally, the new value should be returned")
     }
 
     // MARK: Data?
@@ -359,6 +371,7 @@ class AppStorageTests: XCTestCase {
         XCTAssertEqual(store.data(forKey: key), newValue, "the new value should be persisted in UserDefaults")
 
         store.set(externallySetValue, forKey: key)
-        XCTAssertEqual(value.wrappedValue, externallySetValue, "if modified externally, the new value should be returned")
+        XCTAssertEqual(value.wrappedValue, externallySetValue,
+                       "if modified externally, the new value should be returned")
     }
 }

@@ -8,7 +8,6 @@
 import SwiftUI
 import Combine
 
-
 @available(iOS, introduced: 13, obsoleted: 14.0,
            message: "Backport not necessary as of iOS 14")
 /// Manages the scene related storage (`SceneStorage`) and monitors its activity state
@@ -18,7 +17,8 @@ import Combine
 ///        // A variable to keep a handle to the SceneManager responsible for this scene
 ///        var sceneManager: SceneManager?
 ///
-///        func scene(_ scene: UIScene, willConnectTo session: UISceneSession, options connectionOptions: UIScene.ConnectionOptions) {
+///        func scene(_ scene: UIScene, willConnectTo session: UISceneSession,
+///                   options connectionOptions: UIScene.ConnectionOptions) {
 ///
 ///            // ... other scene initialization
 ///
@@ -48,7 +48,7 @@ public class SceneManager: ObservableObject {
     private let scene: UIScene
 
     // The storage location for all `@SceneStorage` properties
-    fileprivate let store: SceneStorageValues
+    fileprivate let store: SceneStorageValues // swiftlint:disable:this private_over_fileprivate
 
     // The cancellables used when setting up the scene activity monitoring
     private var cancellables = Set<AnyCancellable>()

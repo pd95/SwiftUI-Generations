@@ -31,11 +31,13 @@ extension Array where Element == AnchorPreferenceData {
 
 extension View {
 
-    func anchorBounds(for viewIdx: Int) -> some View{
-        anchorPreference(key: AnchorPreferenceKey.self, value: .bounds, transform: { [AnchorPreferenceData(viewIdx: viewIdx, bounds: $0)] })
+    func anchorBounds(for viewIdx: Int) -> some View {
+        anchorPreference(key: AnchorPreferenceKey.self, value: .bounds,
+                         transform: { [AnchorPreferenceData(viewIdx: viewIdx, bounds: $0)] })
     }
-    
+
     func anchorPoint(for viewIdx: Int, source: Anchor<CGPoint>.Source) -> some View {
-        anchorPreference(key: AnchorPreferenceKey.self, value: source, transform: { [AnchorPreferenceData(viewIdx: viewIdx, points: [$0])] })
+        anchorPreference(key: AnchorPreferenceKey.self, value: source,
+                         transform: { [AnchorPreferenceData(viewIdx: viewIdx, points: [$0])] })
     }
 }

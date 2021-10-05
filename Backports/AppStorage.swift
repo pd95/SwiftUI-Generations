@@ -42,9 +42,9 @@ extension URL: UserDefaultsValueTransform {
 }
 extension Data: UserDefaultsValueTransform {}
 
-
 // For enums which are `RawRepresentable` use the `rawValue` for storing in `UserDefaults`
-struct RawRepresentableTransform<T>: UserDefaultsValueTransform where T: RawRepresentable, T.RawValue: UserDefaultsValueTransform {
+struct RawRepresentableTransform<T>: UserDefaultsValueTransform
+where T: RawRepresentable, T.RawValue: UserDefaultsValueTransform {
     public static func readValue(from store: UserDefaults, key: String) -> Any? {
         if let rawValue = store.value(forKey: key) as? T.RawValue {
             return T(rawValue: rawValue)
@@ -59,8 +59,7 @@ struct RawRepresentableTransform<T>: UserDefaultsValueTransform where T: RawRepr
 }
 
 /// Helper class to encapsulate the management of a single value: read/write, caching, UserDefaults KVO
-private class UserDefaultLocation<Value>: NSObject, ObservableObject
-{
+private class UserDefaultLocation<Value>: NSObject, ObservableObject {
     private let key: String
     private let transform: UserDefaultsValueTransform.Type
     private let defaultValue: Value
@@ -79,7 +78,7 @@ private class UserDefaultLocation<Value>: NSObject, ObservableObject
         if let value = cachedValue {
             return value
         }
-        let value = transform.readValue(from: store, key:key) as? Value ?? defaultValue
+        let value = transform.readValue(from: store, key: key) as? Value ?? defaultValue
         cachedValue = value
 
         return value
@@ -106,9 +105,10 @@ private class UserDefaultLocation<Value>: NSObject, ObservableObject
     }
 
     // Called whenever the related UserDefaults value changed
+    // swiftlint:disable block_based_kvo
     override func observeValue(forKeyPath keyPath: String?,
                                of object: Any?,
-                               change: [NSKeyValueChangeKey : Any]?,
+                               change: [NSKeyValueChangeKey: Any]?,
                                context: UnsafeMutableRawPointer?) {
         self.objectWillChange.send()
         cachedValue = nil
@@ -120,8 +120,7 @@ private class UserDefaultLocation<Value>: NSObject, ObservableObject
 /// A property wrapper type that reflects a value from `UserDefaults` and
 /// invalidates a view on a change in value in that user default.
 @propertyWrapper
-public struct AppStorage<Value>: DynamicProperty
-{
+public struct AppStorage<Value>: DynamicProperty {
     @Environment(\.defaultAppStorage) private var defaultStore
 
     @ObservedObject private var location: UserDefaultLocation<Value>
@@ -136,11 +135,14 @@ public struct AppStorage<Value>: DynamicProperty
     }
 
     public var projectedValue: Binding<Value> {
-        Binding  { self.wrappedValue }
+        Binding(
+            get: { self.wrappedValue },
             set: { self.wrappedValue = $0 }
+        )
     }
 
-    fileprivate init(key: String, transform: UserDefaultsValueTransform.Type, store: UserDefaults?, defaultValue: Value) {
+    private init(key: String, transform: UserDefaultsValueTransform.Type,
+                 store: UserDefaults?, defaultValue: Value) {
         location = UserDefaultLocation(key: key, transform: transform, store: store, defaultValue: defaultValue)
     }
 
@@ -156,12 +158,15 @@ public struct AppStorage<Value>: DynamicProperty
            message: "Backport not necessary as of iOS 14", renamed: "SwiftUI.AppStorage")
 extension AppStorage {
     /// Creates a property that can read and write to a plain user default type.
-    public init(wrappedValue: Value, _ key: String, store: UserDefaults? = nil) where Value: UserDefaultsValueTransform {
+    public init(wrappedValue: Value, _ key: String, store: UserDefaults? = nil)
+    where Value: UserDefaultsValueTransform {
         self.init(key: key, transform: Value.self, store: store, defaultValue: wrappedValue)
     }
 
-    /// Creates a property that can read and write a scalar  user default, transforming that from and to `RawRepresentable` data type.
-    public init(wrappedValue: Value, _ key: String, store: UserDefaults? = nil) where Value: RawRepresentable, Value.RawValue: UserDefaultsValueTransform {
+    /// Creates a property that can read and write a scalar  user default, transforming 
+    /// that from and to `RawRepresentable` data type.
+    public init(wrappedValue: Value, _ key: String, store: UserDefaults? = nil)
+    where Value: RawRepresentable, Value.RawValue: UserDefaultsValueTransform {
         self.init(key: key, transform: RawRepresentableTransform<Value>.self, store: store, defaultValue: wrappedValue)
     }
 }
@@ -170,16 +175,19 @@ extension AppStorage {
            message: "Backport not necessary as of iOS 14", renamed: "SwiftUI.AppStorage")
 extension AppStorage where Value: ExpressibleByNilLiteral {
     /// Creates a property that can read and write an optional scalar user default.
-    public init<WrappedType>(_ key: String, store: UserDefaults? = nil) where Value == Optional<WrappedType>, WrappedType: UserDefaultsValueTransform {
+    public init<WrappedType>(_ key: String, store: UserDefaults? = nil)
+    where Value == WrappedType?, WrappedType: UserDefaultsValueTransform {
         self.init(key: key, transform: WrappedType.self, store: store, defaultValue: nil)
     }
 
-    /// Creates a property that can save and restore an optional value, transforming it to an optional `RawRepresentable` data type.
-    public init<WrappedType>(_ key: String, store: UserDefaults? = nil) where Value == Optional<WrappedType>, WrappedType: RawRepresentable, WrappedType.RawValue: UserDefaultsValueTransform {
+    /// Creates a property that can save and restore an optional value, transforming
+    /// it to an optional `RawRepresentable` data type.
+    public init<WrappedType>(_ key: String, store: UserDefaults? = nil)
+    where Value == WrappedType?, WrappedType: RawRepresentable,
+          WrappedType.RawValue: UserDefaultsValueTransform {
         self.init(key: key, transform: RawRepresentableTransform<WrappedType>.self, store: store, defaultValue: nil)
     }
 }
-
 
 @available(iOS, introduced: 13, obsoleted: 14.0,
            message: "Backport not necessary as of iOS 14", renamed: "SwiftUI.AppStorage")
@@ -197,13 +205,12 @@ struct DefaultAppStorage: EnvironmentKey {
     static var defaultValue: UserDefaults = .standard
 }
 
-
 @available(iOS, introduced: 13, obsoleted: 14.0,
            message: "Backport not necessary as of iOS 14", renamed: "SwiftUI.EnvironmentValues.AppStorage")
 extension EnvironmentValues {
+    // swiftlint:disable private_over_fileprivate
     fileprivate var defaultAppStorage: UserDefaults {
         get { self[DefaultAppStorage.self] }
         set { self[DefaultAppStorage.self] = newValue }
     }
 }
-

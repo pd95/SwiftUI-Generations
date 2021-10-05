@@ -12,11 +12,11 @@ struct AsyncImageDemo: View {
     let icons = [
         "https://developer.apple.com/assets/elements/icons/xcode/xcode-128x128_2x.png",
         "https://developer.apple.com/assets/elements/icons/testflight/testflight-128x128_2x.png",
-        "https://developer.apple.com/assets/elements/icons/swiftui/swiftui-256x256.png",
-        "https://developer.apple.com/assets/elements/icons/shareplay/shareplay-256x256_2x.png",
+        "https://developer.apple.com/assets/elements/icons/swiftui/swiftui-X256x256.png",
+        "https://developer.apple.com/assets/elements/icons/shareplay/shareplay-256x256_2x.png"
     ]
 
-    let urlHQ = URL(string: "https://is3-ssl.mzstatic.com/image/thumb/Purple115/v4/ec/70/a6/ec70a6ff-fbbb-f924-0b05-cfa0028e3269/Xcode-85-220-0-4-2x.png/1024x0w.png")
+    let urlHQ = URL(string: "https://is3-ssl.mzstatic.com/image/thumb/Purple115/v4/ec/70/a6/ec70a6ff-fbbb-f924-0b05-cfa0028e3269/Xcode-85-220-0-4-2x.png/1024x0w.png") // swiftlint:disable:this line_length
 
     @State private var state1 = 2
     @State private var state2 = 1
@@ -36,7 +36,7 @@ struct AsyncImageDemo: View {
                         .frame(maxWidth: .infinity, alignment: .leading)
                         .padding()
 
-                    Text("Image is clipped (as the original image is bigger than the available frame and it is `.resizable` cannot be attached.")
+                    Text("Image is clipped (as the original image is bigger than the available frame and it is `.resizable` cannot be attached.") // swiftlint:disable:this line_length
                         .multilineTextAlignment(.leading)
                         .minimumScaleFactor(0.99)
                         .padding(.horizontal)
@@ -56,7 +56,6 @@ struct AsyncImageDemo: View {
 
                     Text("Tap the images below for resize effect.")
                         .padding(.horizontal)
-
 
                     Text("This image is resizable with low-resolution")
                         .padding(.horizontal)
@@ -104,8 +103,7 @@ struct AsyncImageDemo: View {
     var minScrollViewHeight: CGFloat? {
         if #available(iOS 14, *) {
             return nil
-        }
-        else {
+        } else {
             // iOS 13 has a buggy ScrollView implementation which is bad at adapting dynamically
             return 500+(imageWidth(state2) ?? 0)+(imageWidth(state1) ?? 0)
         }
@@ -116,12 +114,10 @@ struct AsyncImageDemo: View {
         if remainder == 0 {
             if #available(iOS 14, *) {
                 return nil
-            }
-            else {
+            } else {
                 return 400
             }
-        }
-        else {
+        } else {
             return 100.0 * remainder
         }
     }

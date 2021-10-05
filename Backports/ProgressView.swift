@@ -4,6 +4,7 @@
 //
 //  Created by Philipp on 19.08.21.
 //
+// swiftlint:disable file_length
 
 import SwiftUI
 
@@ -122,7 +123,6 @@ extension ProgressView {
     }
 }
 
-
 // To allow styling customizations as shown below, we need this initializer.
 //
 //      struct DarkBlueShadowProgressViewStyle: ProgressViewStyle {
@@ -136,11 +136,11 @@ extension ProgressView {
 
     /// Creates a progress view based on a style configuration.
     public init(_ configuration: ProgressViewStyleConfiguration)
-    where Label == ProgressViewStyleConfiguration.Label, CurrentValueLabel == ProgressViewStyleConfiguration.CurrentValueLabel {
+    where Label == ProgressViewStyleConfiguration.Label,
+    CurrentValueLabel == ProgressViewStyleConfiguration.CurrentValueLabel {
         self.configuration = configuration
     }
 }
-
 
 // MARK: - Determinate progress initializer based on Foundation `Progress` object
 extension ProgressView {
@@ -171,7 +171,6 @@ extension ProgressView {
     }
 }
 
-
 // MARK: - ProgressViewStyle Protocol
 /// A type that applies standard interaction behavior to all progress views
 /// within a view hierarchy.
@@ -194,7 +193,6 @@ public protocol ProgressViewStyle {
     /// The properties of a label.
     typealias Configuration = ProgressViewStyleConfiguration
 }
-
 
 @available(iOS, introduced: 13, obsoleted: 14.0,
            message: "Backport not necessary as of iOS 14", renamed: "SwiftUI.ProgressViewStyle")
@@ -223,7 +221,6 @@ extension ProgressViewStyle where Self == LinearProgressViewStyle {
     public static var linear: LinearProgressViewStyle { LinearProgressViewStyle() }
 }
 
-
 // MARK: - DefaultProgressViewStyle
 /// A progress view that visually indicates its progress using a horizontal bar.
 @available(iOS, introduced: 13, obsoleted: 14.0,
@@ -245,10 +242,10 @@ public struct DefaultProgressViewStyle: ProgressViewStyle {
     }
 }
 
-
 // MARK: - CircularProgressViewStyle
-/// A progress view that visually indicates its progress using a circular gauge, optionally vertically stacked with a label and a current value label,
-/// giving the user feedback about what's the current progress made.
+/// A progress view that visually indicates its progress using a circular gauge, optionally
+/// vertically stacked with a label and a current value label, giving the user feedback
+/// about what's the current progress made.
 @available(iOS, introduced: 13, obsoleted: 14.0,
            message: "Backport not necessary as of iOS 14", renamed: "SwiftUI.CircularProgressViewStyle")
 public struct CircularProgressViewStyle: ProgressViewStyle {
@@ -271,10 +268,10 @@ public struct CircularProgressViewStyle: ProgressViewStyle {
     }
 }
 
-
 // MARK: - LinearProgressViewStyle
-/// A progress view that indicates its progress using a horizontal bar, optionally vertically stacked with a label and a current value label,
-/// giving the user feedback about what's the current progress made.
+/// A progress view that indicates its progress using a horizontal bar, optionally vertically
+/// stacked with a label and a current value label, giving the user feedback about what's the
+/// current progress made.
 @available(iOS, introduced: 13, obsoleted: 14.0,
            message: "Backport not necessary as of iOS 14", renamed: "SwiftUI.LinearProgressViewStyle")
 public struct LinearProgressViewStyle: ProgressViewStyle {
@@ -299,11 +296,10 @@ public struct LinearProgressViewStyle: ProgressViewStyle {
     }
 }
 
-
 // MARK: - Type Erased ProgressViewStyle
 @available(iOS, introduced: 13, obsoleted: 14.0,
            message: "Backport not necessary as of iOS 14")
-fileprivate struct AnyProgressViewStyle: ProgressViewStyle {
+private struct AnyProgressViewStyle: ProgressViewStyle {
     private let _makeBody: (Configuration) -> AnyView
 
     init<S: ProgressViewStyle>(_ style: S) {
@@ -323,11 +319,10 @@ extension ProgressViewStyle {
     }
 }
 
-
 // MARK: - Custom environment for ProgressViewStyle
 @available(iOS, introduced: 13, obsoleted: 14.0,
            message: "Backport not necessary as of iOS 14")
-fileprivate struct ProgressViewStyleEnvironmentKey: EnvironmentKey {
+private struct ProgressViewStyleEnvironmentKey: EnvironmentKey {
     static var defaultValue: [AnyProgressViewStyle] = []
 }
 
@@ -340,11 +335,10 @@ extension EnvironmentValues {
     }
 }
 
-
 // MARK: - ViewModifier to enhance environment with additional style
 @available(iOS, introduced: 13, obsoleted: 14.0,
            message: "Backport not necessary as of iOS 14")
-fileprivate struct ProgressViewModifier: ViewModifier {
+private struct ProgressViewModifier: ViewModifier {
 
     @Environment(\.progressViewStyle) private var styles
 
@@ -363,7 +357,6 @@ fileprivate struct ProgressViewModifier: ViewModifier {
     }
 }
 
-
 // MARK: - View extension for conveniently setting the progress view style
 @available(iOS, introduced: 13, obsoleted: 14.0,
            message: "Backport not necessary as of iOS 14", renamed: "SwiftUI.View.progressViewStyle")
@@ -372,7 +365,6 @@ extension View {
         self.modifier(ProgressViewModifier(style: AnyProgressViewStyle(style)))
     }
 }
-
 
 // MARK: - ProgressViewStyleConfiguration
 /// The properties of a progress view instance.
@@ -413,10 +405,9 @@ public struct ProgressViewStyleConfiguration {
     public var currentValueLabel: ProgressViewStyleConfiguration.CurrentValueLabel?
 }
 
-
 // MARK: - LinearProgressView
 /// A linear growing rectangular bar representing the fractional completion of the current progress.
-fileprivate struct LinearProgressView: View {
+private struct LinearProgressView: View {
     let fractionCompleted: Double
 
     var body: some View {
@@ -434,11 +425,10 @@ fileprivate struct LinearProgressView: View {
     }
 }
 
-
 // MARK: - CircularProgressView
 /// The basic "spinner" used for indeterminate progress.
 /// Relying here on the UIKit `UIActivityIndicatorView`
-fileprivate struct CircularProgressView: UIViewRepresentable {
+private struct CircularProgressView: UIViewRepresentable {
     let style: UIActivityIndicatorView.Style
 
     init(style: UIActivityIndicatorView.Style = .medium) {

@@ -11,7 +11,8 @@ import Combine
 extension View {
     @available(iOS, introduced: 13, obsoleted: 14.0,
                message: "Backport not necessary as of iOS 14", renamed: "SwiftUI.View.onChange")
-    public func onChange<V>(of value: V, perform action: @escaping (_ newValue: V) -> Void) -> some View where V : Equatable {
+    public func onChange<V>(of value: V,
+                            perform action: @escaping (_ newValue: V) -> Void) -> some View where V: Equatable {
         ValueChangeDetectionWrapper(value: value, action: action, content: self)
     }
 }

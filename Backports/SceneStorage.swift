@@ -34,7 +34,8 @@ extension URL: PropertyListTransform {}
 extension Data: PropertyListTransform {}
 
 // For enums which are `RawRepresentable` use the `rawValue` for storing
-private struct RawRepresentablePropertyListTransform<T>: PropertyListTransform where T: RawRepresentable, T.RawValue: PropertyListTransform {
+private struct RawRepresentablePropertyListTransform<T>: PropertyListTransform
+where T: RawRepresentable, T.RawValue: PropertyListTransform {
     public static func readValue(from store: [AnyHashable: Any], key: String, read: inout Bool) -> Any? {
         if let rawValue = store[key] as? T.RawValue {
             return T(rawValue: rawValue)
@@ -48,19 +49,17 @@ private struct RawRepresentablePropertyListTransform<T>: PropertyListTransform w
     }
 }
 
-
 @available(iOS, introduced: 13, obsoleted: 14.0,
            message: "Backport not necessary as of iOS 14", renamed: "SwiftUI.SceneStorage")
 /// Helper class to get/set a value from a `[AnyHashable: Any]` dictionnary using the PropertyListTransform
-private class AnyLocation<Value>: NSObject, ObservableObject
-{
+private class AnyLocation<Value>: NSObject, ObservableObject {
     private let key: String
     private let transform: PropertyListTransform.Type
     private let defaultValue: Value
 
     func get(from store: [AnyHashable: Any]) -> Value {
         var didRead = false
-        let value = transform.readValue(from: store, key: key, read:&didRead) as? Value
+        let value = transform.readValue(from: store, key: key, read: &didRead) as? Value
         return value ?? defaultValue
     }
 
@@ -82,8 +81,7 @@ private class AnyLocation<Value>: NSObject, ObservableObject
            message: "Backport not necessary as of iOS 14", renamed: "SwiftUI.SceneStorage")
 /// A property wrapper type that represents a "named scene value" (managed by  the current `SceneManager`)
 @propertyWrapper
-public struct SceneStorage<Value>: DynamicProperty
-{
+public struct SceneStorage<Value>: DynamicProperty {
     @Environment(\.sceneStorageValues) private var store
 
     @ObservedObject private var location: AnyLocation<Value>
@@ -98,11 +96,13 @@ public struct SceneStorage<Value>: DynamicProperty
     }
 
     public var projectedValue: Binding<Value> {
-        Binding  { self.wrappedValue }
+        Binding(
+            get: { self.wrappedValue },
             set: { self.wrappedValue = $0 }
+        )
     }
 
-    fileprivate init(key: String, transform: PropertyListTransform.Type, defaultValue: Value) {
+    private init(key: String, transform: PropertyListTransform.Type, defaultValue: Value) {
         location = AnyLocation(key: key, transform: transform, defaultValue: defaultValue)
     }
 
@@ -120,8 +120,10 @@ extension SceneStorage {
         self.init(key: key, transform: Value.self, defaultValue: wrappedValue)
     }
 
-    /// Creates a property that can read and write a scalar  user default, transforming that from and to `RawRepresentable` data type.
-    public init(wrappedValue: Value, _ key: String) where Value: RawRepresentable, Value.RawValue: PropertyListTransform {
+    /// Creates a property that can read and write a scalar  user default, transforming 
+    /// that from and to `RawRepresentable` data type.
+    public init(wrappedValue: Value, _ key: String)
+    where Value: RawRepresentable, Value.RawValue: PropertyListTransform {
         self.init(key: key, transform: RawRepresentablePropertyListTransform<Value>.self, defaultValue: wrappedValue)
     }
 }
@@ -130,12 +132,14 @@ extension SceneStorage {
            message: "Backport not necessary as of iOS 14", renamed: "SwiftUI.SceneStorage")
 extension SceneStorage where Value: ExpressibleByNilLiteral {
     /// Creates a property that can read and write an optional scalar user default.
-    public init<WrappedType>(_ key: String) where Value == Optional<WrappedType>, WrappedType: PropertyListTransform {
+    public init<WrappedType>(_ key: String) where Value == WrappedType?, WrappedType: PropertyListTransform {
         self.init(key: key, transform: WrappedType.self, defaultValue: nil)
     }
 
-    /// Creates a property that can save and restore an optional value, transforming it to an optional `RawRepresentable` data type.
-    public init<WrappedType>(_ key: String) where Value == Optional<WrappedType>, WrappedType: RawRepresentable, WrappedType.RawValue: PropertyListTransform {
+    /// Creates a property that can save and restore an optional value, transforming it
+    /// to an optional `RawRepresentable` data type.
+    public init<WrappedType>(_ key: String)
+    where Value == WrappedType?, WrappedType: RawRepresentable, WrappedType.RawValue: PropertyListTransform {
         self.init(key: key, transform: RawRepresentablePropertyListTransform<WrappedType>.self, defaultValue: nil)
     }
 }
@@ -168,7 +172,6 @@ internal struct SceneStorageValuesKey: EnvironmentKey {
     static var defaultValue: SceneStorageValues = SceneStorageValues()
 }
 
-
 @available(iOS, introduced: 13, obsoleted: 14.0,
            message: "Backport not necessary as of iOS 14", renamed: "SwiftUI.SceneStorage")
 extension EnvironmentValues {
@@ -177,5 +180,3 @@ extension EnvironmentValues {
         set { self[SceneStorageValuesKey.self] = newValue }
     }
 }
-
-

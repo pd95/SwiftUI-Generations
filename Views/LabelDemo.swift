@@ -15,16 +15,18 @@ struct LabelDemo: View {
                 .frame(maxWidth: .infinity, alignment: .leading)
 
             Label("Profile", systemImage: "person.circle")
+                // .border(Color.green)
             Label("Lightning", systemImage: "bolt.fill")
+                // .border(Color.green)
 
             Divider()
                 .frame(maxWidth: 200)
 
             Label("Lightning", systemImage: "bolt.fill")
-                //.labelStyle(.iconOnly)
+                // .labelStyle(.iconOnly)
                 .labelStyle(IconOnlyLabelStyle())
             Label("Lightning", systemImage: "bolt.fill")
-                //.labelStyle(.titleOnly)
+                // .labelStyle(.titleOnly)
                 .labelStyle(TitleOnlyLabelStyle())
 
             HStack {
@@ -32,7 +34,7 @@ struct LabelDemo: View {
                 Label("Snow", systemImage: "snow")
                 Label("Sun", systemImage: "sun.max")
             }
-            //.labelStyle(.iconOnly)
+            // .labelStyle(.iconOnly)
             .labelStyle(IconOnlyLabelStyle())
 
             Label {
@@ -71,6 +73,7 @@ struct LabelDemo: View {
                 }
                 .labelStyle(YellowBackgroundLabelStyle())
                 .labelStyle(VerticalLabelStyle())
+                // .font(.largeTitle)
             }
         }
         .padding()
@@ -81,7 +84,9 @@ struct VerticalLabelStyle: LabelStyle {
     func makeBody(configuration: Configuration) -> some View {
         VStack(alignment: .center, spacing: 8) {
             configuration.icon
+                // .border(Color.red)
             configuration.title
+                // .border(Color.red)
         }
     }
 }

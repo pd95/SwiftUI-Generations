@@ -89,13 +89,13 @@ public struct StateObject<ObjectType>: DynamicProperty where ObjectType: Observa
 
     /// The underlying value referenced by the state object.
     public var wrappedValue: ObjectType {
-        //os_log("🟡 StateObject.wrappedValue %@", String(describing: self))
+        // os_log("🟡 StateObject.wrappedValue %@", String(describing: self))
         return storage.object
     }
 
     /// A projection of the state object that creates bindings to its properties.
     public var projectedValue: ObservedObject<ObjectType>.Wrapper {
-        //os_log("🟡 StateObject.projectedValue %@", String(describing: observedStorage))
+        // os_log("🟡 StateObject.projectedValue %@", String(describing: observedStorage))
         return storage.observedObject.projectedValue
     }
 
@@ -126,6 +126,7 @@ public struct StateObject<ObjectType>: DynamicProperty where ObjectType: Observa
             observedStorage.synchronize(to: storage)
         }
 
-        assert(observedStorage.object === storage.object, "Observed object and storage object must point to the same object!")
+        assert(observedStorage.object === storage.object,
+            "Observed object and storage object must point to the same object!")
     }
 }

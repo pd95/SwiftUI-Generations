@@ -1,4 +1,4 @@
-/*
+/* swiftlint:disable line_length
 
  Source was part of Apple Sample Code "Building High-Performance Lists and Collection Views"
  https://developer.apple.com/documentation/uikit/uiimage/building_high-performance_lists_and_collection_views
@@ -21,7 +21,7 @@ import Combine
 
 final class UnfairLock {
     @usableFromInline let lock: UnsafeMutablePointer<os_unfair_lock>
-    
+
     public init() {
         lock = .allocate(capacity: 1)
         lock.initialize(to: os_unfair_lock())
@@ -30,7 +30,7 @@ final class UnfairLock {
     deinit {
         lock.deallocate()
     }
-    
+
     @inlinable
     @inline(__always)
     func withLock<Result>(body: () throws -> Result) rethrows -> Result {
@@ -38,7 +38,7 @@ final class UnfairLock {
         defer { os_unfair_lock_unlock(lock) }
         return try body()
     }
-    
+
     @inlinable
     @inline(__always)
     func withLock(body: () -> Void) {
@@ -46,7 +46,7 @@ final class UnfairLock {
         defer { os_unfair_lock_unlock(lock) }
         body()
     }
-    
+
     // Assert that the current thread owns the lock.
     @inlinable
     @inline(__always)

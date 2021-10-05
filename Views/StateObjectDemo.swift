@@ -41,7 +41,7 @@ struct StateObjectDemo: View {
             }
             .navigationTitle("State Management")
         }
-        //.navigationViewStyle(.stack)
+        // .navigationViewStyle(.stack)
         .navigationViewStyle(StackNavigationViewStyle())
     }
 }

@@ -60,7 +60,6 @@ struct ProgressViewDemo: View {
                 Divider()
                     .frame(maxWidth: 200)
 
-
                 ProgressView(value: progress/100)
 
                 Divider()
@@ -94,8 +93,7 @@ struct ProgressViewDemo: View {
                 }
                 if progress < 100 {
                     progress += 2
-                }
-                else if let endTime = endTime {
+                } else if let endTime = endTime {
                     if endTime.distance(to: time) > 2 {
                         progress = 0
                         self.endTime = nil
@@ -108,7 +106,9 @@ struct ProgressViewDemo: View {
                 // Update Progress object accordingly
                 progressObject.totalUnitCount = Int64(100*20)
                 progressObject.completedUnitCount = Int64(progress*20)
-                progressObject.localizedDescription = withLabel ? "\(progressObject.totalUnitCount - progressObject.completedUnitCount) files remaining..." : nil
+                progressObject.localizedDescription = withLabel ?
+                    "\(progressObject.totalUnitCount - progressObject.completedUnitCount) files remaining..." :
+                    nil
             }
             .onAppear(perform: {
                 timer = Timer.publish(every: 0.1, on: .main, in: .common).autoconnect()

@@ -246,7 +246,7 @@ extension LabelStyle {
 // MARK: - Custom environment for LabelStyle
 @available(iOS, introduced: 13, obsoleted: 14.0,
            message: "Backport not necessary as of iOS 14")
-fileprivate struct LabelStyleEnvironmentKey: EnvironmentKey {
+private struct LabelStyleEnvironmentKey: EnvironmentKey {
     static var defaultValue: [AnyLabelStyle] = []
 }
 
@@ -262,7 +262,7 @@ extension EnvironmentValues {
 // MARK: - ViewModifier to enhance environment with additional style
 @available(iOS, introduced: 13, obsoleted: 14.0,
            message: "Backport not necessary as of iOS 14")
-fileprivate struct LabelStyleViewModifier: ViewModifier {
+private struct LabelStyleViewModifier: ViewModifier {
 
     @Environment(\.labelStyle) private var styles
 
@@ -280,7 +280,6 @@ fileprivate struct LabelStyleViewModifier: ViewModifier {
         return newArray
     }
 }
-
 
 // MARK: - View extension for conveniently setting the label style
 extension View {
