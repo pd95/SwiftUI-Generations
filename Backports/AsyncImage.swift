@@ -58,7 +58,7 @@ public struct AsyncImage<Content>: View where Content: View {
                 loader.fetchImage(url)
             })
             .onChange(of: url, perform: { newValue in
-                loader.setURL(newValue)          // update model with latest URL
+                loader.fetchImage(newValue)
             })
             .background(GeometryReader { proxy in
                 Color.clear
@@ -74,8 +74,22 @@ public struct AsyncImage<Content>: View where Content: View {
            message: "Backport not necessary as of iOS 15", renamed: "SwiftUI.AsyncImage")
 extension AsyncImage {
     public init(url: URL?) where Content == Image {
-        self.init(url: url) { phase in
-            phase.image ?? Image(uiImage: UIImage())
+        self.init(url: url, content: Self.justImage)
+    }
+
+    static private func justImage(phase: AsyncImagePhase) -> Image {
+        switch phase {
+        case .empty:
+            return Image(uiImage: UIImage())
+        case .success(let image):
+            return image
+        case .failure:
+            let size = CGSize(width: 400, height: 400)
+            let uiImage = UIGraphicsImageRenderer(size: size).image { rendererContext in
+                UIColor.systemGray.setFill()
+                rendererContext.fill(CGRect(origin: .zero, size: size))
+            }
+            return Image(uiImage: uiImage)
         }
     }
 
@@ -190,20 +204,18 @@ private class AsyncImageLoader: ObservableObject {
                 if case .failure(let error) = result {
                     self.phase = .failure(error)
                     os_log("AsyncImage: 🔴 Error: loading image %{public}@!", error.localizedDescription)
-                } else {
-                    if case .empty = self.phase {
-                        // This should not happen!
-                        os_log("AsyncImage: 🔴 Error: no image was load for an unknown reason!")
-                        self.cancellable = nil
-                    }
+                } else if case .empty = self.phase {
+                    // This should not happen!
+                    os_log("AsyncImage: 🔴 Error: no image was load for an unknown reason!")
                 }
+                self.cancellable = nil
             }, receiveValue: { (fileURL, image) in
                 guard let self = weakSelf, fileURL == self.fileURL else { return }
                 self.phase = .success(Image(uiImage: image))
             })
     }
 
-    func setURL(_ url: URL?) {
+    private func setURL(_ url: URL?) {
         if url != urlSubject.value {
             os_log("AsyncImage: 🟡 URL did change: %{public}@!", url?.absoluteString ?? "nil")
             fileURL = nil
