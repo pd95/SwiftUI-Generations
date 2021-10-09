@@ -12,7 +12,7 @@ import UIKit
 
 /// A representation of a color that adapts to a given context.
 ///
-/// This extension implement the new sematic colors introduced in iOS 15.
+/// This extension implements the new semantic colors introduced in iOS 15.
 ///
 extension Color {
     @available(iOS, introduced: 13, obsoleted: 15.0,
