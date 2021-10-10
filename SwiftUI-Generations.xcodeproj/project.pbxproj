@@ -173,7 +173,6 @@
 			children = (
 				171029E526CFF239004E9440 /* README.md */,
 				17FFD2C82711C2F20023CD0D /* DemoApp */,
-				174C439D26CEF755009D6D94 /* Assets.xcassets */,
 				176776F026CEC0AC0077534A /* Backports */,
 				170A607626DC2CE900FDEC94 /* iOS13-AppTests */,
 				173D286326CE9C7F00039D17 /* Products */,
@@ -277,6 +276,7 @@
 				174C43A526CEF7B2009D6D94 /* iOS14-App */,
 				174C439826CEF754009D6D94 /* iOS13-App */,
 				173D286426CE9C7F00039D17 /* Views */,
+				174C439D26CEF755009D6D94 /* Assets.xcassets */,
 			);
 			path = DemoApp;
 			sourceTree = "<group>";
