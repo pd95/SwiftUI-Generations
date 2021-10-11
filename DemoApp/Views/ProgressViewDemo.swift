@@ -5,7 +5,7 @@
 //  Created by Philipp on 20.08.21.
 //
 
-import SwiftUI
+import SwiftUIShim
 
 struct ProgressViewDemo: View {
     @Environment(\.scenePhase) var scenePhase

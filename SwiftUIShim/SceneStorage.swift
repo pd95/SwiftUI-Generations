@@ -7,6 +7,8 @@
 
 import SwiftUI
 
+#if SwiftUIv1
+
 /// A protocol for types compatible which can be read from and written to a dictionnary of type [AnyHashable: Any]
 public protocol PropertyListTransform {
     static func readValue(from store: [AnyHashable: Any], key: String, read: inout Bool) -> Any?
@@ -180,3 +182,5 @@ extension EnvironmentValues {
         set { self[SceneStorageValuesKey.self] = newValue }
     }
 }
+
+#endif

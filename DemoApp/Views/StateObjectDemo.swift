@@ -5,7 +5,7 @@
 //  Created by Philipp on 23.08.21.
 //
 
-import SwiftUI
+import SwiftUIShim
 
 struct StateObjectDemo: View {
     @Environment(\.scenePhase) private var scenePhase

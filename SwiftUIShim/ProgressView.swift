@@ -8,6 +8,7 @@
 
 import SwiftUI
 
+#if SwiftUIv1
 // MARK: - ProgressView View
 ///
 /// A view that shows the progress towards completion of a task.
@@ -444,3 +445,4 @@ private struct CircularProgressView: UIViewRepresentable {
     func updateUIView(_ uiView: UIActivityIndicatorView, context: Context) {
     }
 }
+#endif

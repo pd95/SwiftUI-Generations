@@ -5,7 +5,7 @@
 //  Created by Philipp on 02.09.21.
 //
 
-import SwiftUI
+import SwiftUIShim
 
 struct BasicsDemo: View {
     var body: some View {

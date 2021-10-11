@@ -7,6 +7,8 @@
 
 import SwiftUI
 
+#if SwiftUIv1
+
 @available(iOS, introduced: 13, obsoleted: 14.0,
            message: "Backport not necessary as of iOS 14", renamed: "SwiftUI.ScenePhase")
 public enum ScenePhase: Comparable, Hashable {
@@ -47,3 +49,4 @@ extension EnvironmentValues {
         set { self[ScenePhaseKey.self] = newValue }
     }
 }
+#endif

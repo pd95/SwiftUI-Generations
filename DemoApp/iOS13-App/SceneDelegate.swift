@@ -7,7 +7,7 @@
 
 import os.log
 import UIKit
-import SwiftUI
+import SwiftUIShim
 
 class SceneDelegate: UIResponder, UIWindowSceneDelegate {
 

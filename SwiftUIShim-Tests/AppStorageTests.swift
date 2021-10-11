@@ -1,12 +1,12 @@
 //
 //  AppStorageTests.swift
-//  iOS13-AppTests
+//  SwiftUIShim-Tests
 //
 //  Created by Philipp on 29.08.21.
 //
 
 import XCTest
-@testable import iOS13_App
+import SwiftUIShim
 
 // swiftlint:disable type_body_length
 class AppStorageTests: XCTestCase {

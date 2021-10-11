@@ -8,6 +8,7 @@
 import SwiftUI
 import Combine
 
+#if SwiftUIv1
 @available(iOS, introduced: 13, obsoleted: 14.0,
            message: "Backport not necessary as of iOS 14")
 /// Manages the scene related storage (`SceneStorage`) and monitors its activity state
@@ -133,3 +134,4 @@ extension View {
             .modifier(SceneManagerViewModifier(sceneManager: sceneManager))
     }
 }
+#endif

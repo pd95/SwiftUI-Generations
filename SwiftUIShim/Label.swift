@@ -9,6 +9,8 @@
 
 import SwiftUI
 
+#if SwiftUIv1
+
 // MARK: - Label View
 ///
 /// A standard label for user interface items, consisting of an icon with a
@@ -289,3 +291,4 @@ extension View {
         self.modifier(LabelStyleViewModifier(style: AnyLabelStyle(style)))
     }
 }
+#endif

@@ -9,6 +9,8 @@ import SwiftUI
 import os.log
 import Combine
 
+#if SwiftUIv1 || SwiftUIv2
+
 @available(iOS, introduced: 13, obsoleted: 15.0,
            message: "Backport not necessary as of iOS 15", renamed: "SwiftUI.AsyncImagePhase")
 public enum AsyncImagePhase {
@@ -252,3 +254,5 @@ private class AsyncImageLoader: ObservableObject {
         return UIImage(cgImage: downsampledImage)
     }
 }
+
+#endif

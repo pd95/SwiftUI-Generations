@@ -9,6 +9,8 @@ import SwiftUI
 import Combine
 import os.log
 
+#if SwiftUIv1
+
 /// A protocol for types compatible which can be read from and written to UserDefaults
 public protocol UserDefaultsValueTransform {
     static func readValue(from store: UserDefaults, key: String) -> Any?
@@ -214,3 +216,5 @@ extension EnvironmentValues {
         set { self[DefaultAppStorage.self] = newValue }
     }
 }
+
+#endif

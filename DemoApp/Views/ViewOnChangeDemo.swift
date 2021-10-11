@@ -5,7 +5,7 @@
 //  Created by Philipp on 25.08.21.
 //
 
-import SwiftUI
+import SwiftUIShim
 
 struct ViewOnChangeDemo: View {
     @State private var count = 0

@@ -5,7 +5,7 @@
 //  Created by Philipp on 19.08.21.
 //
 
-import SwiftUI
+import SwiftUIShim
 
 // swiftlint:disable type_name
 @main

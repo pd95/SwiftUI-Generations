@@ -5,7 +5,7 @@
 //  Created by Philipp on 20.08.21.
 //
 
-import SwiftUI
+import SwiftUIShim
 
 struct NewColorsDemo: View {
     var body: some View {

@@ -1,6 +1,6 @@
 //
 //  AnchorPreferenceKey.swift
-//  iOS13-AppTests
+//  SwiftUIShim-Tests
 //
 //  Created by Philipp on 23.09.21.
 //

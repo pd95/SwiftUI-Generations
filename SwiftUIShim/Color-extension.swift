@@ -8,16 +8,17 @@
 import SwiftUI
 import UIKit
 
-#if os(iOS)
-
 /// A representation of a color that adapts to a given context.
 ///
 /// This extension implements the new semantic colors introduced in iOS 15.
 ///
 extension Color {
+
+#if SwiftUIv1 || SwiftUIv2
+
     @available(iOS, introduced: 13, obsoleted: 15.0,
                message: "Backport not necessary as of iOS 15", renamed: "SwiftUI.Color.mint")
-    static var mint: Color {
+    public static var mint: Color {
         Color(UIColor(dynamicProvider: { trait in
             if trait.userInterfaceStyle == .light {
                 return UIColor(red: 0, green: 199/255.0, blue: 190/255.0, alpha: 1)
@@ -29,7 +30,7 @@ extension Color {
 
     @available(iOS, introduced: 13, obsoleted: 15.0,
                message: "Backport not necessary as of iOS 15", renamed: "SwiftUI.Color.red")
-    static var teal: Color {
+    public static var teal: Color {
         Color(UIColor(dynamicProvider: { trait in
             if trait.userInterfaceStyle == .light {
                 return UIColor(red: 48/255.0, green: 176/255.0, blue: 199/255.0, alpha: 1)
@@ -41,7 +42,7 @@ extension Color {
 
     @available(iOS, introduced: 13, obsoleted: 15.0,
                message: "Backport not necessary as of iOS 15", renamed: "SwiftUI.Color.cyan")
-    static var cyan: Color {
+    public static var cyan: Color {
         Color(UIColor(dynamicProvider: { trait in
             if trait.userInterfaceStyle == .light {
                 return UIColor(red: 50/255.0, green: 173/255.0, blue: 230/255.0, alpha: 1)
@@ -53,7 +54,7 @@ extension Color {
 
     @available(iOS, introduced: 13, obsoleted: 15.0,
                message: "Backport not necessary as of iOS 15", renamed: "SwiftUI.Color.indigo")
-    static var indigo: Color {
+    public static var indigo: Color {
         Color(UIColor(dynamicProvider: { trait in
             if trait.userInterfaceStyle == .light {
                 return UIColor(red: 88/255.0, green: 86/255.0, blue: 214/255.0, alpha: 1)
@@ -65,7 +66,7 @@ extension Color {
 
     @available(iOS, introduced: 13, obsoleted: 15.0,
                message: "Backport not necessary as of iOS 15", renamed: "SwiftUI.Color.brown")
-    static var brown: Color {
+    public static var brown: Color {
         Color(UIColor(dynamicProvider: { trait in
             if trait.userInterfaceStyle == .light {
                 return UIColor(red: 162/255.0, green: 132/255.0, blue: 93.5/255.0, alpha: 1)
@@ -74,11 +75,11 @@ extension Color {
             }
         }))
     }
+#endif
 }
 
-#endif
-
 extension Color {
+#if SwiftUIv1 || SwiftUIv2
     @available(iOS, introduced: 13, obsoleted: 15.0,
                message: "Backport not necessary as of iOS 15", renamed: "SwiftUI.Color(cgColor:)")
     public init(cgColor color: CGColor) {
@@ -90,7 +91,9 @@ extension Color {
     public init(uiColor color: UIColor) {
         self = Color(color)
     }
+#endif
 
+#if SwiftUIv1
     /// A Core Graphics representation of the color, if available.
     @available(iOS, introduced: 13, obsoleted: 14.0,
                message: "Backport not necessary as of iOS 14", renamed: "SwiftUI.Color.cgColor")
@@ -123,4 +126,5 @@ extension Color {
         // won't return a value
         return nil
     }
+#endif
 }

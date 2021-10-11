@@ -8,6 +8,7 @@
 import SwiftUI
 import Combine
 
+#if SwiftUIv1
 extension View {
     @available(iOS, introduced: 13, obsoleted: 14.0,
                message: "Backport not necessary as of iOS 14", renamed: "SwiftUI.View.onChange")
@@ -41,3 +42,4 @@ private struct ValueChangeDetectionWrapper<V: Equatable, Content: View>: View {
     }
 
 }
+#endif
