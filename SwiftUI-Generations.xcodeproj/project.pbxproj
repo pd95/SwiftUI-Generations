@@ -33,7 +33,6 @@
 		173E38192714376900D11CCD /* libSwiftUIShim.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 173E37BC2714333F00D11CCD /* libSwiftUIShim.a */; };
 		174C439E26CEF755009D6D94 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 174C439D26CEF755009D6D94 /* Assets.xcassets */; };
 		174C43A926CEF819009D6D94 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 173D286726CE9C7F00039D17 /* ContentView.swift */; };
-		174C43BE26CEF897009D6D94 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 174C43BC26CEF896009D6D94 /* AppDelegate.swift */; };
 		174C43BF26CEF897009D6D94 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 174C43BD26CEF896009D6D94 /* SceneDelegate.swift */; };
 		174C43C326CEF996009D6D94 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 174C43C226CEF996009D6D94 /* LaunchScreen.storyboard */; };
 		175D329E26D03603002322AB /* AsyncImageDemo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 175D329D26D03603002322AB /* AsyncImageDemo.swift */; };
@@ -104,7 +103,6 @@
 		174C439726CEF754009D6D94 /* DemoApp15.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = DemoApp15.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		174C439D26CEF755009D6D94 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		174C43B026CEF843009D6D94 /* DemoApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DemoApp.swift; sourceTree = "<group>"; };
-		174C43BC26CEF896009D6D94 /* AppDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		174C43BD26CEF896009D6D94 /* SceneDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
 		174C43C026CEF928009D6D94 /* Info-iOS13.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "Info-iOS13.plist"; sourceTree = "<group>"; };
 		174C43C226CEF996009D6D94 /* LaunchScreen.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = LaunchScreen.storyboard; sourceTree = "<group>"; };
@@ -256,7 +254,6 @@
 			isa = PBXGroup;
 			children = (
 				174C43B026CEF843009D6D94 /* DemoApp.swift */,
-				174C43BC26CEF896009D6D94 /* AppDelegate.swift */,
 				174C43BD26CEF896009D6D94 /* SceneDelegate.swift */,
 				174C43C026CEF928009D6D94 /* Info-iOS13.plist */,
 				170288BE27B9222F005F9D35 /* Info-iOS14.plist */,
@@ -429,7 +426,6 @@
 				177CDA1626E0FEA400A46E2B /* BasicsDemo.swift in Sources */,
 				17EFA68B26D049540094D483 /* NewFontsDemo.swift in Sources */,
 				170288BF27B92431005F9D35 /* DemoApp.swift in Sources */,
-				174C43BE26CEF897009D6D94 /* AppDelegate.swift in Sources */,
 				175D32A626D03731002322AB /* LabelDemo.swift in Sources */,
 				174C43BF26CEF897009D6D94 /* SceneDelegate.swift in Sources */,
 				174C43A926CEF819009D6D94 /* ContentView.swift in Sources */,
