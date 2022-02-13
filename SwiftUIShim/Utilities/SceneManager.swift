@@ -99,8 +99,10 @@ public class SceneManager: ObservableObject {
             scenePhase = .active
         case UIScene.willEnterForegroundNotification, UIScene.willDeactivateNotification:
             scenePhase = .inactive
-        default:
+        case UIScene.didEnterBackgroundNotification:
             scenePhase = .background
+        default:
+            break
         }
 
         print("🟢 Scene activity notification: \(notification.name.rawValue) => scenePhase:", scenePhase)
