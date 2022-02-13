@@ -95,9 +95,9 @@ public class SceneManager: ObservableObject {
     private func updateScenePhase(_ notification: Notification) {
 
         switch notification.name {
-        case UIScene.didActivateNotification:
+        case UIScene.didActivateNotification, UIScene.willEnterForegroundNotification:
             scenePhase = .active
-        case UIScene.willEnterForegroundNotification, UIScene.willDeactivateNotification:
+        case UIScene.willDeactivateNotification:
             scenePhase = .inactive
         case UIScene.willConnectNotification:
             if scenePhase == .background {
