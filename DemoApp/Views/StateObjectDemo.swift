@@ -9,6 +9,7 @@ import SwiftUIShim
 
 struct StateObjectDemo: View {
     @Environment(\.scenePhase) private var scenePhase
+    @AppStorage("username") private var username: String = ""
     @SceneStorage("textField") private var text: String = "Hello"
     @SceneStorage("toogleState") private var toggle: Bool = false
     @SceneStorage("lastNumber") private var lastNumber: Int?
@@ -17,8 +18,11 @@ struct StateObjectDemo: View {
         NavigationView {
             Form {
                 Text("Scene phase: \(String(describing: scenePhase))")
+                Section(header: Text("Preserved in app storage"), footer: Text("You have to delete the app to get rid of the values")) {
+                    TextField("Your name", text: $username)
+                }
                 Section(header: Text("Preserved in scene")) {
-                    TextField("Your name", text: $text)
+                    TextField("Some text", text: $text)
                     Toggle("Active", isOn: $toggle)
                     Text("Last written number was: \(lastNumber == nil ? "-" : String(describing: lastNumber!) )")
                 }

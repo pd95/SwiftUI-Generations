@@ -17,11 +17,6 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
 
     func scene(_ scene: UIScene, willConnectTo session: UISceneSession,
                options connectionOptions: UIScene.ConnectionOptions) {
-        // Use this method to optionally configure and attach the UIWindow `window` to the provided UIWindowScene scene.
-        // If using a storyboard, the `window` property will automatically be initialized and attached to the scene.
-        // This delegate does not imply the connecting scene or session are new
-        // (see `application:configurationForConnectingSceneSession` instead).
-        print(#function)
 
         // Initialize SceneManager instance and restore existing values
         let sceneManager = SceneManager(scene, store: session.stateRestorationActivity?.userInfo)
@@ -29,7 +24,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
 
         let contentView = ContentView()
             .sceneManager(sceneManager)  // Attach SceneManager to view hierarchy
-            .defaultAppStorage(UserDefaults(suiteName: "group.com.yourcompany.test")!)
+            //.defaultAppStorage(UserDefaults(suiteName: "group.com.yourcompany.test")!)
 
         // Use a UIHostingController as window root view controller.
         if let windowScene = scene as? UIWindowScene {
