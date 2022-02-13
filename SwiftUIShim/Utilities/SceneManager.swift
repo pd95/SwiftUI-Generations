@@ -53,7 +53,7 @@ public class SceneManager: ObservableObject {
 
     // The cancellables used when setting up the scene activity monitoring
     private var cancellables = Set<AnyCancellable>()
-    @Published var scenePhase = ScenePhase.inactive
+    @Published var scenePhase = ScenePhase.background
 
     public init(_ scene: UIScene, store: [AnyHashable: Any]?) {
         print("🟢 SceneManager.init", "sceneIdentifier", scene.session.persistentIdentifier)
@@ -99,6 +99,10 @@ public class SceneManager: ObservableObject {
             scenePhase = .active
         case UIScene.willEnterForegroundNotification, UIScene.willDeactivateNotification:
             scenePhase = .inactive
+        case UIScene.willConnectNotification:
+            if scenePhase == .background {
+                scenePhase = .inactive
+            }
         case UIScene.didEnterBackgroundNotification:
             scenePhase = .background
         default:
