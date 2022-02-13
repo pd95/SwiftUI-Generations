@@ -100,7 +100,7 @@
 		173E37D92714341000D11CCD /* _export_SwiftUI.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = _export_SwiftUI.swift; sourceTree = "<group>"; };
 		174C438F26CEC88A009D6D94 /* Color-extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Color-extension.swift"; sourceTree = "<group>"; };
 		174C439126CECF3D009D6D94 /* ProgressView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProgressView.swift; sourceTree = "<group>"; };
-		174C439726CEF754009D6D94 /* DemoApp15.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = DemoApp15.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		174C439726CEF754009D6D94 /* DemoApp13.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = DemoApp13.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		174C439D26CEF755009D6D94 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		174C43B026CEF843009D6D94 /* DemoApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DemoApp.swift; sourceTree = "<group>"; };
 		174C43BD26CEF896009D6D94 /* SceneDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -183,7 +183,7 @@
 		173D286326CE9C7F00039D17 /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				174C439726CEF754009D6D94 /* DemoApp15.app */,
+				174C439726CEF754009D6D94 /* DemoApp13.app */,
 				170A607526DC2CE900FDEC94 /* SwiftUIShim-Tests.xctest */,
 				173E37BC2714333F00D11CCD /* libSwiftUIShim.a */,
 			);
@@ -319,7 +319,7 @@
 			);
 			name = DemoApp;
 			productName = "SwiftUI-Searchbar-iOS13";
-			productReference = 174C439726CEF754009D6D94 /* DemoApp15.app */;
+			productReference = 174C439726CEF754009D6D94 /* DemoApp13.app */;
 			productType = "com.apple.product-type.application";
 		};
 /* End PBXNativeTarget section */
@@ -667,7 +667,7 @@
 				INFOPLIST_FILE = "DemoApp/Info-iOS$(IPHONEOS_DEPLOYMENT_TARGET:base).plist";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
-				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
+				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
@@ -700,7 +700,7 @@
 				INFOPLIST_FILE = "DemoApp/Info-iOS$(IPHONEOS_DEPLOYMENT_TARGET:base).plist";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
-				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
+				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
