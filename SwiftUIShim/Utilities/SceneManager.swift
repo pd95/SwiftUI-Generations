@@ -8,7 +8,7 @@
 import SwiftUI
 import Combine
 
-#if SwiftUIv1
+#if TARGET_IOS_MAJOR_13
 @available(iOS, introduced: 13, obsoleted: 14.0,
            message: "Backport not necessary as of iOS 14")
 /// Manages the scene related storage (`SceneStorage`) and monitors its activity state

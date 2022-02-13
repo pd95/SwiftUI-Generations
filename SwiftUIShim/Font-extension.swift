@@ -8,7 +8,7 @@
 import SwiftUI
 import UIKit
 
-#if SwiftUIv1
+#if TARGET_IOS_MAJOR_13
 extension Font {
     @available(iOS, introduced: 13, obsoleted: 14.0,
                message: "Backport not necessary as of iOS 15", renamed: "SwiftUI.Font.title2")

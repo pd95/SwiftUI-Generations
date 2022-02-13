@@ -9,7 +9,7 @@ import SwiftUI
 import Combine
 import os.log
 
-#if SwiftUIv1
+#if TARGET_IOS_MAJOR_13
 
 /// A protocol for types compatible which can be read from and written to UserDefaults
 public protocol UserDefaultsValueTransform {

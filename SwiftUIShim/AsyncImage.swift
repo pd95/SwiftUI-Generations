@@ -9,7 +9,7 @@ import SwiftUI
 import os.log
 import Combine
 
-#if SwiftUIv1 || SwiftUIv2
+#if (TARGET_IOS_MAJOR_13 || TARGET_IOS_MAJOR_14)
 
 @available(iOS, introduced: 13, obsoleted: 15.0,
            message: "Backport not necessary as of iOS 15", renamed: "SwiftUI.AsyncImagePhase")

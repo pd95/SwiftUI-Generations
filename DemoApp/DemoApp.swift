@@ -1,18 +1,19 @@
 //
-//  iOS15App.swift
-//  iOS15-App
+//  DemoApp.swift
+//  DemoApp
 //
 //  Created by Philipp on 19.08.21.
 //
 
 import SwiftUIShim
 
-// swiftlint:disable type_name
+#if !TARGET_IOS_MAJOR_13
 @main
-struct iOS15App: App {
+struct DemoApp: App {
     var body: some Scene {
         WindowGroup {
             ContentView()
         }
     }
 }
+#endif

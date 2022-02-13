@@ -14,9 +14,9 @@
             buildForAnalyzing = "YES">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "174C43AD26CEF843009D6D94"
-               BuildableName = "iOS15-App.app"
-               BlueprintName = "iOS15-App"
+               BlueprintIdentifier = "174C439626CEF754009D6D94"
+               BuildableName = "DemoApp13.app"
+               BlueprintName = "DemoApp"
                ReferencedContainer = "container:SwiftUI-Generations.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
@@ -28,6 +28,16 @@
       selectedLauncherIdentifier = "Xcode.DebuggerFoundation.Launcher.LLDB"
       shouldUseLaunchSchemeArgsEnv = "YES">
       <Testables>
+         <TestableReference
+            skipped = "NO">
+            <BuildableReference
+               BuildableIdentifier = "primary"
+               BlueprintIdentifier = "170A607426DC2CE900FDEC94"
+               BuildableName = "SwiftUIShim-Tests.xctest"
+               BlueprintName = "SwiftUIShim-Tests"
+               ReferencedContainer = "container:SwiftUI-Generations.xcodeproj">
+            </BuildableReference>
+         </TestableReference>
       </Testables>
    </TestAction>
    <LaunchAction
@@ -45,9 +55,9 @@
          runnableDebuggingMode = "0">
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "174C43AD26CEF843009D6D94"
-            BuildableName = "iOS15-App.app"
-            BlueprintName = "iOS15-App"
+            BlueprintIdentifier = "174C439626CEF754009D6D94"
+            BuildableName = "DemoApp13.app"
+            BlueprintName = "DemoApp"
             ReferencedContainer = "container:SwiftUI-Generations.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
@@ -62,9 +72,9 @@
          runnableDebuggingMode = "0">
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "174C43AD26CEF843009D6D94"
-            BuildableName = "iOS15-App.app"
-            BlueprintName = "iOS15-App"
+            BlueprintIdentifier = "174C439626CEF754009D6D94"
+            BuildableName = "DemoApp13.app"
+            BlueprintName = "DemoApp"
             ReferencedContainer = "container:SwiftUI-Generations.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>

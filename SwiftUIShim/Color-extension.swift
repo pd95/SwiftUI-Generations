@@ -14,7 +14,7 @@ import UIKit
 ///
 extension Color {
 
-#if SwiftUIv1 || SwiftUIv2
+#if (TARGET_IOS_MAJOR_13 || TARGET_IOS_MAJOR_14)
 
     @available(iOS, introduced: 13, obsoleted: 15.0,
                message: "Backport not necessary as of iOS 15", renamed: "SwiftUI.Color.mint")
@@ -79,7 +79,7 @@ extension Color {
 }
 
 extension Color {
-#if SwiftUIv1 || SwiftUIv2
+#if (TARGET_IOS_MAJOR_13 || TARGET_IOS_MAJOR_14)
     @available(iOS, introduced: 13, obsoleted: 15.0,
                message: "Backport not necessary as of iOS 15", renamed: "SwiftUI.Color(cgColor:)")
     public init(cgColor color: CGColor) {
@@ -93,7 +93,7 @@ extension Color {
     }
 #endif
 
-#if SwiftUIv1
+#if TARGET_IOS_MAJOR_13
     /// A Core Graphics representation of the color, if available.
     @available(iOS, introduced: 13, obsoleted: 14.0,
                message: "Backport not necessary as of iOS 14", renamed: "SwiftUI.Color.cgColor")

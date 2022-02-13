@@ -8,7 +8,7 @@
 
 import SwiftUI
 
-#if SwiftUIv1
+#if TARGET_IOS_MAJOR_13
 // MARK: - ProgressView View
 ///
 /// A view that shows the progress towards completion of a task.

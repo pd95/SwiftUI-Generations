@@ -8,6 +8,7 @@
 import XCTest
 import SwiftUIShim
 
+#if TARGET_IOS_MAJOR_13
 // swiftlint:disable type_body_length
 class AppStorageTests: XCTestCase {
 
@@ -375,3 +376,4 @@ class AppStorageTests: XCTestCase {
                        "if modified externally, the new value should be returned")
     }
 }
+#endif

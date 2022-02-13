@@ -1,6 +1,6 @@
 //
 //  AppDelegate.swift
-//  iOS13-App
+//  DemoApp
 //
 //  Created by Philipp on 19.08.21.
 //
@@ -8,6 +8,7 @@
 import UIKit
 import CoreData
 
+#if TARGET_IOS_MAJOR_13
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
 
@@ -38,3 +39,4 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         print(#function)
     }
 }
+#endif

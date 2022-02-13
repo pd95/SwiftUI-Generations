@@ -9,6 +9,7 @@ import os.log
 import UIKit
 import SwiftUIShim
 
+#if TARGET_IOS_MAJOR_13
 class SceneDelegate: UIResponder, UIWindowSceneDelegate {
 
     var window: UIWindow?
@@ -54,3 +55,5 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         print(userActivity)
     }
 }
+
+#endif

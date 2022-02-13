@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-#if SwiftUIv1
+#if TARGET_IOS_MAJOR_13
 /// This extension allows us to create types conforming to `View` specifying a `Body` type of `Never`
 extension View where Body == Swift.Never {
     public var body: Never {

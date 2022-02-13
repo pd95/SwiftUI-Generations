@@ -9,7 +9,7 @@
 
 import SwiftUI
 
-#if SwiftUIv1
+#if TARGET_IOS_MAJOR_13
 
 // MARK: - Label View
 ///
