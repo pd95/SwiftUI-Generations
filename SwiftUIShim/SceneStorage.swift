@@ -93,7 +93,9 @@ public struct SceneStorage<Value>: DynamicProperty {
             location.get(from: store.values)
         }
         nonmutating set {
-            location.set(newValue, to: &store.values)
+            var values = store.values
+            location.set(newValue, to: &values)
+            store.values = values
         }
     }
 
