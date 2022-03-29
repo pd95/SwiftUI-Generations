@@ -25,6 +25,8 @@ struct StateObjectDemo: View {
                     TextField("Some text", text: $text)
                     Toggle("Active", isOn: $toggle)
                     Text("Last written number was: \(lastNumber == nil ? "-" : String(describing: lastNumber!) )")
+
+                    SceneStorageDemoPicker()
                 }
                 .onChange(of: scenePhase) { newValue in
                     print("🟡 Scene phase changed to", newValue)
@@ -47,6 +49,42 @@ struct StateObjectDemo: View {
         }
         // .navigationViewStyle(.stack)
         .navigationViewStyle(StackNavigationViewStyle())
+    }
+}
+
+
+// This view illustrates the `SceneStorage` property wrapper used with a `RawRepresentable` type.
+// On iOS 14 there is no built-in support for optional RawRepresentable SceneStorage types, therefore
+// this example builds differently when built for iOS 14 compared to iOS 13 or 15.
+struct SceneStorageDemoPicker: View {
+
+    enum MyEnum: String, CaseIterable {
+        case a, b, c
+    }
+
+    #if TARGET_IOS_MAJOR_14
+    // There is now RawRepresentable? available in iOS 14!
+    @SceneStorage("selectedEntry") private var selectedEntry: MyEnum = .a
+    #else
+    @SceneStorage("selectedEntry") private var selectedEntry: MyEnum?
+    #endif
+
+    var body: some View {
+        Picker("Selected entry", selection: $selectedEntry) {
+            #if TARGET_IOS_MAJOR_14
+            ForEach(MyEnum.allCases, id: \.rawValue) { entry in
+                Text(entry.rawValue)
+                    .tag(entry)
+            }
+            #else
+            Text("None")
+                .tag(Optional<MyEnum>.none)
+            ForEach(MyEnum.allCases, id: \.rawValue) { entry in
+                Text(entry.rawValue)
+                    .tag(Optional(entry))
+            }
+            #endif
+        }
     }
 }
 
