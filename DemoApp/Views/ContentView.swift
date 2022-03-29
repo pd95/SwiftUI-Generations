@@ -11,7 +11,7 @@ struct ContentView: View {
 
     enum Tab: Int {
         case none
-        case basic, asyncImage, stateObject
+        case basic, asyncImage, stateObject, list
     }
 
     @SceneStorage("mainTab") private var selectedTab: Tab = Tab.none
@@ -35,6 +35,12 @@ struct ContentView: View {
                     Label("State", systemImage: "house")
                 }
                 .tag(Tab.stateObject)
+
+            ListDemo()
+                .tabItem {
+                    Label("List", systemImage: "text.justify")
+                }
+                .tag(Tab.list)
         }
     }
 }

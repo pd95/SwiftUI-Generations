@@ -9,6 +9,8 @@
 /* Begin PBXBuildFile section */
 		170288BF27B92431005F9D35 /* DemoApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 174C43B026CEF843009D6D94 /* DemoApp.swift */; };
 		170A607826DC2CE900FDEC94 /* AppStorageTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 170A607726DC2CE900FDEC94 /* AppStorageTests.swift */; };
+		1738CF2227F32BD200C8A1FB /* ListDemo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1738CF2127F32BD200C8A1FB /* ListDemo.swift */; };
+		1738CF2427F3317800C8A1FB /* Section-extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1738CF2327F3317800C8A1FB /* Section-extension.swift */; };
 		173E37C3271433A300D11CCD /* AppStorage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 17DE260326D80A4800AB5B07 /* AppStorage.swift */; };
 		173E37C4271433A300D11CCD /* AsyncImage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1785AACE26CE9DAC0009572F /* AsyncImage.swift */; };
 		173E37C5271433A300D11CCD /* Color-extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 174C438F26CEC88A009D6D94 /* Color-extension.swift */; };
@@ -93,6 +95,8 @@
 		171029E526CFF239004E9440 /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
 		172CCD4E26DBF88200DD1D4D /* ScenePhase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScenePhase.swift; sourceTree = "<group>"; };
 		172CCD5026DC049F00DD1D4D /* SceneManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneManager.swift; sourceTree = "<group>"; };
+		1738CF2127F32BD200C8A1FB /* ListDemo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ListDemo.swift; sourceTree = "<group>"; };
+		1738CF2327F3317800C8A1FB /* Section-extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Section-extension.swift"; sourceTree = "<group>"; };
 		173D286726CE9C7F00039D17 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
 		173E37B42713810100D11CCD /* SwiftUI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SwiftUI.framework; path = System/Library/Frameworks/SwiftUI.framework; sourceTree = SDKROOT; };
 		173E37B62713810700D11CCD /* Combine.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Combine.framework; path = System/Library/Frameworks/Combine.framework; sourceTree = SDKROOT; };
@@ -195,6 +199,7 @@
 			children = (
 				173D286726CE9C7F00039D17 /* ContentView.swift */,
 				177CDA1526E0FEA400A46E2B /* BasicsDemo.swift */,
+				1738CF2127F32BD200C8A1FB /* ListDemo.swift */,
 				175D32A126D036BF002322AB /* NewColorsDemo.swift */,
 				17EFA68A26D049540094D483 /* NewFontsDemo.swift */,
 				175D32A526D03731002322AB /* LabelDemo.swift */,
@@ -229,6 +234,7 @@
 				174C439126CECF3D009D6D94 /* ProgressView.swift */,
 				172CCD4E26DBF88200DD1D4D /* ScenePhase.swift */,
 				1772985F26DB7AF400CA2A8B /* SceneStorage.swift */,
+				1738CF2327F3317800C8A1FB /* Section-extension.swift */,
 				1788790F26D41113001C59FF /* StateObject.swift */,
 				17BEB6BC26EBAABA006C0115 /* View-Accessibility-Wrappers.swift */,
 				1766B77126D61AC2006B096E /* View-onChange.swift */,
@@ -399,6 +405,7 @@
 				173E37C6271433A300D11CCD /* Font-extension.swift in Sources */,
 				173E37D1271433A300D11CCD /* NavigationView-extension.swift in Sources */,
 				173E37CA271433A300D11CCD /* ViewGeometryPreferenceKey.swift in Sources */,
+				1738CF2427F3317800C8A1FB /* Section-extension.swift in Sources */,
 				173E37CC271433A300D11CCD /* StateObject.swift in Sources */,
 				173E37D3271433A300D11CCD /* View-onChange.swift in Sources */,
 				173E37D5271433A300D11CCD /* URLSession+DownloadTaskPublisher.swift in Sources */,
@@ -425,6 +432,7 @@
 			files = (
 				177CDA1626E0FEA400A46E2B /* BasicsDemo.swift in Sources */,
 				17EFA68B26D049540094D483 /* NewFontsDemo.swift in Sources */,
+				1738CF2227F32BD200C8A1FB /* ListDemo.swift in Sources */,
 				170288BF27B92431005F9D35 /* DemoApp.swift in Sources */,
 				175D32A626D03731002322AB /* LabelDemo.swift in Sources */,
 				174C43BF26CEF897009D6D94 /* SceneDelegate.swift in Sources */,
