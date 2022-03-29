@@ -459,10 +459,9 @@ class SceneStorageTests: XCTestCase {
         XCTAssertEqual(value.wrappedValue, newValue, "if set, the new value should be returned.")
         XCTAssertEqual(store.value(forKey: key) as? MyIntEnum.RawValue, newValue.rawValue, "the new value should be persisted session store")
 
-// FIXME: this is currently failing
-//        value.wrappedValue = nil
-//        XCTAssertEqual(value.wrappedValue, nil, "if set to nil, the value should be cleared.")
-//        XCTAssertEqual(store.value(forKey: key) as? MyIntEnum.RawValue, nil, "the nil value should be persisted session store")
+        value.wrappedValue = nil
+        XCTAssertEqual(value.wrappedValue, nil, "if set to nil, the value should be cleared.")
+        XCTAssertEqual(store.value(forKey: key) as? MyIntEnum.RawValue, nil, "the nil value should be persisted session store")
 
         store.set(externallySetValue.rawValue, forKey: key)
         XCTAssertEqual(value.wrappedValue, externallySetValue,

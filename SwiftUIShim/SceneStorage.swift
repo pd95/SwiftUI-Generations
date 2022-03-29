@@ -46,8 +46,11 @@ where T: RawRepresentable, T.RawValue: PropertyListTransform {
     }
 
     public static func writeValue(_ value: Any?, to store: inout [AnyHashable: Any], key: String) {
-        guard let value = value as? T? else { return }
-        store[key] = value?.rawValue
+        if value != nil, let value = value as? T? {
+            store[key] = value?.rawValue
+        } else {
+            store[key] = nil
+        }
     }
 }
 
