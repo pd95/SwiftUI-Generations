@@ -375,6 +375,74 @@ class SceneStorageTests: XCTestCase {
         XCTAssertEqual(value.wrappedValue, externallySetValue,
                        "if modified externally, the new value should be returned")
     }
+
+    private enum MyIntEnum: Int {
+        case a, b, c
+    }
+
+    // MARK: RawRepresentable
+    func testSceneStorageRawRepresentable() {
+        // Type to be tested
+        let value: SceneStorage<MyIntEnum>
+
+        // Test configuration
+        let key = "RawRepresentable"
+        let defaultValue = MyIntEnum.a
+        let newValue = MyIntEnum.b
+        let externallySetValue = MyIntEnum.c
+
+        // Prepare setup
+        let store = SceneStorageValuesKey.defaultValue
+        store.removeObject(forKey: key)
+        XCTAssertEqual(store.value(forKey: key) as? MyIntEnum, nil, "No value should be set after removal")
+
+        // Test
+        value = SceneStorage(wrappedValue: defaultValue, key)
+        XCTAssertEqual(value.wrappedValue, defaultValue, "if not set, the default value should be returned.")
+        XCTAssertEqual(store.value(forKey: key) as? MyIntEnum, nil, "no value session store should have been set")
+
+        value.wrappedValue = newValue
+        XCTAssertEqual(value.wrappedValue, newValue, "if set, the new value should be returned.")
+        XCTAssertEqual(store.value(forKey: key) as? MyIntEnum.RawValue, newValue.rawValue, "the new value should be persisted session store")
+
+        store.set(externallySetValue.rawValue, forKey: key)
+        XCTAssertEqual(value.wrappedValue, externallySetValue,
+                       "if modified externally, the new value should be returned")
+    }
+
+    // MARK: RawRepresentable?
+    func testSceneStorageOptionalRawRepresentable() {
+        // Type to be tested
+        let value: SceneStorage<MyIntEnum?>
+
+        // Test configuration
+        let key = "OptionalRawRepresentable"
+        let defaultValue: MyIntEnum? = .none
+        let newValue = MyIntEnum.b
+        let externallySetValue = MyIntEnum.c
+
+        // Prepare setup
+        let store = SceneStorageValuesKey.defaultValue
+        store.removeObject(forKey: key)
+        XCTAssertEqual(store.value(forKey: key) as? MyIntEnum, nil, "No value should be set after removal")
+
+        // Test
+        value = SceneStorage(key)
+        XCTAssertEqual(value.wrappedValue, defaultValue, "if not set, the nil should be returned.")
+        XCTAssertEqual(store.value(forKey: key) as? MyIntEnum, nil, "no value session store should have been set")
+
+        value.wrappedValue = newValue
+        XCTAssertEqual(value.wrappedValue, newValue, "if set, the new value should be returned.")
+        XCTAssertEqual(store.value(forKey: key) as? MyIntEnum.RawValue, newValue.rawValue, "the new value should be persisted session store")
+
+        store.set(externallySetValue.rawValue, forKey: key)
+        XCTAssertEqual(value.wrappedValue, externallySetValue,
+                       "if modified externally, the new value should be returned")
+
+        store.set(externallySetValue.rawValue, forKey: key)
+        XCTAssertEqual(value.wrappedValue, externallySetValue,
+                       "if modified externally, the new value should be returned")
+    }
 }
 #endif
 
