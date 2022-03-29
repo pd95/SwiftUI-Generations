@@ -31,11 +31,11 @@ class SceneStorageTests: XCTestCase {
         // Test
         value = SceneStorage(wrappedValue: defaultValue, key)
         XCTAssertEqual(value.wrappedValue, defaultValue, "if not set, the default value should be returned.")
-        XCTAssertEqual(store.value(forKey: key) as? Bool, nil, "no value in UserDefaults should have been set")
+        XCTAssertEqual(store.value(forKey: key) as? Bool, nil, "no value SceneStorageValues should have been set")
 
         value.wrappedValue = newValue
         XCTAssertEqual(value.wrappedValue, newValue, "if set, the new value should be returned.")
-        XCTAssertEqual(store.value(forKey: key) as? Bool, newValue, "the new value should be persisted in UserDefaults")
+        XCTAssertEqual(store.value(forKey: key) as? Bool, newValue, "the new value should be persisted SceneStorageValues")
 
         store.set(externallySetValue, forKey: key)
         XCTAssertEqual(value.wrappedValue, externallySetValue,
@@ -61,11 +61,11 @@ class SceneStorageTests: XCTestCase {
         // Test
         value = SceneStorage(key)
         XCTAssertEqual(value.wrappedValue, defaultValue, "if not set, the nil should be returned.")
-        XCTAssertEqual(store.value(forKey: key) as? Bool, nil, "no value in UserDefaults should have been set")
+        XCTAssertEqual(store.value(forKey: key) as? Bool, nil, "no value SceneStorageValues should have been set")
 
         value.wrappedValue = newValue
         XCTAssertEqual(value.wrappedValue, newValue, "if set, the new value should be returned.")
-        XCTAssertEqual(store.value(forKey: key) as? Bool, newValue, "the new value should be persisted in UserDefaults")
+        XCTAssertEqual(store.value(forKey: key) as? Bool, newValue, "the new value should be persisted SceneStorageValues")
 
         store.set(externallySetValue, forKey: key)
         XCTAssertEqual(value.wrappedValue, externallySetValue,
@@ -91,11 +91,11 @@ class SceneStorageTests: XCTestCase {
         // Test
         value = SceneStorage(wrappedValue: defaultValue, key)
         XCTAssertEqual(value.wrappedValue, defaultValue, "if not set, the default value should be returned.")
-        XCTAssertEqual(store.value(forKey: key) as? Int, nil, "no value in UserDefaults should have been set")
+        XCTAssertEqual(store.value(forKey: key) as? Int, nil, "no value SceneStorageValues should have been set")
 
         value.wrappedValue = newValue
         XCTAssertEqual(value.wrappedValue, newValue, "if set, the new value should be returned.")
-        XCTAssertEqual(store.value(forKey: key) as? Int, newValue, "the new value should be persisted in UserDefaults")
+        XCTAssertEqual(store.value(forKey: key) as? Int, newValue, "the new value should be persisted SceneStorageValues")
 
         store.set(externallySetValue, forKey: key)
         XCTAssertEqual(value.wrappedValue, externallySetValue,
@@ -121,11 +121,11 @@ class SceneStorageTests: XCTestCase {
         // Test
         value = SceneStorage(key)
         XCTAssertEqual(value.wrappedValue, defaultValue, "if not set, the nil should be returned.")
-        XCTAssertEqual(store.value(forKey: key) as? Int, nil, "no value in UserDefaults should have been set")
+        XCTAssertEqual(store.value(forKey: key) as? Int, nil, "no value SceneStorageValues should have been set")
 
         value.wrappedValue = newValue
         XCTAssertEqual(value.wrappedValue, newValue, "if set, the new value should be returned.")
-        XCTAssertEqual(store.value(forKey: key) as? Int, newValue, "the new value should be persisted in UserDefaults")
+        XCTAssertEqual(store.value(forKey: key) as? Int, newValue, "the new value should be persisted SceneStorageValues")
 
         store.set(externallySetValue, forKey: key)
         XCTAssertEqual(value.wrappedValue, externallySetValue,
@@ -151,12 +151,12 @@ class SceneStorageTests: XCTestCase {
         // Test
         value = SceneStorage(wrappedValue: defaultValue, key)
         XCTAssertEqual(value.wrappedValue, defaultValue, "if not set, the default value should be returned.")
-        XCTAssertEqual(store.value(forKey: key) as? Double, nil, "no value in UserDefaults should have been set")
+        XCTAssertEqual(store.value(forKey: key) as? Double, nil, "no value SceneStorageValues should have been set")
 
         value.wrappedValue = newValue
         XCTAssertEqual(value.wrappedValue, newValue, "if set, the new value should be returned.")
         XCTAssertEqual(store.value(forKey: key) as? Double, newValue,
-                       "the new value should be persisted in UserDefaults")
+                       "the new value should be persisted SceneStorageValues")
 
         store.set(externallySetValue, forKey: key)
         XCTAssertEqual(value.wrappedValue, externallySetValue,
@@ -182,12 +182,12 @@ class SceneStorageTests: XCTestCase {
         // Test
         value = SceneStorage(key)
         XCTAssertEqual(value.wrappedValue, defaultValue, "if not set, the nil should be returned.")
-        XCTAssertEqual(store.value(forKey: key) as? Double, nil, "no value in UserDefaults should have been set")
+        XCTAssertEqual(store.value(forKey: key) as? Double, nil, "no value SceneStorageValues should have been set")
 
         value.wrappedValue = newValue
         XCTAssertEqual(value.wrappedValue, newValue, "if set, the new value should be returned.")
         XCTAssertEqual(store.value(forKey: key) as? Double, newValue,
-                       "the new value should be persisted in UserDefaults")
+                       "the new value should be persisted SceneStorageValues")
 
         store.set(externallySetValue, forKey: key)
         XCTAssertEqual(value.wrappedValue, externallySetValue,
@@ -213,12 +213,12 @@ class SceneStorageTests: XCTestCase {
         // Test
         value = SceneStorage(wrappedValue: defaultValue, key)
         XCTAssertEqual(value.wrappedValue, defaultValue, "if not set, the default value should be returned.")
-        XCTAssertEqual(store.value(forKey: key) as? String, nil, "no value in UserDefaults should have been set")
+        XCTAssertEqual(store.value(forKey: key) as? String, nil, "no value SceneStorageValues should have been set")
 
         value.wrappedValue = newValue
         XCTAssertEqual(value.wrappedValue, newValue, "if set, the new value should be returned.")
         XCTAssertEqual(store.value(forKey: key) as? String, newValue,
-                       "the new value should be persisted in UserDefaults")
+                       "the new value should be persisted SceneStorageValues")
 
         store.set(externallySetValue, forKey: key)
         XCTAssertEqual(value.wrappedValue, externallySetValue,
@@ -244,12 +244,12 @@ class SceneStorageTests: XCTestCase {
         // Test
         value = SceneStorage(key)
         XCTAssertEqual(value.wrappedValue, defaultValue, "if not set, the nil should be returned.")
-        XCTAssertEqual(store.value(forKey: key) as? String, nil, "no value in UserDefaults should have been set")
+        XCTAssertEqual(store.value(forKey: key) as? String, nil, "no value SceneStorageValues should have been set")
 
         value.wrappedValue = newValue
         XCTAssertEqual(value.wrappedValue, newValue, "if set, the new value should be returned.")
         XCTAssertEqual(store.value(forKey: key) as? String, newValue,
-                       "the new value should be persisted in UserDefaults")
+                       "the new value should be persisted SceneStorageValues")
 
         store.set(externallySetValue, forKey: key)
         XCTAssertEqual(value.wrappedValue, externallySetValue,
@@ -275,11 +275,11 @@ class SceneStorageTests: XCTestCase {
         // Test
         value = SceneStorage(wrappedValue: defaultValue, key)
         XCTAssertEqual(value.wrappedValue, defaultValue, "if not set, the default value should be returned.")
-        XCTAssertEqual(store.value(forKey: key) as? URL, nil, "no value in UserDefaults should have been set")
+        XCTAssertEqual(store.value(forKey: key) as? URL, nil, "no value SceneStorageValues should have been set")
 
         value.wrappedValue = newValue
         XCTAssertEqual(value.wrappedValue, newValue, "if set, the new value should be returned.")
-        XCTAssertEqual(store.value(forKey: key) as? URL, newValue, "the new value should be persisted in UserDefaults")
+        XCTAssertEqual(store.value(forKey: key) as? URL, newValue, "the new value should be persisted SceneStorageValues")
 
         store.set(externallySetValue, forKey: key)
         XCTAssertEqual(value.wrappedValue, externallySetValue,
@@ -305,11 +305,11 @@ class SceneStorageTests: XCTestCase {
         // Test
         value = SceneStorage(key)
         XCTAssertEqual(value.wrappedValue, defaultValue, "if not set, the nil should be returned.")
-        XCTAssertEqual(store.value(forKey: key) as? URL, nil, "no value in UserDefaults should have been set")
+        XCTAssertEqual(store.value(forKey: key) as? URL, nil, "no value SceneStorageValues should have been set")
 
         value.wrappedValue = newValue
         XCTAssertEqual(value.wrappedValue, newValue, "if set, the new value should be returned.")
-        XCTAssertEqual(store.value(forKey: key) as? URL, newValue, "the new value should be persisted in UserDefaults")
+        XCTAssertEqual(store.value(forKey: key) as? URL, newValue, "the new value should be persisted SceneStorageValues")
 
         store.set(externallySetValue as Any, forKey: key)
         XCTAssertEqual(value.wrappedValue, externallySetValue,
@@ -335,11 +335,11 @@ class SceneStorageTests: XCTestCase {
         // Test
         value = SceneStorage(wrappedValue: defaultValue, key)
         XCTAssertEqual(value.wrappedValue, defaultValue, "if not set, the default value should be returned.")
-        XCTAssertEqual(store.value(forKey: key) as? Data, nil, "no value in UserDefaults should have been set")
+        XCTAssertEqual(store.value(forKey: key) as? Data, nil, "no value SceneStorageValues should have been set")
 
         value.wrappedValue = newValue
         XCTAssertEqual(value.wrappedValue, newValue, "if set, the new value should be returned.")
-        XCTAssertEqual(store.value(forKey: key) as? Data, newValue, "the new value should be persisted in UserDefaults")
+        XCTAssertEqual(store.value(forKey: key) as? Data, newValue, "the new value should be persisted SceneStorageValues")
 
         store.set(externallySetValue, forKey: key)
         XCTAssertEqual(value.wrappedValue, externallySetValue,
@@ -365,11 +365,11 @@ class SceneStorageTests: XCTestCase {
         // Test
         value = SceneStorage(key)
         XCTAssertEqual(value.wrappedValue, defaultValue, "if not set, the nil should be returned.")
-        XCTAssertEqual(store.value(forKey: key) as? Data, nil, "no value in UserDefaults should have been set")
+        XCTAssertEqual(store.value(forKey: key) as? Data, nil, "no value SceneStorageValues should have been set")
 
         value.wrappedValue = newValue
         XCTAssertEqual(value.wrappedValue, newValue, "if set, the new value should be returned.")
-        XCTAssertEqual(store.value(forKey: key) as? Data, newValue, "the new value should be persisted in UserDefaults")
+        XCTAssertEqual(store.value(forKey: key) as? Data, newValue, "the new value should be persisted SceneStorageValues")
 
         store.set(externallySetValue as Any, forKey: key)
         XCTAssertEqual(value.wrappedValue, externallySetValue,
