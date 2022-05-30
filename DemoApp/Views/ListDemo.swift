@@ -5,7 +5,11 @@
 //  Created by Philipp on 29.03.22.
 //
 
+#if canImport(SwiftUIShim)
 import SwiftUIShim
+#else
+import SwiftUI
+#endif
 
 struct ListDemo: View {
     struct NamedItem: Identifiable {

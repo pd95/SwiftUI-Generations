@@ -7,7 +7,11 @@
 
 import os.log
 import UIKit
+#if canImport(SwiftUIShim)
 import SwiftUIShim
+#else
+import SwiftUI
+#endif
 
 #if TARGET_IOS_MAJOR_13
 class SceneDelegate: UIResponder, UIWindowSceneDelegate {

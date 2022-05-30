@@ -5,7 +5,11 @@
 //  Created by Philipp on 02.09.21.
 //
 
+#if canImport(SwiftUIShim)
 import SwiftUIShim
+#else
+import SwiftUI
+#endif
 
 struct BasicsDemo: View {
     var body: some View {

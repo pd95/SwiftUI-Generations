@@ -5,7 +5,11 @@
 //  Created by Philipp on 23.08.21.
 //
 
+#if canImport(SwiftUIShim)
 import SwiftUIShim
+#else
+import SwiftUI
+#endif
 
 struct StateObjectDemo: View {
     @Environment(\.scenePhase) private var scenePhase

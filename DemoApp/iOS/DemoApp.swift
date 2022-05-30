@@ -5,7 +5,11 @@
 //  Created by Philipp on 19.08.21.
 //
 
+#if canImport(SwiftUIShim)
 import SwiftUIShim
+#else
+import SwiftUI
+#endif
 
 #if TARGET_IOS_MAJOR_13
 

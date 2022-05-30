@@ -5,7 +5,11 @@
 //  Created by Philipp on 20.08.21.
 //
 
+#if canImport(SwiftUIShim)
 import SwiftUIShim
+#else
+import SwiftUI
+#endif
 
 struct ProgressViewDemo: View {
     @Environment(\.scenePhase) var scenePhase

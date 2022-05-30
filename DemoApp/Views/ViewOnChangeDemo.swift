@@ -5,7 +5,11 @@
 //  Created by Philipp on 25.08.21.
 //
 
+#if canImport(SwiftUIShim)
 import SwiftUIShim
+#else
+import SwiftUI
+#endif
 
 struct ViewOnChangeDemo: View {
     @State private var count = 0
