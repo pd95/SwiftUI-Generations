@@ -15,7 +15,7 @@ struct StateObjectDemo: View {
     @SceneStorage("lastNumber") private var lastNumber: Int?
 
     var body: some View {
-        NavigationView {
+        StackNavigationView {
             Form {
                 Text("Scene phase: \(String(describing: scenePhase))")
                 Section(header: Text("Preserved in app storage"), footer: Text("You have to delete the app to get rid of the values")) {
@@ -47,8 +47,6 @@ struct StateObjectDemo: View {
             }
             .navigationTitle("State Management")
         }
-        // .navigationViewStyle(.stack)
-        .navigationViewStyle(StackNavigationViewStyle())
     }
 }
 

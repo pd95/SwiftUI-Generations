@@ -9,7 +9,7 @@ import SwiftUIShim
 
 struct BasicsDemo: View {
     var body: some View {
-        NavigationView {
+        StackNavigationView {
             ScrollView {
                 NewColorsDemo()
                 Divider()

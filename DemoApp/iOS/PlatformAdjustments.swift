@@ -12,3 +12,12 @@ extension View {
         self
     }
 }
+
+struct StackNavigationView<Content: View>: View {
+    @ViewBuilder let content: () -> Content
+
+    var body: some View {
+        NavigationView(content: content)
+            .navigationViewStyle(.stack)
+    }
+}

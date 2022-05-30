@@ -28,7 +28,7 @@ struct AsyncImageDemo: View {
     }
 
     var body: some View {
-        NavigationView {
+        StackNavigationView {
             ScrollView {
                 VStack {
                     Text("Loading images asynchronously:")

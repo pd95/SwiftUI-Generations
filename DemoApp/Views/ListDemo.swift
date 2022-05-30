@@ -32,7 +32,7 @@ struct ListDemo: View {
     ]
 
     var body: some View {
-        NavigationView {
+        StackNavigationView {
             List {
                 Section("Simple Header") {
                     Text("Some item")
@@ -64,7 +64,6 @@ struct ListDemo: View {
             .listStyle(.grouped)
             .navigationTitle("List Demo")
         }
-        .navigationViewStyle(.stack)
     }
 }
 
