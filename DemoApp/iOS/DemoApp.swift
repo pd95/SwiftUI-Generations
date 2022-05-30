@@ -1,6 +1,6 @@
 //
 //  DemoApp.swift
-//  DemoApp
+//  DemoApp (iOS)
 //
 //  Created by Philipp on 19.08.21.
 //

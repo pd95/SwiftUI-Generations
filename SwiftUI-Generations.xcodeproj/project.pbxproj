@@ -46,6 +46,9 @@
 		1788790C26D41101001C59FF /* StateObjectDemo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1788790B26D41101001C59FF /* StateObjectDemo.swift */; };
 		178A350C26FB76E900E5049E /* SceneStorageTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 178A350B26FB76E900E5049E /* SceneStorageTests.swift */; };
 		17D65A5F2845015400FDACC9 /* DemoAppMac.swift in Sources */ = {isa = PBXBuildFile; fileRef = 17D65A512845012B00FDACC9 /* DemoAppMac.swift */; };
+		17D65A792845169300FDACC9 /* PlatformAdjustments.swift in Sources */ = {isa = PBXBuildFile; fileRef = 17D65A782845169300FDACC9 /* PlatformAdjustments.swift */; };
+		17D65A7A2845169D00FDACC9 /* PlatformAdjustments.swift in Sources */ = {isa = PBXBuildFile; fileRef = 17D65A762845168100FDACC9 /* PlatformAdjustments.swift */; };
+		17D65A7B284516DD00FDACC9 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 173D286726CE9C7F00039D17 /* ContentView.swift */; };
 		17EFA68B26D049540094D483 /* NewFontsDemo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 17EFA68A26D049540094D483 /* NewFontsDemo.swift */; };
 /* End PBXBuildFile section */
 
@@ -134,6 +137,8 @@
 		17D65A4F2845012B00FDACC9 /* DemoApp11.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = DemoApp11.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		17D65A512845012B00FDACC9 /* DemoAppMac.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DemoAppMac.swift; sourceTree = "<group>"; };
 		17D65A5A2845012C00FDACC9 /* DemoApp.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = DemoApp.entitlements; sourceTree = "<group>"; };
+		17D65A762845168100FDACC9 /* PlatformAdjustments.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlatformAdjustments.swift; sourceTree = "<group>"; };
+		17D65A782845169300FDACC9 /* PlatformAdjustments.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlatformAdjustments.swift; sourceTree = "<group>"; };
 		17DE260326D80A4800AB5B07 /* AppStorage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppStorage.swift; sourceTree = "<group>"; };
 		17EFA68826D049420094D483 /* Font-extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Font-extension.swift"; sourceTree = "<group>"; };
 		17EFA68A26D049540094D483 /* NewFontsDemo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewFontsDemo.swift; sourceTree = "<group>"; };
@@ -272,6 +277,7 @@
 			isa = PBXGroup;
 			children = (
 				17D65A512845012B00FDACC9 /* DemoAppMac.swift */,
+				17D65A762845168100FDACC9 /* PlatformAdjustments.swift */,
 				17D65A5A2845012C00FDACC9 /* DemoApp.entitlements */,
 			);
 			path = macOS;
@@ -282,6 +288,7 @@
 			children = (
 				174C43B026CEF843009D6D94 /* DemoApp.swift */,
 				174C43BD26CEF896009D6D94 /* SceneDelegate.swift */,
+				17D65A782845169300FDACC9 /* PlatformAdjustments.swift */,
 				174C43C026CEF928009D6D94 /* Info-iOS13.plist */,
 				170288BE27B9222F005F9D35 /* Info-iOS14.plist */,
 				170288C027B925D1005F9D35 /* Info-iOS15.plist */,
@@ -490,6 +497,7 @@
 			files = (
 				177CDA1626E0FEA400A46E2B /* BasicsDemo.swift in Sources */,
 				17EFA68B26D049540094D483 /* NewFontsDemo.swift in Sources */,
+				17D65A792845169300FDACC9 /* PlatformAdjustments.swift in Sources */,
 				1738CF2227F32BD200C8A1FB /* ListDemo.swift in Sources */,
 				170288BF27B92431005F9D35 /* DemoApp.swift in Sources */,
 				175D32A626D03731002322AB /* LabelDemo.swift in Sources */,
@@ -507,7 +515,9 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				17D65A7A2845169D00FDACC9 /* PlatformAdjustments.swift in Sources */,
 				17D65A5F2845015400FDACC9 /* DemoAppMac.swift in Sources */,
+				17D65A7B284516DD00FDACC9 /* ContentView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

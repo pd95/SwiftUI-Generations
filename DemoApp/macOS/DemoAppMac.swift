@@ -1,6 +1,6 @@
 //
 //  DemoAppApp.swift
-//  DemoApp
+//  DemoApp (macOS)
 //
 //  Created by Philipp on 30.05.22.
 //
@@ -11,10 +11,7 @@ import SwiftUI
 struct DemoApp: App {
     var body: some Scene {
         WindowGroup {
-            Text("Hello World!")
-                .font(.largeTitle)
-                .padding()
-                .fixedSize()
+            ContentView()
         }
     }
 }
