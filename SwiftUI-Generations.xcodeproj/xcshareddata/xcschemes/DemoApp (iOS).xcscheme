@@ -15,8 +15,8 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "174C439626CEF754009D6D94"
-               BuildableName = "DemoApp13.app"
-               BlueprintName = "DemoApp"
+               BuildableName = "DemoApp--iOS-13.app"
+               BlueprintName = "DemoApp (iOS)"
                ReferencedContainer = "container:SwiftUI-Generations.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
@@ -56,8 +56,8 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "174C439626CEF754009D6D94"
-            BuildableName = "DemoApp13.app"
-            BlueprintName = "DemoApp"
+            BuildableName = "DemoApp--iOS-13.app"
+            BlueprintName = "DemoApp (iOS)"
             ReferencedContainer = "container:SwiftUI-Generations.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
@@ -73,8 +73,8 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "174C439626CEF754009D6D94"
-            BuildableName = "DemoApp13.app"
-            BlueprintName = "DemoApp"
+            BuildableName = "DemoApp--iOS-13.app"
+            BlueprintName = "DemoApp (iOS)"
             ReferencedContainer = "container:SwiftUI-Generations.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
