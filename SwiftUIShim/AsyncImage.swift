@@ -9,10 +9,65 @@ import SwiftUI
 import os.log
 import Combine
 
-#if (TARGET_IOS_MAJOR_13 || TARGET_IOS_MAJOR_14)
+// First we need some helpers to become platform independent: NSImage on macOS UIImage on iOS
+#if os(macOS)
+typealias PlatformImage = NSImage
+
+extension Image {
+    static func fromPlatformImage(_ image: PlatformImage) -> Image {
+        return Image(nsImage: image)
+    }
+
+    static func failureImage() -> Image {
+        let size = CGSize(width: 400, height: 400)
+        let nsImage = NSImage(size: size)
+        nsImage.lockFocus()
+        NSColor.systemGray.drawSwatch(in: NSRect(origin: .zero, size: size))
+        nsImage.unlockFocus()
+        return Image(nsImage: nsImage)
+    }
+}
+
+extension NSImage {
+    convenience init(cgImage image: CGImage) {
+        self.init(cgImage: image, size: .zero)
+    }
+}
+
+#elseif os(iOS)
+typealias PlatformImage = UIImage
+
+extension Image {
+    static func fromPlatformImage(_ image: PlatformImage) -> Image {
+        return Image(uiImage: image)
+    }
+
+    static func failureImage() -> Image {
+        let size = CGSize(width: 400, height: 400)
+        let uiImage = UIGraphicsImageRenderer(size: size).image { rendererContext in
+            UIColor.systemGray.setFill()
+            rendererContext.fill(CGRect(origin: .zero, size: size))
+        }
+        return Image(uiImage: uiImage)
+    }
+}
+
+#else
+#error("This platform is not yet supported")
+#endif
+
+extension Image {
+    static func emptyImage() -> Image {
+        return Image.fromPlatformImage(.init())
+    }
+}
+
+#if os(iOS) && (TARGET_IOS_MAJOR_13 || TARGET_IOS_MAJOR_14) || os(macOS)
 
 @available(iOS, introduced: 13, obsoleted: 15.0,
            message: "Backport not necessary as of iOS 15", renamed: "SwiftUI.AsyncImagePhase")
+@available(macOS, introduced: 11, obsoleted: 12.0,
+           message: "Backport not necessary as of macOS 12", renamed: "SwiftUI.AsyncImagePhase")
 public enum AsyncImagePhase {
 
     /// No image is loaded.
@@ -43,14 +98,18 @@ public enum AsyncImagePhase {
 
 @available(iOS, introduced: 13, obsoleted: 15.0,
            message: "Backport not necessary as of iOS 15", renamed: "SwiftUI.AsyncImage")
+@available(macOS, introduced: 11, obsoleted: 12.0,
+           message: "Backport not necessary as of macOS 12", renamed: "SwiftUI.AsyncImage")
 public struct AsyncImage<Content>: View where Content: View {
     private var url: URL?
+    private var scale: CGFloat    // TODO: support scale when transforming cgImage
     private var contentBuilder: ((AsyncImagePhase) -> Content)?
 
     @StateObject private var loader = AsyncImageLoader()
 
-    public init(url: URL?, @ViewBuilder content: @escaping (AsyncImagePhase) -> Content) {
+    public init(url: URL?, scale: CGFloat = 1, @ViewBuilder content: @escaping (AsyncImagePhase) -> Content) {
         self.url = url
+        self.scale = scale
         self.contentBuilder = content
     }
 
@@ -74,24 +133,21 @@ public struct AsyncImage<Content>: View where Content: View {
 
 @available(iOS, introduced: 13, obsoleted: 15.0,
            message: "Backport not necessary as of iOS 15", renamed: "SwiftUI.AsyncImage")
+@available(macOS, introduced: 11, obsoleted: 12.0,
+           message: "Backport not necessary as of macOS 12", renamed: "SwiftUI.AsyncImage")
 extension AsyncImage {
-    public init(url: URL?) where Content == Image {
-        self.init(url: url, content: Self.justImage)
-    }
+    public init(url: URL?, scale: CGFloat = 1) where Content == Image {
+        self.init(url: url, scale: scale) { phase in
+            switch phase {
+            case .success(let image):
+                return image
 
-    static private func justImage(phase: AsyncImagePhase) -> Image {
-        switch phase {
-        case .empty:
-            return Image(uiImage: UIImage())
-        case .success(let image):
-            return image
-        case .failure:
-            let size = CGSize(width: 400, height: 400)
-            let uiImage = UIGraphicsImageRenderer(size: size).image { rendererContext in
-                UIColor.systemGray.setFill()
-                rendererContext.fill(CGRect(origin: .zero, size: size))
+            case .empty:
+                return Image.emptyImage()
+
+            case .failure:
+                return Image.failureImage()
             }
-            return Image(uiImage: uiImage)
         }
     }
 
@@ -193,16 +249,16 @@ private class AsyncImageLoader: ObservableObject {
 
         cancellable = Publishers.CombineLatest(urlPublisher, sizePublisher)
             .receive(on: DispatchQueue.global(qos: .userInitiated))
-            .tryMap({ (url, size) -> (URL, UIImage) in
+            .tryMap({ (url, size) -> (URL, PlatformImage) in
                 guard let self = weakSelf else {
                     throw Errors.selfWasDeallocated
                 }
 
-                let image: UIImage?
+                let image: PlatformImage?
                 if size != .zero {
                     image = self.downsample(imageAt: url, to: size, scale: self.displayScale)
                 } else {
-                    image = UIImage(contentsOfFile: url.path)
+                    image = PlatformImage(contentsOfFile: url.path)
                 }
                 guard let image = image else {
                     throw Errors.imageDecodingError
@@ -221,7 +277,7 @@ private class AsyncImageLoader: ObservableObject {
                 }
                 self.cancellable = nil
             }, receiveValue: { (_, image) in
-                weakSelf?.phase = .success(Image(uiImage: image))
+                weakSelf?.phase = .success(Image.fromPlatformImage(image))
             })
     }
 
@@ -232,7 +288,7 @@ private class AsyncImageLoader: ObservableObject {
     /// Loading an appropriately sized image from the given URL
     ///
     /// Downsampling code has been shown at WWDC 2018: Image and Graphics Best Practices
-    private func downsample(imageAt imageURL: URL, to pointSize: CGSize, scale: CGFloat) -> UIImage? {
+    private func downsample(imageAt imageURL: URL, to pointSize: CGSize, scale: CGFloat) -> PlatformImage? {
         let imageSourceOptions = [kCGImageSourceShouldCache: false] as CFDictionary
         guard let imageSource = CGImageSourceCreateWithURL(imageURL as CFURL, imageSourceOptions) else {
             os_log("AsyncImage: 🔴 CGImageSourceCreateWithURL failed due to an unknown reason!")
@@ -251,7 +307,7 @@ private class AsyncImageLoader: ObservableObject {
             os_log("AsyncImage: 🔴 CGImageSourceCreateThumbnailAtIndex failed due to an unknown reason!")
             return nil
         }
-        return UIImage(cgImage: downsampledImage)
+        return PlatformImage(cgImage: downsampledImage)
     }
 }
 

@@ -49,6 +49,11 @@
 		17D65A792845169300FDACC9 /* PlatformAdjustments.swift in Sources */ = {isa = PBXBuildFile; fileRef = 17D65A782845169300FDACC9 /* PlatformAdjustments.swift */; };
 		17D65A7A2845169D00FDACC9 /* PlatformAdjustments.swift in Sources */ = {isa = PBXBuildFile; fileRef = 17D65A762845168100FDACC9 /* PlatformAdjustments.swift */; };
 		17D65A7B284516DD00FDACC9 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 173D286726CE9C7F00039D17 /* ContentView.swift */; };
+		17D65A7C28451B2400FDACC9 /* AsyncImage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1785AACE26CE9DAC0009572F /* AsyncImage.swift */; };
+		17D65A7D28451B3100FDACC9 /* AsyncImageDemo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 175D329D26D03603002322AB /* AsyncImageDemo.swift */; };
+		17D65A7E28451B7100FDACC9 /* UnfairLock.swift in Sources */ = {isa = PBXBuildFile; fileRef = 17C9CC1026D3977C00459FA2 /* UnfairLock.swift */; };
+		17D65A7F28451B7100FDACC9 /* ViewGeometryPreferenceKey.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1788790726D3C58B001C59FF /* ViewGeometryPreferenceKey.swift */; };
+		17D65A8028451B7100FDACC9 /* URLSession+DownloadTaskPublisher.swift in Sources */ = {isa = PBXBuildFile; fileRef = 17C9CC0C26D393BA00459FA2 /* URLSession+DownloadTaskPublisher.swift */; };
 		17EFA68B26D049540094D483 /* NewFontsDemo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 17EFA68A26D049540094D483 /* NewFontsDemo.swift */; };
 /* End PBXBuildFile section */
 
@@ -515,7 +520,12 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				17D65A7C28451B2400FDACC9 /* AsyncImage.swift in Sources */,
 				17D65A7A2845169D00FDACC9 /* PlatformAdjustments.swift in Sources */,
+				17D65A7D28451B3100FDACC9 /* AsyncImageDemo.swift in Sources */,
+				17D65A7E28451B7100FDACC9 /* UnfairLock.swift in Sources */,
+				17D65A8028451B7100FDACC9 /* URLSession+DownloadTaskPublisher.swift in Sources */,
+				17D65A7F28451B7100FDACC9 /* ViewGeometryPreferenceKey.swift in Sources */,
 				17D65A5F2845015400FDACC9 /* DemoAppMac.swift in Sources */,
 				17D65A7B284516DD00FDACC9 /* ContentView.swift in Sources */,
 			);

@@ -27,7 +27,7 @@ struct ContentView: View {
                 placeholder
 #endif
             case .asyncImage:
-#if os(iOS)
+#if os(iOS) || os(macOS)
                 AsyncImageDemo()
 #else
                 placeholder
